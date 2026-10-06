@@ -20,6 +20,8 @@ export const INITIAL_USER: User = {
     {
       id: 'cert_884920',
       certificateCode: 'EXC-2026-COMPTA-8849',
+      type: 'certificate_completion',
+      typeTitle: 'CERTIFICAT DE MAÎTRISE & RÉUSSITE EXAMEN',
       userId: 'usr_101',
       userName: 'Amine El Amrani',
       courseId: 'course-1',
@@ -720,3 +722,127 @@ export const MOCK_ORDERS: Order[] = [
     date: '2026-10-04',
   },
 ];
+
+export const INITIAL_CERTIFICATE_TEMPLATES = [
+  {
+    id: 'tmpl-cert-completion',
+    type: 'certificate_completion' as const,
+    title: 'Certificat Officiel de Maîtrise & Réussite',
+    headerText: 'CABINET EXCELIUM CONSULTING • CASABLANCA',
+    subheadText: 'DÉCERNÉ PAR LE CONSEIL D EVALUATION DU CABINET',
+    bodyTemplate: 'atteste par la présente que l apprenant(e) a suivi avec succès la formation professionnelle continue et validé l examen final de spécialisation avec distinction.',
+    signatoryName: 'M. Karim Alami',
+    signatoryTitle: 'Expert-Comptable DPLE & Associé Gérant',
+    cabinetSealText: 'EXCELIUM CONSULTING • SECTEUR FINANCIER & COMPTABLE MAROC',
+    primaryColorHex: '#059669', // Emerald
+    accentColorHex: '#d97706', // Amber Gold
+    showQrCode: true,
+    showScore: true,
+  },
+  {
+    id: 'tmpl-attest-presence',
+    type: 'attestation_presence' as const,
+    title: 'Attestation de Présence & Participation',
+    headerText: 'EXCELIUM CONSULTING • CENTRE DE FORMATION CONTINUE',
+    subheadText: 'ATTESTATION DE PARTICIPATION AU SÉMINAIRE PRATIQUE',
+    bodyTemplate: 'certifie que la personne désignée ci-dessous a assisté régulièrement et participé activement au séminaire professionnel de perfectionnement.',
+    signatoryName: 'Mme Souad Benjelloun',
+    signatoryTitle: 'Directrice Pédagogique & Conseil Fiscal',
+    cabinetSealText: 'SÉMINAIRES EXCELIUM • ATTESTATION OFFICIELLE',
+    primaryColorHex: '#0284c7', // Sky Blue
+    accentColorHex: '#059669', // Emerald
+    showQrCode: true,
+    showScore: false,
+  },
+  {
+    id: 'tmpl-attest-stage',
+    type: 'attestation_stage' as const,
+    title: 'Attestation de Stage Pratique en Cabinet',
+    headerText: 'CABINET D EXPERTISE COMPTABLE EXCELIUM',
+    subheadText: 'ATTESTATION DE STAGE & IMMERSION PROFESSIONNELLE',
+    bodyTemplate: 'atteste que le stagiaire a effectué un stage pratique intensif au sein des départements Comptabilité, Fiscalité et Paie du Cabinet Excelium.',
+    signatoryName: 'M. Mehdi Tazi',
+    signatoryTitle: 'Senior Partner Audit & Encadrant de Stage',
+    cabinetSealText: 'EXCELIUM CONSULTING • STAGE PRATIQUE MAROC',
+    primaryColorHex: '#7c3aed', // Purple / Violet
+    accentColorHex: '#d97706', // Amber Gold
+    showQrCode: true,
+    showScore: false,
+  },
+];
+
+export const INITIAL_WORKSHOPS = [
+  {
+    id: 'ws-2026-01',
+    title: 'Séminaire Présentiel : Loi de Finances 2026 & Arrêté des Comptes',
+    subtitle: 'Journée d immersion pratique pour la préparation de la Liasse Fiscale 2026 et les nouveautés CGI.',
+    category: 'Fiscalité' as const,
+    type: 'présentiel' as const,
+    date: '24 Octobre 2026',
+    timeSlot: '09h00 - 17h00 (Pause déjeuner incluse)',
+    locationOrUrl: 'Hôtel Kenzi Tower, Twin Center, Casablanca',
+    instructorName: 'M. Karim Alami & Mme Souad Benjelloun',
+    capacity: 30,
+    enrolledCount: 22,
+    priceMAD: 2500,
+    status: 'planifié' as const,
+    attendees: [
+      {
+        id: 'att-1',
+        studentName: 'Amine El Amrani',
+        studentEmail: 'a.elamrani@excelium.ma',
+        company: 'Cabinet Fiduciaire Casablanca',
+        phone: '+212 6 61 23 45 67',
+        attended: true,
+        attestationIssued: true,
+        attestationCode: 'EXC-PRES-2026-8801',
+      },
+      {
+        id: 'att-2',
+        studentName: 'Fatima-Zohra Chraibi',
+        studentEmail: 'fz.chraibi@fiduciaire.ma',
+        company: 'Audit & Consulting SARL',
+        phone: '+212 6 62 99 88 77',
+        attended: true,
+        attestationIssued: false,
+      },
+      {
+        id: 'att-3',
+        studentName: 'Yassine Kabbaj',
+        studentEmail: 'yassine.kabbaj@gmail.com',
+        company: 'Holding Financière Moderne',
+        phone: '+212 6 63 11 22 33',
+        attended: false,
+        attestationIssued: false,
+      },
+    ],
+  },
+  {
+    id: 'ws-2026-02',
+    title: 'Webinaire Direct : Atelier Télé-déclaration Damancom & Paie Sage 100c',
+    subtitle: 'Formation en direct avec partage d écran et exercices guidés en temps réel.',
+    category: 'Logiciels Comptables' as const,
+    type: 'webinaire' as const,
+    date: '12 Novembre 2026',
+    timeSlot: '14h30 - 18h00',
+    locationOrUrl: 'Classe Virtuelle HD Zoom Pro (Lien transmis aux inscrits)',
+    instructorName: 'Mlle Kenza El Fassi',
+    capacity: 60,
+    enrolledCount: 45,
+    priceMAD: 990,
+    status: 'planifié' as const,
+    attendees: [
+      {
+        id: 'att-4',
+        studentName: 'Nadia Bennis',
+        studentEmail: 'n.bennis@rh-solutions.ma',
+        company: 'RH Solutions Maroc',
+        phone: '+212 6 55 44 33 22',
+        attended: true,
+        attestationIssued: true,
+        attestationCode: 'EXC-PRES-2026-8804',
+      },
+    ],
+  },
+];
+

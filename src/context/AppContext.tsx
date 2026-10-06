@@ -3,6 +3,8 @@ import type {
   User,
   Course,
   Certificate,
+  CertificateTemplate,
+  LiveWorkshop,
   DownloadableResource,
   Order,
   SecurityAuditLog,
@@ -14,6 +16,8 @@ import {
   GLOBAL_RESOURCES,
   MOCK_ORDERS,
   MOCK_SECURITY_LOGS,
+  INITIAL_CERTIFICATE_TEMPLATES,
+  INITIAL_WORKSHOPS,
 } from '../data/mockData';
 
 export type ViewMode =
@@ -26,7 +30,8 @@ export type ViewMode =
   | 'resources'
   | 'dashboard'
   | 'admin'
-  | 'checkout';
+  | 'checkout'
+  | 'studio';
 
 interface ToastInfo {
   id: string;
@@ -58,6 +63,18 @@ interface AppContextType {
   addCourse: (newCourse: Course) => void;
   updateCourse: (updatedCourse: Course) => void;
   deleteCourse: (courseId: string) => void;
+
+  // Studio: Certificates & Attestations
+  certificateTemplates: CertificateTemplate[];
+  updateCertificateTemplate: (template: CertificateTemplate) => void;
+  issueCustomCertificate: (cert: Partial<Certificate> & { userName: string; courseTitle: string }) => Certificate;
+
+  // Studio: Workshops & Live Seminars
+  workshops: LiveWorkshop[];
+  addWorkshop: (workshop: LiveWorkshop) => void;
+  updateWorkshop: (workshop: LiveWorkshop) => void;
+  markAttendeePresence: (workshopId: string, attendeeId: string, attended: boolean) => void;
+  issueWorkshopAttestation: (workshopId: string, attendeeId: string) => Certificate | null;
   
   // Enrollment & Progress
   enrollInCourse: (courseId: string, paymentMethod: 'carte_bancaire' | 'virement' | 'cash' | 'coupon') => boolean;
@@ -89,6 +106,7 @@ interface AppContextType {
   setSelectedCategory: (cat: string) => void;
 }
 
+
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -109,6 +127,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return saved ? JSON.parse(saved) : INITIAL_COURSES;
   });
 
+  const [certificateTemplates, setCertificateTemplates] = useState<CertificateTemplate[]>(() => {
+    const saved = localStorage.getItem('excelium_templates');
+    return saved ? JSON.parse(saved) : INITIAL_CERTIFICATE_TEMPLATES;
+  });
+
+  const [workshops, setWorkshops] = useState<LiveWorkshop[]>(() => {
+    const saved = localStorage.getItem('excelium_workshops');
+    return saved ? JSON.parse(saved) : INITIAL_WORKSHOPS;
+  });
+
   const [resources, setResources] = useState<DownloadableResource[]>(GLOBAL_RESOURCES);
   const [orders, setOrders] = useState<Order[]>(MOCK_ORDERS);
   const [securityLogs, setSecurityLogs] = useState<SecurityAuditLog[]>(MOCK_SECURITY_LOGS);
@@ -127,6 +155,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     localStorage.setItem('excelium_courses', JSON.stringify(courses));
   }, [courses]);
+
+  useEffect(() => {
+    localStorage.setItem('excelium_templates', JSON.stringify(certificateTemplates));
+  }, [certificateTemplates]);
+
+  useEffect(() => {
+    localStorage.setItem('excelium_workshops', JSON.stringify(workshops));
+  }, [workshops]);
 
   const showToast = (title: string, message: string, type: ToastInfo['type'] = 'success') => {
     const id = Math.random().toString(36).substring(2);
@@ -166,6 +202,106 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const deleteCourse = (courseId: string) => {
     setCourses((prev) => prev.filter((c) => c.id !== courseId));
     showToast('Formation Supprimée', 'La formation a été retirée du catalogue.', 'warning');
+  };
+
+  const updateCertificateTemplate = (template: CertificateTemplate) => {
+    setCertificateTemplates((prev) => prev.map((t) => (t.id === template.id ? template : t)));
+    showToast('Template Modifié', `Le modèle "${template.title}" a été mis à jour avec succès.`);
+  };
+
+  const issueCustomCertificate = (data: Partial<Certificate> & { userName: string; courseTitle: string }): Certificate => {
+    const certCode = data.certificateCode || `EXC-STUDIO-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+    const newCert: Certificate = {
+      id: `cert_${Math.random().toString(36).substring(2, 8)}`,
+      certificateCode: certCode,
+      type: data.type || 'certificate_completion',
+      typeTitle: data.typeTitle || (data.type === 'attestation_presence' ? 'ATTESTATION DE PRÉSENCE & PARTICIPATION' : 'CERTIFICAT DE MAÎTRISE ET RÉUSSITE'),
+      userId: data.userId || currentUser.id,
+      userName: data.userName,
+      recipientCompany: data.recipientCompany || 'Cabinet Externe',
+      courseId: data.courseId || 'custom-studio-course',
+      courseTitle: data.courseTitle,
+      issueDate: data.issueDate || new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' }),
+      scorePercent: data.scorePercent || 100,
+      instructorName: data.instructorName || 'M. Karim Alami (Expert-Comptable DPLE)',
+      instructorTitle: data.instructorTitle || 'Associé Gérant Cabinet Excelium',
+      durationHours: data.durationHours || 20,
+      location: data.location || 'Casablanca, Maroc',
+      sealTitle: data.sealTitle || 'EXCELIUM CONSULTING • SECTEUR FINANCIER & COMPTABLE',
+      verificationUrl: `https://excelium.ma/verify/${certCode}`,
+    };
+
+    setCurrentUser((prev) => ({
+      ...prev,
+      certificates: [newCert, ...prev.certificates],
+    }));
+
+    showToast('Document Émis !', `L'attestation/certificat pour ${data.userName} a été généré(e) avec le code ${certCode}.`, 'success');
+    return newCert;
+  };
+
+  const addWorkshop = (newWs: LiveWorkshop) => {
+    setWorkshops((prev) => [newWs, ...prev]);
+    showToast('Séminaire Planifié', `La session "${newWs.title}" a été ajoutée.`);
+  };
+
+  const updateWorkshop = (updatedWs: LiveWorkshop) => {
+    setWorkshops((prev) => prev.map((w) => (w.id === updatedWs.id ? updatedWs : w)));
+    showToast('Séminaire Mis à Jour', `La session "${updatedWs.title}" a été modifiée.`);
+  };
+
+  const markAttendeePresence = (workshopId: string, attendeeId: string, attended: boolean) => {
+    setWorkshops((prev) =>
+      prev.map((w) => {
+        if (w.id === workshopId) {
+          const updatedAttendees = w.attendees.map((att) =>
+            att.id === attendeeId ? { ...att, attended } : att
+          );
+          return { ...w, attendees: updatedAttendees };
+        }
+        return w;
+      })
+    );
+    showToast('Présence Validée', attended ? 'Participant marqué PRÉSENT (Émargé).' : 'Participant marqué ABSENT.', 'info');
+  };
+
+  const issueWorkshopAttestation = (workshopId: string, attendeeId: string): Certificate | null => {
+    const ws = workshops.find((w) => w.id === workshopId);
+    if (!ws) return null;
+    const attendee = ws.attendees.find((a) => a.id === attendeeId);
+    if (!attendee) return null;
+
+    const certCode = `EXC-PRES-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    const attestationCert = issueCustomCertificate({
+      certificateCode: certCode,
+      type: 'attestation_presence',
+      typeTitle: 'ATTESTATION DE PRÉSENCE & PARTICIPATION',
+      userName: attendee.studentName,
+      recipientCompany: attendee.company || 'Entreprise Partenaire',
+      courseId: ws.id,
+      courseTitle: ws.title,
+      issueDate: ws.date,
+      scorePercent: 100,
+      instructorName: ws.instructorName,
+      durationHours: 8,
+      location: ws.locationOrUrl,
+    });
+
+    // Update attendee record
+    setWorkshops((prev) =>
+      prev.map((w) => {
+        if (w.id === workshopId) {
+          const updatedAttendees = w.attendees.map((att) =>
+            att.id === attendeeId ? { ...att, attestationIssued: true, attestationCode: certCode } : att
+          );
+          return { ...w, attendees: updatedAttendees };
+        }
+        return w;
+      })
+    );
+
+    return attestationCert;
   };
 
   const isCourseEnrolled = (courseId: string): boolean => {
@@ -265,6 +401,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const newCert: Certificate = {
         id: `cert_${Math.random().toString(36).substring(2, 8)}`,
         certificateCode: certCode,
+        type: 'certificate_completion',
+        typeTitle: 'CERTIFICAT DE MAÎTRISE & RÉUSSITE EXAMEN',
         userId: currentUser.id,
         userName: currentUser.name,
         courseId: course.id,
@@ -340,6 +478,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         addCourse,
         updateCourse,
         deleteCourse,
+        certificateTemplates,
+        updateCertificateTemplate,
+        issueCustomCertificate,
+        workshops,
+        addWorkshop,
+        updateWorkshop,
+        markAttendeePresence,
+        issueWorkshopAttestation,
         enrollInCourse,
         markLessonCompleted,
         saveLessonNote,
@@ -375,3 +521,5 @@ export const useApp = () => {
   }
   return context;
 };
+
+

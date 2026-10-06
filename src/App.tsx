@@ -11,8 +11,8 @@ import { QuizExamView } from './components/QuizExamView';
 import { CertificateViewer } from './components/CertificateViewer';
 import { DocumentHubView } from './components/DocumentHubView';
 import { StudentDashboardView } from './components/StudentDashboardView';
-import { AdminDashboardView } from './components/AdminDashboardView';
 import { AdminLoginModal } from './components/AdminLoginModal';
+import { ExceliumStudioView } from './components/studio/ExceliumStudioView';
 import { CheckoutView } from './components/CheckoutView';
 import { CourseCard } from './components/CourseCard';
 import {
@@ -33,7 +33,7 @@ const MainContent: React.FC = () => {
     setIsAdminModalOpen(false);
     setIsAdminAuthenticated(true);
     setUserRole('admin');
-    setCurrentView('admin');
+    setCurrentView('studio');
   };
 
   return (
@@ -142,21 +142,21 @@ const MainContent: React.FC = () => {
         {currentView === 'certificate' && <CertificateViewer />}
         {currentView === 'resources' && <DocumentHubView />}
         {currentView === 'dashboard' && <StudentDashboardView />}
-        {currentView === 'admin' && (
+        {(currentView === 'admin' || currentView === 'studio') && (
           isAdminAuthenticated ? (
-            <AdminDashboardView />
+            <ExceliumStudioView />
           ) : (
-            <div className="min-h-screen bg-slate-50 py-20 px-4 text-center space-y-4">
-              <ShieldCheck className="w-12 h-12 text-slate-400 mx-auto" />
-              <h3 className="text-xl font-bold text-slate-900">Accès Administrateur Requis</h3>
-              <p className="text-xs text-slate-500 max-w-sm mx-auto font-medium">
-                Veuillez vous authentifier pour accéder à l'espace d'administration du cabinet.
+            <div className="min-h-screen bg-slate-950 py-20 px-4 text-center space-y-4 text-white">
+              <ShieldCheck className="w-12 h-12 text-amber-400 mx-auto" />
+              <h3 className="text-xl font-bold">Accès Espace Studio Requis</h3>
+              <p className="text-xs text-slate-400 max-w-sm mx-auto font-mono">
+                Veuillez vous authentifier pour accéder au Studio Pédagogique du Cabinet Excelium.
               </p>
               <button
                 onClick={() => setIsAdminModalOpen(true)}
-                className="px-6 py-2.5 bg-slate-900 text-white font-bold text-xs rounded-xl shadow"
+                className="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-xs rounded-xl shadow-lg font-mono"
               >
-                Se connecter en Administrateur
+                Se connecter au Studio
               </button>
             </div>
           )

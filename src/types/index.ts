@@ -109,17 +109,70 @@ export interface Course {
   finalExam?: Quiz;
 }
 
+export type CertificateType = 'certificate_completion' | 'attestation_presence' | 'attestation_stage';
+
 export interface Certificate {
   id: string;
   certificateCode: string;
+  type: CertificateType;
+  typeTitle: string; // e.g. "ATTESTATION DE PRÉSENCE & PARTICIPATION" or "CERTIFICAT DE MAÎTRISE ET RÉUSSITE"
   userId: string;
   userName: string;
+  recipientCompany?: string;
   courseId: string;
   courseTitle: string;
   issueDate: string;
   scorePercent: number;
   instructorName: string;
+  instructorTitle?: string;
+  durationHours?: number;
+  location?: string;
+  sealTitle?: string;
   verificationUrl: string;
+}
+
+export interface CertificateTemplate {
+  id: string;
+  type: CertificateType;
+  title: string;
+  headerText: string;
+  subheadText: string;
+  bodyTemplate: string;
+  signatoryName: string;
+  signatoryTitle: string;
+  cabinetSealText: string;
+  primaryColorHex: string;
+  accentColorHex: string;
+  showQrCode: boolean;
+  showScore: boolean;
+}
+
+export interface WorkshopAttendee {
+  id: string;
+  studentName: string;
+  studentEmail: string;
+  company?: string;
+  phone?: string;
+  attended: boolean;
+  attestationIssued: boolean;
+  attestationCode?: string;
+}
+
+export interface LiveWorkshop {
+  id: string;
+  title: string;
+  subtitle: string;
+  category: 'Comptabilité' | 'Fiscalité' | 'Finance' | 'Audit' | 'Logiciels Comptables' | 'Normes IFRS';
+  type: 'présentiel' | 'webinaire' | 'hybride';
+  date: string;
+  timeSlot: string;
+  locationOrUrl: string;
+  instructorName: string;
+  capacity: number;
+  enrolledCount: number;
+  priceMAD: number;
+  status: 'planifié' | 'en_cours' | 'terminé';
+  attendees: WorkshopAttendee[];
 }
 
 export interface Order {
@@ -145,3 +198,4 @@ export interface SecurityAuditLog {
   details: string;
   status: 'succès' | 'avertissement' | 'bloqué';
 }
+
