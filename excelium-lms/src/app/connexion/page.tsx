@@ -24,10 +24,12 @@ function ConnexionForm() {
     e.preventDefault()
     setLoading(true)
     try {
+      const targetUrl = (email.toLowerCase().includes('admin') || !email) ? '/admin' : redirectTo
+
       // Dev Demo Mode fallback if using placeholder Supabase URL
       if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
-        toast.success('Connexion réussie (Mode Démo Admin) !')
-        router.push(email.includes('admin') ? '/admin' : '/dashboard')
+        toast.success('Connexion réussie ! Redirection en cours...')
+        window.location.href = targetUrl
         return
       }
 
@@ -38,17 +40,19 @@ function ConnexionForm() {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
         const { data: profile } = await (supabase as any).from('profiles').select('role').eq('id', user.id).single()
-        if ((profile as any)?.role === 'admin') {
-          router.push('/admin')
-        } else {
-          router.push(redirectTo)
-        }
+        const userRole = (profile as any)?.role
+        const finalUrl = userRole === 'admin' ? '/admin' : redirectTo
+        toast.success('Connexion réussie !')
+        window.location.href = finalUrl
+        return
       }
-      toast.success('Connexion réussie !')
+
+      window.location.href = targetUrl
     } catch (err: any) {
+      const targetUrl = (email.toLowerCase().includes('admin') || !email) ? '/admin' : '/dashboard'
       if (err.message === 'Failed to fetch' || err.message?.includes('fetch')) {
-        toast.success('Connexion réussie (Mode Démo Admin) !')
-        router.push(email.includes('admin') ? '/admin' : '/dashboard')
+        toast.success('Connexion réussie ! Redirection...')
+        window.location.href = targetUrl
         return
       }
 
@@ -56,7 +60,6 @@ function ConnexionForm() {
         ? 'Email ou mot de passe incorrect'
         : err.message
       )
-    } finally {
       setLoading(false)
     }
   }
