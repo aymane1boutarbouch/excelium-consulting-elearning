@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -9,7 +9,7 @@ import { supabase } from '@/lib/supabase/client'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
-export default function ConnexionPage() {
+function ConnexionForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirectTo') || '/dashboard'
@@ -80,11 +80,6 @@ export default function ConnexionPage() {
 
   return (
     <div className="min-h-screen bg-navy flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-mesh" />
-      <div className="orb-gold w-96 h-96 top-0 left-0 opacity-20 absolute" />
-      <div className="orb-navy w-96 h-96 bottom-0 right-0 opacity-40 absolute" />
-
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -203,5 +198,13 @@ export default function ConnexionPage() {
         </div>
       </motion.div>
     </div>
+  )
+}
+
+export default function ConnexionPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-navy flex items-center justify-center text-white">Chargement...</div>}>
+      <ConnexionForm />
+    </Suspense>
   )
 }

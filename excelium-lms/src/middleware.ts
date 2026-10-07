@@ -41,6 +41,11 @@ export async function middleware(req: NextRequest) {
 
   const pathname = req.nextUrl.pathname
 
+  // Dev Demo Mode bypass if using placeholder Supabase URL
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
+    return response
+  }
+
   if (PROTECTED_ROUTES.some(route => pathname.startsWith(route))) {
     if (!session) {
       const redirectUrl = new URL('/connexion', req.url)
