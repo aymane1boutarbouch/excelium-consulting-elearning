@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, BookOpen, Users, CreditCard,
-  FileText, Video, Award, Bell, Settings,
+  FileText, Video, Award, Bell, Settings, Layers,
   GraduationCap, Eye, LogOut, Menu, X, Plus, AlertCircle, CheckCircle2
 } from 'lucide-react'
 import { format } from 'date-fns'
@@ -16,6 +16,8 @@ import { toast } from 'sonner'
 
 const adminLinks = [
   { label: 'Tableau de bord', icon: LayoutDashboard, href: '/admin' },
+  { label: 'CMS & Structure', icon: Layers, href: '/admin/cms' },
+  { label: 'Programmes', icon: Layers, href: '/admin/programmes' },
   { label: 'Formations', icon: BookOpen, href: '/admin/formations' },
   { label: 'Étudiants', icon: Users, href: '/admin/etudiants' },
   { label: 'Paiements', icon: CreditCard, href: '/admin/paiements', badgeKey: 'pendingPayments' },

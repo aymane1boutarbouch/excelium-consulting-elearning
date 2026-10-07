@@ -11,6 +11,8 @@ import {
 import { supabase } from '@/lib/supabase/client'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import SecureVideoPlayer from '@/components/player/SecureVideoPlayer'
+import LessonResourcesList from '@/components/lessons/LessonResourcesList'
 
 interface LessonResource {
   id: string
@@ -158,21 +160,19 @@ export default function LearningPlayerClient({ course, enrollment, initialProgre
         <main className="flex-1 flex flex-col overflow-y-auto bg-navy-950 p-4 md:p-8">
           {activeLesson ? (
             <div className="max-w-5xl mx-auto w-full space-y-6">
-              {/* Video Player Box */}
-              <div className="relative aspect-video rounded-3xl bg-black overflow-hidden shadow-2xl border border-white/10">
+              {/* Secure Video Player Box */}
+              <div className="space-y-4">
                 {activeLesson.video_url ? (
-                  <iframe
-                    src={activeLesson.video_url.includes('youtube')
-                      ? activeLesson.video_url.replace('watch?v=', 'embed/')
-                      : activeLesson.video_url}
-                    className="w-full h-full"
-                    allowFullScreen
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  <SecureVideoPlayer
+                    videoId={activeLesson.video_url}
+                    lessonId={activeLesson.id}
+                    studentEmail={enrollment?.profiles?.email || 'apprenant@excelium.ma'}
+                    videoDurationSeconds={(activeLesson.duration_minutes || 60) * 60}
                   />
                 ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-navy">
-                    <Video className="w-16 h-16 text-white/20 mb-4" />
-                    <p className="text-white/70 text-lg font-semibold">Contenu texte pour cette leçon</p>
+                  <div className="w-full aspect-video rounded-3xl flex flex-col items-center justify-center p-6 text-center bg-gradient-navy border border-white/10">
+                    <Video className="w-16 h-16 text-gold/40 mb-4" />
+                    <p className="text-white font-bold text-lg">Leçon au format Texte / Support Fichier</p>
                   </div>
                 )}
               </div>
@@ -224,43 +224,23 @@ export default function LearningPlayerClient({ course, enrollment, initialProgre
               {/* Lesson Text Content */}
               <div className="glass-card p-6 md:p-8 rounded-3xl space-y-4">
                 <h2 className="font-display font-bold text-2xl text-white">{activeLesson.title}</h2>
-                <div className="text-white/80 text-base leading-relaxed whitespace-pre-wrap">
-                  {activeLesson.content || 'Aucune note textuelle pour cette leçon.'}
+                <div className="text-white/80 text-base leading-relaxed whitespace-pre-wrap font-sans">
+                  {activeLesson.content || 'Consultez la vidéo ci-dessus et les documents téléchargeables ci-dessous.'}
                 </div>
               </div>
 
-              {/* Downloadable Resources */}
-              {activeLesson.lesson_resources && activeLesson.lesson_resources.length > 0 && (
-                <div className="glass-card p-6 rounded-3xl space-y-3">
-                  <h3 className="font-display font-semibold text-white text-base flex items-center gap-2">
-                    <Download className="w-5 h-5 text-gold" /> Resources & Documents téléchargeables
-                  </h3>
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    {activeLesson.lesson_resources.map((res) => (
-                      <a
-                        key={res.id}
-                        href={res.file_path}
-                        target="_blank"
-                        download
-                        className="flex items-center justify-between p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:border-gold/30 hover:bg-gold/10 transition-all group"
-                      >
-                        <div className="flex items-center gap-3">
-                          <FileText className="w-5 h-5 text-gold" />
-                          <div>
-                            <div className="text-sm font-medium text-white group-hover:text-gold transition-colors">
-                              {res.title}
-                            </div>
-                            <div className="text-xs text-white/40 font-mono">
-                              {(res.file_size / 1024 / 1024).toFixed(1)} MB
-                            </div>
-                          </div>
-                        </div>
-                        <Download className="w-4 h-4 text-white/40 group-hover:text-gold transition-colors" />
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
+              {/* Downloadable Resources Component */}
+              <LessonResourcesList
+                resources={(activeLesson.lesson_resources || []).map(r => ({
+                  id: r.id,
+                  title: r.title,
+                  fileName: r.title,
+                  filePath: r.file_path,
+                  sizeBytes: r.file_size || 2048000,
+                  fileTypeCategory: (r.file_type as any) || 'pdf'
+                }))}
+                isEnrolled={true}
+              />
             </div>
           ) : (
             <div className="flex items-center justify-center h-full text-white/50">
