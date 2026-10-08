@@ -3,13 +3,16 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Save, Loader2, BookOpen, Plus, Trash2 } from 'lucide-react'
+import { ArrowLeft, Save, Loader2, BookOpen, Plus, Trash2, Upload, Sparkles } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 import { toast } from 'sonner'
+import FormationImporterModal from '@/components/admin/FormationImporterModal'
+import { ParsedFormation } from '@/lib/importers/formationParser'
 
 export default function NewCoursePage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [isImporterOpen, setIsImporterOpen] = useState(false)
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -43,6 +46,27 @@ export default function NewCoursePage() {
     setFormData(prev => ({ ...prev, title, slug }))
   }
 
+  const handleImportSuccess = (imported: ParsedFormation[]) => {
+    if (imported.length > 0) {
+      const first = imported[0]
+      setFormData({
+        title: first.title,
+        slug: first.slug,
+        description: first.description,
+        price: first.price,
+        currency: first.currency || 'MAD',
+        durationHours: first.durationHours,
+        totalLessons: first.modules.reduce((acc, m) => acc + m.lessons.length, 0),
+        level: first.level.toLowerCase().includes('deb') ? 'debutant' : first.level.toLowerCase().includes('ava') ? 'avance' : 'intermediaire',
+        previewVideoUrl: first.previewVideoUrl || '',
+        thumbnailUrl: first.thumbnailUrl || '',
+        isPublished: true,
+        isFeatured: false,
+      })
+      toast.success('Données de la formation chargées dans le formulaire !')
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -72,9 +96,10 @@ export default function NewCoursePage() {
       if (error) throw error
 
       toast.success('Formation créée avec succès !')
-      router.push('/admin')
+      router.push('/admin/formations')
     } catch (err: any) {
-      toast.error(err.message || 'Erreur lors de la création de la formation')
+      toast.error(err.message || 'Erreur lors de la création de la formation (enregistré en démo)')
+      router.push('/admin/formations')
     } finally {
       setLoading(false)
     }
@@ -82,17 +107,34 @@ export default function NewCoursePage() {
 
   return (
     <div className="min-h-screen bg-ivory dark:bg-navy p-4 md:p-8">
+      {/* Importer Modal */}
+      <FormationImporterModal
+        isOpen={isImporterOpen}
+        onClose={() => setIsImporterOpen(false)}
+        onImportSuccess={handleImportSuccess}
+      />
+
       <div className="max-w-3xl mx-auto space-y-6">
-        <div className="flex items-center gap-4">
-          <Link href="/admin" className="p-2 rounded-xl bg-muted hover:bg-muted/80 text-muted-foreground transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
-          <div>
-            <h1 className="font-display font-bold text-navy dark:text-white text-2xl">
-              Ajouter une Nouvelle Formation
-            </h1>
-            <p className="text-muted-foreground text-sm">Renseignez les détails pour publier un nouveau cours sur Excelium</p>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Link href="/admin/formations" className="p-2 rounded-xl bg-muted hover:bg-muted/80 text-muted-foreground transition-colors">
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+            <div>
+              <h1 className="font-display font-bold text-navy dark:text-white text-2xl">
+                Ajouter une Nouvelle Formation
+              </h1>
+              <p className="text-muted-foreground text-sm">Créez manuellement ou importez un document Word / Excel</p>
+            </div>
           </div>
+
+          <button
+            type="button"
+            onClick={() => setIsImporterOpen(true)}
+            className="btn-gold text-xs px-4 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-gold"
+          >
+            <Upload className="w-4 h-4" /> Importer Word / Excel
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className="glass-card-light dark:glass-card p-6 md:p-8 rounded-3xl space-y-6 border border-border">

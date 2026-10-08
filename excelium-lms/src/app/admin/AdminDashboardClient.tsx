@@ -7,13 +7,15 @@ import {
   Users, BookOpen, CreditCard, TrendingUp, Clock,
   CheckCircle, XCircle, Eye, ArrowRight, BarChart2,
   Plus, Settings, GraduationCap, Video, Award,
-  Bell, FileText, LayoutDashboard, ChevronRight, Star, AlertCircle
+  Bell, FileText, LayoutDashboard, ChevronRight, Star, AlertCircle, Upload, Sparkles
 } from 'lucide-react'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { formatCurrency, cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase/client'
 import { toast } from 'sonner'
+import FormationImporterModal from '@/components/admin/FormationImporterModal'
+import { ParsedFormation } from '@/lib/importers/formationParser'
 
 interface Props {
   stats: {
@@ -29,6 +31,7 @@ interface Props {
 
 export default function AdminDashboardClient({ stats, recentPayments, recentEnrollments, topCourses }: Props) {
   const [processingPayment, setProcessingPayment] = useState<string | null>(null)
+  const [isImporterOpen, setIsImporterOpen] = useState(false)
 
   const handlePaymentAction = async (paymentId: string, enrollmentId: string, action: 'approved' | 'rejected') => {
     setProcessingPayment(paymentId)
@@ -55,6 +58,10 @@ export default function AdminDashboardClient({ stats, recentPayments, recentEnro
     } finally {
       setProcessingPayment(null)
     }
+  }
+
+  const handleImportSuccess = (imported: ParsedFormation[]) => {
+    toast.success(`${imported.length} formation(s) ajoutée(s) au catalogue !`)
   }
 
   const kpis = [
@@ -94,10 +101,51 @@ export default function AdminDashboardClient({ stats, recentPayments, recentEnro
 
   return (
     <div className="space-y-8">
-      {/* KPI Cards */}
+      {/* Importer Modal */}
+      <FormationImporterModal
+        isOpen={isImporterOpen}
+        onClose={() => setIsImporterOpen(false)}
+        onImportSuccess={handleImportSuccess}
+      />
+
+      {/* Quick Hero Banner for Easy Control & Creator */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
+        className="glass-card-light dark:glass-card p-6 rounded-3xl border border-border bg-gradient-to-r from-navy via-navy-900 to-navy text-white relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
+      >
+        <div className="space-y-2 z-10 max-w-2xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/20 text-gold text-xs font-bold font-mono">
+            <Sparkles className="w-3.5 h-3.5" /> CENTRE DE CRÉATION &amp; CONTRÔLE ADMIN
+          </div>
+          <h1 className="font-display font-bold text-2xl md:text-3xl text-white leading-tight">
+            Pilotez votre plateforme et importez vos formations en 1-clic
+          </h1>
+          <p className="text-white/70 text-xs md:text-sm">
+            Importez des cours complets depuis des fichiers Word (.docx) ou Excel (.xlsx), gérez vos inscriptions et validez les virement bancaires instantanément.
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center gap-3 z-10 w-full md:w-auto">
+          <button
+            onClick={() => setIsImporterOpen(true)}
+            className="w-full sm:w-auto btn-gold px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 shadow-gold text-navy"
+          >
+            <Upload className="w-4 h-4" /> Importer Word / Excel
+          </button>
+          <Link
+            href="/admin/formations/nouveau"
+            className="w-full sm:w-auto px-5 py-3 rounded-2xl border border-white/20 hover:border-gold text-white text-xs font-bold flex items-center justify-center gap-2 transition-all bg-white/5 hover:bg-white/10"
+          >
+            <Plus className="w-4 h-4 text-gold" /> Créer Manuellement
+          </Link>
+        </div>
+      </motion.div>
+
+      {/* KPI Cards */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0, transition: { delay: 0.1 } }}
         className="grid grid-cols-2 lg:grid-cols-4 gap-4"
       >
         {kpis.map((kpi, i) => {
@@ -243,109 +291,16 @@ export default function AdminDashboardClient({ stats, recentPayments, recentEnro
                 </Link>
               </div>
             ))}
-            <Link
-              href="/admin/formations/nouveau"
-              className="block p-4 rounded-2xl border-2 border-dashed border-gold/30 hover:border-gold text-center text-xs font-bold text-gold transition-all"
+            <button
+              onClick={() => setIsImporterOpen(true)}
+              className="w-full p-4 rounded-2xl border-2 border-dashed border-gold/40 hover:border-gold bg-gold/5 text-center text-xs font-bold text-gold transition-all flex items-center justify-center gap-2"
             >
-              <Plus className="w-4 h-4 mx-auto mb-1" />
-              Créer une nouvelle formation
-            </Link>
+              <Upload className="w-4 h-4" />
+              Importer une formation depuis Word ou Excel
+            </button>
           </div>
         </motion.div>
       </div>
-
-      {/* Recent enrollments */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0, transition: { delay: 0.4 } }}
-      >
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="font-display font-bold text-navy dark:text-white text-lg">
-            Dernières inscriptions
-          </h2>
-          <Link href="/admin/inscriptions" className="text-gold text-xs font-bold hover:underline flex items-center gap-1">
-            Voir tout le registre <ChevronRight className="w-4 h-4" />
-          </Link>
-        </div>
-        <div className="glass-card-light dark:glass-card rounded-2xl overflow-hidden border border-border">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border bg-muted/30">
-                  <th className="px-4 py-3.5 text-left text-xs font-semibold text-muted-foreground">Étudiant</th>
-                  <th className="px-4 py-3.5 text-left text-xs font-semibold text-muted-foreground">Formation</th>
-                  <th className="px-4 py-3.5 text-left text-xs font-semibold text-muted-foreground">Date</th>
-                  <th className="px-4 py-3.5 text-left text-xs font-semibold text-muted-foreground">Statut</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentEnrollments.map((enrollment) => (
-                  <tr key={enrollment.id} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                    <td className="px-4 py-3.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-gold/20 text-gold flex items-center justify-center text-xs font-bold font-mono">
-                          {enrollment.profiles?.full_name?.charAt(0) || 'E'}
-                        </div>
-                        <div>
-                          <div className="text-sm font-semibold text-navy dark:text-white">
-                            {enrollment.profiles?.full_name}
-                          </div>
-                          <div className="text-xs text-muted-foreground">{enrollment.profiles?.email}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3.5 text-sm text-navy dark:text-white max-w-[240px] truncate">
-                      {enrollment.courses?.title}
-                    </td>
-                    <td className="px-4 py-3.5 text-xs text-muted-foreground font-mono">
-                      {format(new Date(enrollment.enrolled_at), 'd MMM yyyy', { locale: fr })}
-                    </td>
-                    <td className="px-4 py-3.5">
-                      <span className={cn(
-                        'px-2.5 py-1 rounded-full text-xs font-bold border',
-                        enrollment.status === 'approved' ? 'bg-emerald/10 text-emerald border-emerald/20' :
-                        enrollment.status === 'pending' ? 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20' :
-                        'bg-red-500/10 text-red-500 border-red-500/20'
-                      )}>
-                        {enrollment.status === 'approved' ? 'Approuvé' :
-                         enrollment.status === 'pending' ? 'En attente' : 'Refusé'}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Quick Actions Shortcuts */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0, transition: { delay: 0.5 } }}
-      >
-        <h2 className="font-display font-bold text-navy dark:text-white text-lg mb-4">Actions Rapides d&apos;Administration</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            { label: 'Nouvelle Formation', icon: BookOpen, href: '/admin/formations/nouveau', color: 'text-gold' },
-            { label: 'Gestion Étudiants', icon: Users, href: '/admin/etudiants', color: 'text-blue-500' },
-            { label: 'Créer un Quiz', icon: FileText, href: '/admin/quiz/nouveau', color: 'text-purple-500' },
-            { label: 'Planifier Session Live', icon: Video, href: '/admin/sessions/nouvelle', color: 'text-emerald' },
-          ].map((action) => {
-            const Icon = action.icon
-            return (
-              <Link
-                key={action.label}
-                href={action.href}
-                className="glass-card-light dark:glass-card p-4 rounded-2xl flex flex-col items-center gap-2 text-center border border-border hover:border-gold/40 hover:shadow-gold transition-all group"
-              >
-                <Icon className={cn('w-6 h-6 group-hover:scale-110 transition-transform', action.color)} />
-                <span className="text-xs font-bold text-navy dark:text-white">{action.label}</span>
-              </Link>
-            )
-          })}
-        </div>
-      </motion.div>
     </div>
   )
 }

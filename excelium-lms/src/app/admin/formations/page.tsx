@@ -3,11 +3,19 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { BookOpen, Plus, Search, Filter, Edit3, Trash2, Eye, Star, Users, CheckCircle, Clock } from 'lucide-react'
+import {
+  BookOpen, Plus, Search, Filter, Edit3, Trash2, Eye, Star,
+  Users, CheckCircle, Clock, Upload, Download, Sparkles,
+  Columns, LayoutGrid, FileSpreadsheet, FileText, Layers
+} from 'lucide-react'
 import { formatCurrency, cn } from '@/lib/utils'
 import { toast } from 'sonner'
+import FormationImporterModal from '@/components/admin/FormationImporterModal'
+import ThreeColumnCurriculumBuilder from '@/components/admin/ThreeColumnCurriculumBuilder'
+import { ParsedFormation } from '@/lib/importers/formationParser'
+import * as XLSX from 'xlsx'
 
-const mockCourses = [
+const initialMockCourses = [
   {
     id: 'c-01',
     title: 'Pratique de la Liasse Fiscale Marocaine & IS 2026',
@@ -91,160 +99,319 @@ const mockCourses = [
 ]
 
 export default function AdminCoursesPage() {
-  const [courses, setCourses] = useState(mockCourses)
+  const [courses, setCourses] = useState(initialMockCourses)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedStatus, setSelectedStatus] = useState('all')
+  const [isImporterOpen, setIsImporterOpen] = useState(false)
+  const [viewMode, setViewMode] = useState<'3columns' | 'grid'>('3columns')
 
   const togglePublish = (id: string) => {
-    setCourses(prev => prev.map(c => c.id === id ? { ...c, isPublished: !c.isPublished } : c))
-    toast.success('Statut de publication mis à jour')
+    setCourses((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, isPublished: !c.isPublished } : c))
+    )
+    toast.success('Statut de publication mis à jour !')
   }
 
   const handleDelete = (id: string) => {
     if (confirm('Voulez-vous vraiment supprimer cette formation ?')) {
-      setCourses(prev => prev.filter(c => c.id !== id))
-      toast.success('Formation supprimée')
+      setCourses((prev) => prev.filter((c) => c.id !== id))
+      toast.success('Formation supprimée du catalogue.')
     }
   }
 
-  const filteredCourses = courses.filter(c => {
-    const matchesSearch = c.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const handleImportSuccess = (imported: ParsedFormation[]) => {
+    const formattedNew = imported.map((imp, idx) => ({
+      id: `c-imp-${Date.now()}-${idx}`,
+      title: imp.title,
+      slug: imp.slug,
+      category: imp.category,
+      price: imp.price,
+      currency: imp.currency || 'MAD',
+      durationHours: imp.durationHours,
+      totalLessons: imp.modules.reduce((sum, m) => sum + m.lessons.length, 0),
+      totalEnrolled: 0,
+      ratingAvg: 5.0,
+      isPublished: true,
+      isFeatured: false,
+      level: imp.level,
+      updatedAt: new Date().toISOString().split('T')[0],
+    }))
+
+    setCourses((prev) => [...formattedNew, ...prev])
+  }
+
+  const handleExportExcel = () => {
+    const dataToExport = courses.map((c) => ({
+      ID: c.id,
+      Titre: c.title,
+      Catégorie: c.category,
+      Prix_MAD: c.price,
+      Niveau: c.level,
+      Durée_Heures: c.durationHours,
+      Nombre_Leçons: c.totalLessons,
+      Inscrits: c.totalEnrolled,
+      Statut: c.isPublished ? 'Publié' : 'Brouillon',
+      Dernière_Mise_A_Jour: c.updatedAt,
+    }))
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Catalogue_Formations')
+    XLSX.writeFile(workbook, `Catalogue_Formations_Excelium_${new Date().toISOString().split('T')[0]}.xlsx`)
+    toast.success('Catalogue des formations exporté en Excel !')
+  }
+
+  const filteredCourses = courses.filter((c) => {
+    const matchesSearch = c.title.toLowerCase().includes(searchTerm.toLowerCase()) || c.category.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCat = selectedCategory === 'all' || c.category === selectedCategory
-    return matchesSearch && matchesCat
+    const matchesStatus =
+      selectedStatus === 'all' ||
+      (selectedStatus === 'published' && c.isPublished) ||
+      (selectedStatus === 'draft' && !c.isPublished)
+    return matchesSearch && matchesCat && matchesStatus
   })
+
+  const totalValue = courses.reduce((acc, c) => acc + c.price * c.totalEnrolled, 0)
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      {/* Importer Modal Component */}
+      <FormationImporterModal
+        isOpen={isImporterOpen}
+        onClose={() => setIsImporterOpen(false)}
+        onImportSuccess={handleImportSuccess}
+      />
+
+      {/* Top Header & Action Controls */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display font-bold text-navy dark:text-white text-2xl">
-            Gestion du Catalogue des Formations
+          <h1 className="font-display font-bold text-navy dark:text-white text-2xl flex items-center gap-2">
+            Gestion &amp; Création des Formations
+            <span className="text-xs font-mono bg-gold/15 text-gold px-2.5 py-0.5 rounded-full border border-gold/30">
+              {courses.length} Formations
+            </span>
           </h1>
           <p className="text-muted-foreground text-xs mt-1">
-            Gérez vos cours, leçons, tarifs et paramètres de publication
+            Gérez votre catalogue en mode 3-Colonnes (Formations / Leçons / Quiz) ou via la grille de cartes.
           </p>
         </div>
-        <Link
-          href="/admin/formations/nouveau"
-          className="btn-gold text-xs px-4 py-2.5 rounded-xl font-bold inline-flex items-center gap-2 shadow-sm"
-        >
-          <Plus className="w-4 h-4" /> Nouvelle Formation
-        </Link>
+
+        <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+          {/* View Mode Switcher */}
+          <div className="flex items-center gap-1 p-1 rounded-xl bg-muted/60 border border-border">
+            <button
+              onClick={() => setViewMode('3columns')}
+              className={cn(
+                'px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5',
+                viewMode === '3columns'
+                  ? 'bg-navy dark:bg-navy-900 text-gold shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              )}
+            >
+              <Columns className="w-3.5 h-3.5" /> 3 Colonnes (Formations / Leçons / Quiz)
+            </button>
+            <button
+              onClick={() => setViewMode('grid')}
+              className={cn(
+                'px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5',
+                viewMode === 'grid'
+                  ? 'bg-navy dark:bg-navy-900 text-gold shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              )}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" /> Grille Cartes
+            </button>
+          </div>
+
+          {/* Main Excel/Word Import Button */}
+          <button
+            onClick={() => setIsImporterOpen(true)}
+            className="btn-gold text-xs px-4 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-gold"
+          >
+            <Upload className="w-4 h-4" />
+            <span>Importer Word / Excel</span>
+          </button>
+
+          <Link
+            href="/admin/formations/nouveau"
+            className="px-4 py-2.5 rounded-xl bg-navy dark:bg-navy-900 border border-white/20 text-white hover:border-gold text-xs font-bold flex items-center gap-2 transition-all"
+          >
+            <Plus className="w-4 h-4 text-gold" /> Nouvelle Formation
+          </Link>
+        </div>
       </div>
 
-      {/* Filters bar */}
-      <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="relative w-full sm:w-80">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Rechercher une formation..."
-            className="w-full pl-9 pr-4 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none focus:border-gold"
-          />
+      {/* Summary KPI Counters */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border">
+          <div className="text-xs text-muted-foreground font-semibold">Total Formations</div>
+          <div className="font-display font-bold text-2xl text-navy dark:text-white mt-1 font-mono">
+            {courses.length}
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <Filter className="w-4 h-4 text-muted-foreground" />
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none text-navy dark:text-white"
-          >
-            <option value="all">Toutes les catégories</option>
-            <option value="Fiscalité Marocaine">Fiscalité Marocaine</option>
-            <option value="Comptabilité">Comptabilité</option>
-            <option value="Gestion Sociale">Gestion Sociale</option>
-          </select>
+        <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border">
+          <div className="text-xs text-muted-foreground font-semibold">En Ligne (Publiées)</div>
+          <div className="font-display font-bold text-2xl text-emerald mt-1 font-mono">
+            {courses.filter((c) => c.isPublished).length}
+          </div>
+        </div>
+
+        <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border">
+          <div className="text-xs text-muted-foreground font-semibold">Inscrits Totaux</div>
+          <div className="font-display font-bold text-2xl text-gold mt-1 font-mono">
+            {courses.reduce((acc, c) => acc + c.totalEnrolled, 0)}
+          </div>
+        </div>
+
+        <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border">
+          <div className="text-xs text-muted-foreground font-semibold">Chiffre d&apos;Affaires Généré</div>
+          <div className="font-display font-bold text-xl text-navy dark:text-white mt-1 font-mono">
+            {formatCurrency(totalValue, 'MAD')}
+          </div>
         </div>
       </div>
 
-      {/* Courses Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCourses.map((course) => (
-          <motion.div
-            key={course.id}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="glass-card-light dark:glass-card rounded-2xl border border-border p-5 flex flex-col justify-between hover:border-gold/40 transition-all group"
-          >
-            <div>
-              <div className="flex items-center justify-between gap-2 mb-3">
-                <span className="px-2.5 py-1 rounded-full bg-gold/15 text-gold text-[10px] font-bold uppercase tracking-wider">
-                  {course.category}
-                </span>
-                <span className={cn(
-                  'px-2 py-0.5 rounded-full text-[10px] font-semibold border',
-                  course.isPublished ? 'bg-emerald/10 text-emerald border-emerald/20' : 'bg-muted text-muted-foreground border-border'
-                )}>
-                  {course.isPublished ? 'Publié' : 'Brouillon'}
-                </span>
-              </div>
-
-              <h3 className="font-display font-bold text-navy dark:text-white text-base leading-snug mb-2 group-hover:text-gold transition-colors">
-                {course.title}
-              </h3>
-
-              <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
-                <span className="flex items-center gap-1">
-                  <Users className="w-3.5 h-3.5 text-gold" />
-                  {course.totalEnrolled} étudiants
-                </span>
-                <span className="flex items-center gap-1 font-mono">
-                  <Clock className="w-3.5 h-3.5" />
-                  {course.durationHours}h ({course.totalLessons} leçons)
-                </span>
-              </div>
+      {/* VIEW CONDITIONAL: 3 COLUMNS vs GRID */}
+      {viewMode === '3columns' ? (
+        <ThreeColumnCurriculumBuilder />
+      ) : (
+        <>
+          {/* Search & Filter Bar */}
+          <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="relative w-full sm:w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Rechercher par titre ou catégorie..."
+                className="w-full pl-9 pr-4 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none focus:border-gold"
+              />
             </div>
 
-            <div>
-              <div className="pt-4 border-t border-border flex items-center justify-between mb-4">
+            <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+              <div className="flex items-center gap-2">
+                <Filter className="w-4 h-4 text-muted-foreground" />
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none text-navy dark:text-white"
+                >
+                  <option value="all">Toutes les catégories</option>
+                  <option value="Fiscalité Marocaine">Fiscalité Marocaine</option>
+                  <option value="Comptabilité">Comptabilité &amp; Finance</option>
+                  <option value="Gestion Sociale">Gestion Sociale &amp; Paie</option>
+                </select>
+              </div>
+
+              <select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none text-navy dark:text-white"
+              >
+                <option value="all">Tous les statuts</option>
+                <option value="published">Publiés uniquement</option>
+                <option value="draft">Brouillons</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Courses Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCourses.map((course) => (
+              <motion.div
+                key={course.id}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="glass-card-light dark:glass-card rounded-2xl border border-border p-5 flex flex-col justify-between hover:border-gold/40 transition-all group relative overflow-hidden"
+              >
                 <div>
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Prix de vente</div>
-                  <div className="font-mono font-bold text-navy dark:text-white text-base">
-                    {formatCurrency(course.price, course.currency)}
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="px-2.5 py-1 rounded-full bg-gold/15 text-gold text-[10px] font-bold uppercase tracking-wider">
+                      {course.category}
+                    </span>
+                    <span
+                      className={cn(
+                        'px-2.5 py-0.5 rounded-full text-[10px] font-semibold border flex items-center gap-1',
+                        course.isPublished
+                          ? 'bg-emerald/10 text-emerald border-emerald/20'
+                          : 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20'
+                      )}
+                    >
+                      <span className={cn('w-1.5 h-1.5 rounded-full', course.isPublished ? 'bg-emerald' : 'bg-yellow-500')} />
+                      {course.isPublished ? 'Publié' : 'Brouillon'}
+                    </span>
+                  </div>
+
+                  <h3 className="font-display font-bold text-navy dark:text-white text-base leading-snug mb-2 group-hover:text-gold transition-colors line-clamp-2">
+                    {course.title}
+                  </h3>
+
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
+                    <span className="flex items-center gap-1">
+                      <Users className="w-3.5 h-3.5 text-gold" />
+                      {course.totalEnrolled} étudiants
+                    </span>
+                    <span className="flex items-center gap-1 font-mono">
+                      <Clock className="w-3.5 h-3.5" />
+                      {course.durationHours}h ({course.totalLessons} leçons)
+                    </span>
                   </div>
                 </div>
-                <button
-                  onClick={() => togglePublish(course.id)}
-                  className={cn(
-                    'text-xs font-bold px-3 py-1.5 rounded-xl border transition-all',
-                    course.isPublished
-                      ? 'bg-emerald/10 text-emerald border-emerald/20 hover:bg-emerald/20'
-                      : 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20 hover:bg-yellow-500/20'
-                  )}
-                >
-                  {course.isPublished ? 'Masquer' : 'Publier'}
-                </button>
-              </div>
 
-              <div className="flex items-center gap-2">
-                <Link
-                  href={`/admin/formations/${course.id}`}
-                  className="flex-1 btn-gold py-2 text-xs text-center justify-center font-bold rounded-xl"
-                >
-                  <Edit3 className="w-3.5 h-3.5 mr-1" /> Modifier &amp; Syllabus
-                </Link>
-                <Link
-                  href={`/formations/${course.slug}`}
-                  target="_blank"
-                  className="p-2 rounded-xl border border-border hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Eye className="w-4 h-4" />
-                </Link>
-                <button
-                  onClick={() => handleDelete(course.id)}
-                  className="p-2 rounded-xl border border-red-500/20 text-red-500 hover:bg-red-500/10 transition-colors"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+                <div>
+                  <div className="pt-4 border-t border-border flex items-center justify-between mb-4">
+                    <div>
+                      <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Tarif officiel</div>
+                      <div className="font-mono font-bold text-navy dark:text-white text-base">
+                        {formatCurrency(course.price, course.currency)}
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => togglePublish(course.id)}
+                      className={cn(
+                        'text-xs font-bold px-3 py-1.5 rounded-xl border transition-all',
+                        course.isPublished
+                          ? 'bg-emerald/10 text-emerald border-emerald/20 hover:bg-emerald/20'
+                          : 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20 hover:bg-yellow-500/20'
+                      )}
+                    >
+                      {course.isPublished ? 'Masquer' : 'Publier'}
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={`/admin/formations/${course.id}`}
+                      className="flex-1 btn-gold py-2 text-xs text-center justify-center font-bold rounded-xl flex items-center gap-1"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" /> Modifier &amp; Syllabus
+                    </Link>
+                    <Link
+                      href={`/formations/${course.slug}`}
+                      target="_blank"
+                      className="p-2 rounded-xl border border-border hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                      title="Voir l'aperçu public"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(course.id)}
+                      className="p-2 rounded-xl border border-red-500/20 text-red-500 hover:bg-red-500/10 transition-colors"
+                      title="Supprimer"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }
