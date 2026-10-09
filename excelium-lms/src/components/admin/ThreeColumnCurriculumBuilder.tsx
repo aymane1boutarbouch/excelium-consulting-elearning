@@ -435,13 +435,13 @@ export default function ThreeColumnCurriculumBuilder() {
   return (
     <div className="space-y-4">
       {/* Top Banner & Instructions */}
-      <div className="p-4 rounded-2xl bg-gradient-to-r from-navy via-navy-900 to-navy border border-white/15 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl">
+      <div className="p-5 rounded-2xl bg-[#F3EFE6] border border-[#E7E2D6] text-[#1E293B] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
         <div>
-          <h2 className="font-display font-bold text-lg flex items-center gap-2">
-            <Layers className="w-5 h-5 text-gold" />
+          <h2 className="font-serif font-bold text-lg text-[#0A1F44] flex items-center gap-2">
+            <Layers className="w-5 h-5 text-[#C9A24B]" />
             Gestion Colonnes : Formations &gt; Leçons &gt; Quiz &amp; Questions
           </h2>
-          <p className="text-white/60 text-xs mt-0.5">
+          <p className="text-[#475569] text-xs mt-1">
             Sélectionnez une formation à gauche pour afficher ses cours/leçons, puis cochez une leçon pour la modifier et gérer ses quiz.
           </p>
         </div>
@@ -459,9 +459,9 @@ export default function ThreeColumnCurriculumBuilder() {
         {/* ========================================================= */}
         {/* COLUMN 1: FORMATIONS (Width: 3.5 / 12)                    */}
         {/* ========================================================= */}
-        <div className="md:col-span-4 lg:col-span-3.5 glass-card-light dark:glass-card rounded-2xl border border-border p-4 space-y-3 flex flex-col h-full max-h-[720px]">
+        <div className="md:col-span-4 lg:col-span-3.5 glass-card-light rounded-2xl border border-border p-4 space-y-3 flex flex-col h-full max-h-[720px]">
           <div className="flex items-center justify-between pb-2 border-b border-border">
-            <h3 className="font-display font-bold text-navy dark:text-white text-xs uppercase tracking-wider flex items-center gap-1.5">
+            <h3 className="font-display font-bold text-navy text-xs uppercase tracking-wider flex items-center gap-1.5">
               <BookOpen className="w-4 h-4 text-gold" />
               1. Formations ({filteredFormations.length})
             </h3>
@@ -497,7 +497,7 @@ export default function ThreeColumnCurriculumBuilder() {
                   className={cn(
                     'p-3 rounded-xl border transition-all cursor-pointer relative flex flex-col justify-between gap-2',
                     isSelected
-                      ? 'bg-gold/15 dark:bg-gold/15 border-gold shadow-gold text-navy dark:text-white font-semibold'
+                      ? 'bg-gold/15 border-gold shadow-gold text-navy font-semibold'
                       : 'bg-muted/30 border-border/60 hover:bg-muted/60 text-muted-foreground hover:text-foreground'
                   )}
                 >
@@ -505,12 +505,12 @@ export default function ThreeColumnCurriculumBuilder() {
                     <span className="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-gold/20 text-gold">
                       {f.category}
                     </span>
-                    <span className="text-[10px] font-mono font-bold text-navy dark:text-white">
+                    <span className="text-[10px] font-mono font-bold text-navy">
                       {formatCurrency(f.price, f.currency)}
                     </span>
                   </div>
 
-                  <div className="font-bold text-xs leading-snug line-clamp-2 text-navy dark:text-white">
+                  <div className="font-bold text-xs leading-snug line-clamp-2 text-navy">
                     {f.title}
                   </div>
 
@@ -533,10 +533,10 @@ export default function ThreeColumnCurriculumBuilder() {
         {/* ========================================================= */}
         {/* COLUMN 2: LEÇONS, COURS & QUIZZ (Width: 4 / 12)           */}
         {/* ========================================================= */}
-        <div className="md:col-span-4 lg:col-span-4 glass-card-light dark:glass-card rounded-2xl border border-border p-4 space-y-3 flex flex-col h-full max-h-[720px]">
+        <div className="md:col-span-4 lg:col-span-4 glass-card-light rounded-2xl border border-border p-4 space-y-3 flex flex-col h-full max-h-[720px]">
           <div className="flex items-center justify-between pb-2 border-b border-border">
             <div className="min-w-0 flex-1">
-              <h3 className="font-display font-bold text-navy dark:text-white text-xs uppercase tracking-wider flex items-center gap-1.5 truncate">
+              <h3 className="font-display font-bold text-navy text-xs uppercase tracking-wider flex items-center gap-1.5 truncate">
                 <FileText className="w-4 h-4 text-gold" />
                 2. Leçons &amp; Cours
               </h3>
@@ -575,7 +575,7 @@ export default function ThreeColumnCurriculumBuilder() {
               return (
                 <div key={mod.id} className="p-3 rounded-xl border border-border bg-muted/20 space-y-2">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-bold text-navy dark:text-white text-xs flex items-center gap-1.5">
+                    <span className="font-bold text-navy text-xs flex items-center gap-1.5">
                       <Layers className="w-3.5 h-3.5 text-gold" />
                       {mod.title}
                     </span>
@@ -598,8 +598,8 @@ export default function ThreeColumnCurriculumBuilder() {
                           className={cn(
                             'p-2.5 rounded-xl border text-xs flex items-center justify-between gap-2 transition-all cursor-pointer group',
                             isChecked
-                              ? 'bg-navy dark:bg-navy-900 border-gold text-white font-semibold shadow-md'
-                              : 'bg-card border-border/80 hover:border-gold/40 text-muted-foreground hover:text-foreground'
+                              ? 'bg-[#C9A24B]/15 border-[#C9A24B] text-[#0A1F44] font-semibold shadow-sm'
+                              : 'bg-white border-[#E7E2D6] hover:border-[#C9A24B]/50 text-[#475569] hover:text-[#0A1F44]'
                           )}
                         >
                           <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -623,7 +623,7 @@ export default function ThreeColumnCurriculumBuilder() {
                               <FileText className="w-3.5 h-3.5 text-blue-400 shrink-0" />
                             )}
 
-                            <span className="truncate text-xs text-navy dark:text-white font-medium">
+                            <span className="truncate text-xs text-navy font-medium">
                               {les.title}
                             </span>
                           </div>
@@ -651,7 +651,7 @@ export default function ThreeColumnCurriculumBuilder() {
         {/* ========================================================= */}
         {/* COLUMN 3: QUIZZ, QUESTIONS & SECTION D'ÉDITION (4.5 / 12) */}
         {/* ========================================================= */}
-        <div className="md:col-span-4 lg:col-span-4.5 glass-card-light dark:glass-card rounded-2xl border border-border p-4 space-y-4 flex flex-col h-full max-h-[720px] overflow-y-auto">
+        <div className="md:col-span-4 lg:col-span-4.5 glass-card-light rounded-2xl border border-border p-4 space-y-4 flex flex-col h-full max-h-[720px] overflow-y-auto">
           {selectedLesson ? (
             <>
               {/* Header & Tabs */}
@@ -661,7 +661,7 @@ export default function ThreeColumnCurriculumBuilder() {
                     <span className="text-[10px] font-mono font-bold text-gold uppercase tracking-wider">
                       ÉDITEUR / DÉTAILS
                     </span>
-                    <h3 className="font-display font-bold text-navy dark:text-white text-sm truncate">
+                    <h3 className="font-display font-bold text-navy text-sm truncate">
                       {selectedLesson.title}
                     </h3>
                   </div>
@@ -681,7 +681,7 @@ export default function ThreeColumnCurriculumBuilder() {
                     className={cn(
                       'flex-1 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5',
                       activeTab === 'editor'
-                        ? 'bg-navy dark:bg-navy-900 text-gold shadow-sm'
+                        ? 'bg-navy text-gold shadow-sm'
                         : 'text-muted-foreground hover:text-foreground'
                     )}
                   >
@@ -692,7 +692,7 @@ export default function ThreeColumnCurriculumBuilder() {
                     className={cn(
                       'flex-1 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 relative',
                       activeTab === 'quiz'
-                        ? 'bg-navy dark:bg-navy-900 text-gold shadow-sm'
+                        ? 'bg-navy text-gold shadow-sm'
                         : 'text-muted-foreground hover:text-foreground'
                     )}
                   >
@@ -709,26 +709,26 @@ export default function ThreeColumnCurriculumBuilder() {
               {activeTab === 'editor' && (
                 <div className="space-y-4 flex-1">
                   <div>
-                    <label className="block text-[11px] font-bold text-navy dark:text-white mb-1">
+                    <label className="block text-[11px] font-bold text-navy mb-1">
                       Titre de la Leçon
                     </label>
                     <input
                       type="text"
                       value={selectedLesson.title}
                       onChange={(e) => handleUpdateLessonField('title', e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none focus:border-gold text-navy dark:text-white"
+                      className="w-full px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none focus:border-gold text-navy"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] font-bold text-navy dark:text-white mb-1">
+                      <label className="block text-[11px] font-bold text-navy mb-1">
                         Type de contenu
                       </label>
                       <select
                         value={selectedLesson.type}
                         onChange={(e) => handleUpdateLessonField('type', e.target.value)}
-                        className="w-full px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none text-navy dark:text-white"
+                        className="w-full px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none text-navy"
                       >
                         <option value="video">Vidéo (Vimeo / Bunny)</option>
                         <option value="text">Texte / Markdown</option>
@@ -738,20 +738,20 @@ export default function ThreeColumnCurriculumBuilder() {
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-bold text-navy dark:text-white mb-1">
+                      <label className="block text-[11px] font-bold text-navy mb-1">
                         Durée (minutes)
                       </label>
                       <input
                         type="number"
                         value={selectedLesson.durationMinutes}
                         onChange={(e) => handleUpdateLessonField('durationMinutes', Number(e.target.value))}
-                        className="w-full px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs font-mono focus:outline-none text-navy dark:text-white"
+                        className="w-full px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs font-mono focus:outline-none text-navy"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold text-navy dark:text-white mb-1">
+                    <label className="block text-[11px] font-bold text-navy mb-1">
                       Lien vidéo (URL Vimeo / YouTube)
                     </label>
                     <input
@@ -759,12 +759,12 @@ export default function ThreeColumnCurriculumBuilder() {
                       value={selectedLesson.videoUrl || ''}
                       onChange={(e) => handleUpdateLessonField('videoUrl', e.target.value)}
                       placeholder="https://vimeo.com/..."
-                      className="w-full px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs font-mono focus:outline-none text-navy dark:text-white"
+                      className="w-full px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs font-mono focus:outline-none text-navy"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-bold text-navy dark:text-white mb-1">
+                    <label className="block text-[11px] font-bold text-navy mb-1">
                       Support de cours (Contenu textuel / Markdown)
                     </label>
                     <textarea
@@ -772,12 +772,12 @@ export default function ThreeColumnCurriculumBuilder() {
                       onChange={(e) => handleUpdateLessonField('content', e.target.value)}
                       rows={5}
                       placeholder="Description et résumés de la leçon..."
-                      className="w-full px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none focus:border-gold text-navy dark:text-white resize-none font-mono"
+                      className="w-full px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none focus:border-gold text-navy resize-none font-mono"
                     />
                   </div>
 
                   <div className="flex items-center justify-between p-3 rounded-xl bg-muted/30 border border-border">
-                    <label className="flex items-center gap-2 text-xs font-bold text-navy dark:text-white cursor-pointer">
+                    <label className="flex items-center gap-2 text-xs font-bold text-navy cursor-pointer">
                       <input
                         type="checkbox"
                         checked={selectedLesson.isFreePreview}
@@ -804,7 +804,7 @@ export default function ThreeColumnCurriculumBuilder() {
                     <div className="p-8 text-center rounded-2xl border-2 border-dashed border-border bg-muted/10 space-y-3">
                       <QuizIcon className="w-10 h-10 text-purple-400 mx-auto" />
                       <div>
-                        <h4 className="font-bold text-navy dark:text-white text-sm">Aucun Quiz rattaché</h4>
+                        <h4 className="font-bold text-navy text-sm">Aucun Quiz rattaché</h4>
                         <p className="text-xs text-muted-foreground mt-0.5">
                           Créez un quiz interactif avec des QCM et questions Vrai/Faux pour cette leçon.
                         </p>
@@ -864,7 +864,7 @@ export default function ThreeColumnCurriculumBuilder() {
 
                       {/* Questions Header & Add Button */}
                       <div className="flex items-center justify-between">
-                        <h4 className="font-bold text-navy dark:text-white text-xs uppercase tracking-wider">
+                        <h4 className="font-bold text-navy text-xs uppercase tracking-wider">
                           Questions du Quiz ({selectedLesson.quiz.questions.length})
                         </h4>
                         <button
@@ -877,48 +877,48 @@ export default function ThreeColumnCurriculumBuilder() {
 
                       {/* Inline Add Question Form */}
                       {showAddQuestionForm && (
-                        <div className="p-4 rounded-xl bg-navy dark:bg-navy-950 border border-gold/40 text-white space-y-3">
-                          <div className="font-bold text-xs text-gold flex items-center gap-1">
-                            <Sparkles className="w-4 h-4" /> Ajouter une Question au Quiz
+                        <div className="p-4 rounded-xl bg-white border border-[#C9A24B]/40 text-[#1E293B] space-y-3 shadow-md">
+                          <div className="font-bold text-xs text-[#0A1F44] flex items-center gap-1">
+                            <Sparkles className="w-4 h-4 text-[#C9A24B]" /> Ajouter une Question au Quiz
                           </div>
 
                           <div>
-                            <label className="block text-[10px] font-semibold text-white/80 mb-1">Énoncé de la question</label>
+                            <label className="block text-[10px] font-semibold text-[#0A1F44] mb-1">Énoncé de la question</label>
                             <input
                               type="text"
                               value={newQuestionText}
                               onChange={(e) => setNewQuestionText(e.target.value)}
                               placeholder="ex: Quel est le taux normal de TVA en 2026 ?"
-                              className="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:outline-none focus:border-gold"
+                              className="w-full px-3 py-2 rounded-xl bg-[#FAF8F3] border border-[#E7E2D6] text-[#0A1F44] text-xs focus:outline-none focus:border-[#C9A24B] placeholder:text-[#94A3B8]"
                             />
                           </div>
 
                           <div className="grid grid-cols-2 gap-2">
                             <div>
-                              <label className="block text-[10px] font-semibold text-white/80 mb-1">Type</label>
+                              <label className="block text-[10px] font-semibold text-[#0A1F44] mb-1">Type</label>
                               <select
                                 value={newQuestionType}
                                 onChange={(e) => setNewQuestionType(e.target.value as any)}
-                                className="w-full px-2.5 py-1.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs focus:outline-none"
+                                className="w-full px-2.5 py-1.5 rounded-xl bg-[#FAF8F3] border border-[#E7E2D6] text-[#0A1F44] text-xs focus:outline-none focus:border-[#C9A24B]"
                               >
                                 <option value="mcq">QCM Choix Multiples</option>
                                 <option value="true_false">Vrai / Faux</option>
                               </select>
                             </div>
                             <div>
-                              <label className="block text-[10px] font-semibold text-white/80 mb-1">Points</label>
+                              <label className="block text-[10px] font-semibold text-[#0A1F44] mb-1">Points</label>
                               <input
                                 type="number"
                                 value={newQuestionPoints}
                                 onChange={(e) => setNewQuestionPoints(Number(e.target.value))}
-                                className="w-full px-2.5 py-1.5 rounded-xl bg-white/10 border border-white/20 text-white text-xs font-mono focus:outline-none"
+                                className="w-full px-2.5 py-1.5 rounded-xl bg-[#FAF8F3] border border-[#E7E2D6] text-[#0A1F44] text-xs font-mono focus:outline-none focus:border-[#C9A24B]"
                               />
                             </div>
                           </div>
 
                           {/* Options Editor */}
                           <div className="space-y-2 pt-1">
-                            <label className="block text-[10px] font-semibold text-gold">Choix de réponses (Cochez la bonne réponse) :</label>
+                            <label className="block text-[10px] font-semibold text-[#0A1F44]">Choix de réponses (Cochez la bonne réponse) :</label>
                             {newQuestionOptions.map((opt, oIdx) => (
                               <div key={opt.id} className="flex items-center gap-2">
                                 <input
@@ -933,7 +933,7 @@ export default function ThreeColumnCurriculumBuilder() {
                                       }))
                                     )
                                   }}
-                                  className="w-4 h-4 text-gold focus:ring-gold"
+                                  className="w-4 h-4 text-[#C9A24B] focus:ring-[#C9A24B]"
                                 />
                                 <input
                                   type="text"
@@ -946,7 +946,7 @@ export default function ThreeColumnCurriculumBuilder() {
                                       )
                                     )
                                   }}
-                                  className="flex-1 px-3 py-1 rounded-lg bg-white/10 border border-white/20 text-white text-xs focus:outline-none"
+                                  className="flex-1 px-3 py-1 rounded-lg bg-[#FAF8F3] border border-[#E7E2D6] text-[#0A1F44] text-xs focus:outline-none focus:border-[#C9A24B] placeholder:text-[#94A3B8]"
                                 />
                               </div>
                             ))}
@@ -955,7 +955,7 @@ export default function ThreeColumnCurriculumBuilder() {
                           <div className="flex justify-end gap-2 pt-2">
                             <button
                               onClick={() => setShowAddQuestionForm(false)}
-                              className="px-3 py-1.5 rounded-lg border border-white/20 text-white/70 text-xs"
+                              className="px-3 py-1.5 rounded-lg border border-[#E7E2D6] text-[#475569] hover:bg-[#F3EFE6] text-xs font-medium"
                             >
                               Annuler
                             </button>
@@ -977,7 +977,7 @@ export default function ThreeColumnCurriculumBuilder() {
                             className="p-3.5 rounded-xl border border-border bg-card space-y-2 text-xs"
                           >
                             <div className="flex items-start justify-between gap-2">
-                              <span className="font-bold text-navy dark:text-white flex items-center gap-1.5">
+                              <span className="font-bold text-navy flex items-center gap-1.5">
                                 <span className="w-5 h-5 rounded-md bg-gold/20 text-gold font-mono text-[10px] flex items-center justify-center">
                                   {qIdx + 1}
                                 </span>

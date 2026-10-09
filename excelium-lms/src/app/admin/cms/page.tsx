@@ -14,7 +14,7 @@ export default function CMSManagementPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display font-bold text-navy dark:text-white text-2xl flex items-center gap-2">
+          <h1 className="font-display font-bold text-navy text-2xl flex items-center gap-2">
             Gestionnaire CMS : Formations, Leçons &amp; Quizz
           </h1>
           <p className="text-muted-foreground text-xs mt-1">
@@ -28,7 +28,7 @@ export default function CMSManagementPage() {
             onClick={() => setViewMode('3columns')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
               viewMode === '3columns'
-                ? 'bg-navy dark:bg-navy-900 text-gold shadow-sm font-bold'
+                ? 'bg-navy text-gold shadow-sm font-bold'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >

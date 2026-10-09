@@ -94,7 +94,7 @@ export default function CourseEditPage() {
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="font-display font-bold text-navy dark:text-white text-xl">
+            <h1 className="font-display font-bold text-navy text-xl">
               Édition : {course.title}
             </h1>
             <p className="text-muted-foreground text-xs font-mono">ID: {courseId}</p>
@@ -107,12 +107,12 @@ export default function CourseEditPage() {
 
       {/* Main form */}
       <form onSubmit={handleSave} className="space-y-6">
-        <div className="glass-card-light dark:glass-card p-6 rounded-3xl border border-border space-y-4">
-          <h2 className="font-display font-bold text-navy dark:text-white text-lg">Informations Générales</h2>
+        <div className="glass-card-light p-6 rounded-3xl border border-border space-y-4">
+          <h2 className="font-display font-bold text-navy text-lg">Informations Générales</h2>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Titre de la formation</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Titre de la formation</label>
               <input
                 type="text"
                 value={course.title}
@@ -123,7 +123,7 @@ export default function CourseEditPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Description</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Description</label>
               <textarea
                 value={course.description}
                 onChange={(e) => setCourse(prev => ({ ...prev, description: e.target.value }))}
@@ -134,7 +134,7 @@ export default function CourseEditPage() {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Prix (MAD)</label>
+                <label className="block text-xs font-semibold text-navy mb-1">Prix (MAD)</label>
                 <input
                   type="number"
                   value={course.price}
@@ -143,7 +143,7 @@ export default function CourseEditPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Durée (heures)</label>
+                <label className="block text-xs font-semibold text-navy mb-1">Durée (heures)</label>
                 <input
                   type="number"
                   value={course.durationHours}
@@ -152,7 +152,7 @@ export default function CourseEditPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Niveau</label>
+                <label className="block text-xs font-semibold text-navy mb-1">Niveau</label>
                 <select
                   value={course.level}
                   onChange={(e) => setCourse(prev => ({ ...prev, level: e.target.value }))}
@@ -166,7 +166,7 @@ export default function CourseEditPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Lien Vidéo d&apos;Aperçu (Vimeo/YouTube)</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Lien Vidéo d&apos;Aperçu (Vimeo/YouTube)</label>
               <input
                 type="text"
                 value={course.previewVideoUrl}
@@ -178,9 +178,9 @@ export default function CourseEditPage() {
         </div>
 
         {/* Syllabus / Modules Builder */}
-        <div className="glass-card-light dark:glass-card p-6 rounded-3xl border border-border space-y-6">
+        <div className="glass-card-light p-6 rounded-3xl border border-border space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="font-display font-bold text-navy dark:text-white text-lg">
+            <h2 className="font-display font-bold text-navy text-lg">
               Programme &amp; Leçons ({modules.reduce((acc, m) => acc + m.lessons.length, 0)} leçons)
             </h2>
           </div>
@@ -218,7 +218,7 @@ export default function CourseEditPage() {
           <div className="space-y-4">
             {modules.map((mod) => (
               <div key={mod.id} className="p-4 rounded-2xl border border-border bg-muted/20 space-y-3">
-                <h3 className="font-bold text-navy dark:text-white text-sm flex items-center gap-2">
+                <h3 className="font-bold text-navy text-sm flex items-center gap-2">
                   <Video className="w-4 h-4 text-gold" /> {mod.title}
                 </h3>
 
@@ -227,7 +227,7 @@ export default function CourseEditPage() {
                     <div key={lesson.id} className="p-3 rounded-xl bg-muted/50 border border-border flex items-center justify-between gap-3 text-xs">
                       <div className="flex items-center gap-2 min-w-0">
                         <FileText className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-                        <span className="font-medium text-navy dark:text-white truncate">{lesson.title}</span>
+                        <span className="font-medium text-navy truncate">{lesson.title}</span>
                         <span className="text-muted-foreground font-mono text-[10px]">({lesson.duration})</span>
                       </div>
 

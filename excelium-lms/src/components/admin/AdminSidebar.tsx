@@ -1,12 +1,12 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, BookOpen, Users, CreditCard,
   FileText, Video, Award, Bell, Settings, Layers,
-  GraduationCap, Eye, LogOut, Menu, X, Plus, AlertCircle, CheckCircle2
+  GraduationCap, Eye, LogOut, Menu, X, Plus, AlertCircle
 } from 'lucide-react'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -32,60 +32,57 @@ const adminLinks = [
 export default function AdminSidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [pendingCount, setPendingCount] = useState(3)
+  const pendingCount = 3
 
   const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut()
-    } catch {}
+    try { await supabase.auth.signOut() } catch {}
     toast.success('Déconnexion réussie')
     window.location.href = '/connexion'
   }
 
   return (
-    <div className="min-h-screen bg-ivory dark:bg-navy flex">
-      {/* Mobile Overlay */}
+    <div className="min-h-screen bg-[#FAF8F3] flex">
+      {/* Mobile overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 md:hidden"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      {/* Admin Sidebar */}
+      {/* Sidebar */}
       <aside className={cn(
         'fixed md:sticky top-0 left-0 h-screen z-50 md:z-auto',
-        'w-64 bg-navy dark:bg-navy-900 border-r border-white/10',
-        'flex flex-col transition-transform duration-300 shadow-2xl md:shadow-none',
+        'w-64 bg-white border-r border-[#E7E2D6]',
+        'flex flex-col transition-transform duration-300 shadow-lg md:shadow-none',
         sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
       )}>
-        {/* Brand header */}
-        <div className="p-5 border-b border-white/10 flex items-center justify-between">
+        {/* Brand */}
+        <div className="p-5 border-b border-[#E7E2D6] flex items-center justify-between">
           <Link href="/admin" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-gold flex items-center justify-center shadow-gold">
-              <GraduationCap className="w-6 h-6 text-navy" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C9A24B] to-[#A0782E] flex items-center justify-center shadow-sm">
+              <GraduationCap className="w-5 h-5 text-white" />
             </div>
             <div>
-              <div className="font-display font-bold text-white text-xs tracking-wider">EXCELIUM ADMIN</div>
-              <div className="text-gold text-[10px] tracking-widest font-mono">CABINET &amp; E-LEARNING</div>
+              <div className="font-serif font-bold text-[#0A1F44] text-xs tracking-wider">EXCELIUM ADMIN</div>
+              <div className="text-[#C9A24B] text-[10px] tracking-widest font-mono">CABINET & E-LEARNING</div>
             </div>
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="md:hidden text-white/50 hover:text-white"
+            className="md:hidden text-[#475569] hover:text-[#0A1F44] p-1"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Navigation links */}
-        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+        {/* Nav */}
+        <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
           {adminLinks.map((link) => {
             const Icon = link.icon
             const isActive = link.href === '/admin'
               ? pathname === '/admin'
               : pathname.startsWith(link.href)
-            
             const badgeValue = link.badgeKey === 'pendingPayments' ? pendingCount : null
 
             return (
@@ -94,16 +91,16 @@ export default function AdminSidebar({ children }: { children: React.ReactNode }
                 href={link.href}
                 onClick={() => setSidebarOpen(false)}
                 className={cn(
-                  'sidebar-item relative group text-xs py-2.5 px-3 rounded-xl flex items-center gap-3 transition-all',
+                  'flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all relative',
                   isActive
-                    ? 'bg-gold/15 text-gold font-bold border border-gold/30'
-                    : 'text-white/70 hover:bg-white/5 hover:text-white'
+                    ? 'bg-[#C9A24B]/10 text-[#A0782E] font-bold border-r-2 border-[#C9A24B]'
+                    : 'text-[#475569] hover:bg-[#F3EFE6] hover:text-[#0A1F44]'
                 )}
               >
-                <Icon className={cn('w-4 h-4 flex-shrink-0', isActive ? 'text-gold' : 'text-white/50 group-hover:text-gold')} />
+                <Icon className={cn('w-4 h-4 flex-shrink-0', isActive ? 'text-[#C9A24B]' : 'text-[#94A3B8]')} />
                 <span className="flex-1 truncate">{link.label}</span>
                 {badgeValue && badgeValue > 0 && (
-                  <span className="w-5 h-5 rounded-full bg-yellow-500 text-navy text-[10px] font-bold flex items-center justify-center font-mono animate-pulse">
+                  <span className="w-5 h-5 rounded-full bg-amber-400 text-[#0A1F44] text-[10px] font-bold flex items-center justify-center font-mono">
                     {badgeValue}
                   </span>
                 )}
@@ -113,41 +110,42 @@ export default function AdminSidebar({ children }: { children: React.ReactNode }
         </nav>
 
         {/* Bottom actions */}
-        <div className="p-3 border-t border-white/10 space-y-1">
+        <div className="p-3 border-t border-[#E7E2D6] space-y-0.5">
           <Link
             href="/"
-            className="sidebar-item text-white/60 hover:text-white text-xs py-2 px-3 rounded-xl flex items-center gap-2"
             target="_blank"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-[#475569] hover:bg-[#F3EFE6] hover:text-[#0A1F44] transition-all"
           >
-            <Eye className="w-4 h-4 text-white/40" />
+            <Eye className="w-4 h-4 text-[#94A3B8]" />
             <span>Voir le site public</span>
           </Link>
           <button
             onClick={handleLogout}
-            className="w-full sidebar-item text-white/60 hover:text-red-400 hover:bg-red-500/10 text-xs py-2 px-3 rounded-xl flex items-center gap-2 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-[#475569] hover:bg-red-50 hover:text-red-600 transition-all"
           >
-            <LogOut className="w-4 h-4 text-white/40 group-hover:text-red-400" />
+            <LogOut className="w-4 h-4 text-[#94A3B8]" />
             <span>Déconnexion</span>
           </button>
         </div>
       </aside>
 
-      {/* Main Container */}
+      {/* Main */}
       <div className="flex-1 min-w-0 flex flex-col min-h-screen">
         {/* Top bar */}
-        <header className="sticky top-0 z-30 bg-ivory/85 dark:bg-navy/85 backdrop-blur-md border-b border-border px-4 md:px-8 py-3.5 flex items-center justify-between">
+        <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-[#E7E2D6] px-4 md:px-8 py-3.5 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="md:hidden p-2 rounded-xl bg-muted/60 text-muted-foreground hover:text-foreground"
+              className="md:hidden p-2 rounded-xl bg-[#F3EFE6] text-[#475569] hover:text-[#0A1F44] transition-colors"
+              aria-label="Ouvrir le menu"
             >
               <Menu className="w-5 h-5" />
             </button>
             <div>
-              <p className="text-muted-foreground text-[11px] font-mono capitalize">
+              <p className="text-[#475569] text-[11px] font-mono capitalize">
                 {format(new Date(), 'EEEE d MMMM yyyy', { locale: fr })}
               </p>
-              <h1 className="font-display font-bold text-navy dark:text-white text-lg leading-tight">
+              <h1 className="font-serif font-bold text-[#0A1F44] text-lg leading-tight">
                 Plateforme d&apos;Administration Excelium
               </h1>
             </div>
@@ -156,7 +154,7 @@ export default function AdminSidebar({ children }: { children: React.ReactNode }
           <div className="flex items-center gap-3">
             <Link
               href="/admin/paiements"
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-yellow-600 dark:text-yellow-400 text-xs font-semibold hover:bg-yellow-500/20 transition-all"
+              className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 text-xs font-semibold hover:bg-amber-100 transition-all"
             >
               <AlertCircle className="w-3.5 h-3.5" />
               <span>3 paiements à valider</span>
@@ -164,7 +162,7 @@ export default function AdminSidebar({ children }: { children: React.ReactNode }
 
             <Link
               href="/admin/formations/nouveau"
-              className="btn-gold text-xs px-3.5 py-2 rounded-xl font-bold inline-flex items-center gap-1.5 shadow-sm"
+              className="btn-gold text-xs !h-12 px-4 rounded-xl font-bold inline-flex items-center gap-1.5 shadow-sm"
             >
               <Plus className="w-4 h-4" />
               <span className="hidden xs:inline">Nouveau cours</span>
@@ -172,7 +170,7 @@ export default function AdminSidebar({ children }: { children: React.ReactNode }
           </div>
         </header>
 
-        {/* Page Content */}
+        {/* Page content */}
         <main className="flex-1 p-4 md:p-8 overflow-y-auto">
           {children}
         </main>

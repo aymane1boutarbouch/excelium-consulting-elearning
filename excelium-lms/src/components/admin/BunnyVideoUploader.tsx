@@ -158,9 +158,9 @@ export default function BunnyVideoUploader({ onVideoUploaded, existingVideoId }:
   }
 
   return (
-    <div className="glass-card-light dark:glass-card p-6 rounded-3xl border border-border space-y-4">
+    <div className="glass-card-light p-6 rounded-3xl border border-border space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-display font-bold text-navy dark:text-white text-sm flex items-center gap-2">
+        <h3 className="font-display font-bold text-navy text-sm flex items-center gap-2">
           <Video className="w-4 h-4 text-gold" /> Téléversement Vidéo Direct (Bunny Stream TUS 10GB Max)
         </h3>
         {videoId && (
@@ -180,7 +180,7 @@ export default function BunnyVideoUploader({ onVideoUploaded, existingVideoId }:
             className="hidden"
           />
           <Upload className="w-8 h-8 text-gold mx-auto mb-2" />
-          <div className="text-xs font-bold text-navy dark:text-white">
+          <div className="text-xs font-bold text-navy">
             {file ? file.name : 'Glissez-déposez un fichier MP4 / MOV (Jusqu\'à 10 Go)'}
           </div>
           <div className="text-[11px] text-muted-foreground mt-1">
@@ -204,7 +204,7 @@ export default function BunnyVideoUploader({ onVideoUploaded, existingVideoId }:
       {(status === 'uploading' || paused) && (
         <div className="space-y-3 p-4 rounded-2xl bg-muted/40 border border-border">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-bold text-navy dark:text-white truncate max-w-[200px]">
+            <span className="font-bold text-navy truncate max-w-[200px]">
               {file?.name}
             </span>
             <span className="font-mono font-bold text-gold">{progress}% ({uploadSpeed})</span>
@@ -234,7 +234,7 @@ export default function BunnyVideoUploader({ onVideoUploaded, existingVideoId }:
       {/* Transcoding Status Indicator */}
       {status === 'transcoding' && (
         <div className="p-4 rounded-2xl bg-yellow-500/10 border border-yellow-500/20 space-y-2">
-          <div className="flex items-center justify-between text-xs font-semibold text-yellow-600 dark:text-yellow-400">
+          <div className="flex items-center justify-between text-xs font-semibold text-yellow-600">
             <span className="flex items-center gap-1.5">
               <RefreshCw className="w-4 h-4 animate-spin" /> Encodage HD/4K Bunny Stream en cours...
             </span>

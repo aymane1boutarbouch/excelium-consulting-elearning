@@ -30,16 +30,16 @@ export default function NewSessionPage() {
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="font-display font-bold text-navy dark:text-white text-2xl">
+          <h1 className="font-display font-bold text-navy text-2xl">
             Planifier une Session Live / Webinaire
           </h1>
           <p className="text-muted-foreground text-xs">Configurez les détails du direct pour les apprenants</p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="glass-card-light dark:glass-card p-6 rounded-3xl border border-border space-y-5">
+      <form onSubmit={handleSubmit} className="glass-card-light p-6 rounded-3xl border border-border space-y-5">
         <div>
-          <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Titre de la Session</label>
+          <label className="block text-xs font-semibold text-navy mb-1">Titre de la Session</label>
           <input
             type="text"
             value={formData.title}
@@ -52,7 +52,7 @@ export default function NewSessionPage() {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Date et Heure du Direct</label>
+            <label className="block text-xs font-semibold text-navy mb-1">Date et Heure du Direct</label>
             <input
               type="datetime-local"
               value={formData.scheduledAt}
@@ -62,7 +62,7 @@ export default function NewSessionPage() {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Durée (Minutes)</label>
+            <label className="block text-xs font-semibold text-navy mb-1">Durée (Minutes)</label>
             <input
               type="number"
               value={formData.durationMinutes}
@@ -74,7 +74,7 @@ export default function NewSessionPage() {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Lien Google Meet / Zoom / Teams</label>
+          <label className="block text-xs font-semibold text-navy mb-1">Lien Google Meet / Zoom / Teams</label>
           <input
             type="url"
             value={formData.meetUrl}
@@ -86,7 +86,7 @@ export default function NewSessionPage() {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Nom de l&apos;Animateur / Formateur</label>
+          <label className="block text-xs font-semibold text-navy mb-1">Nom de l&apos;Animateur / Formateur</label>
           <input
             type="text"
             value={formData.instructorName}

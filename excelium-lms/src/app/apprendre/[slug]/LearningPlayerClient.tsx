@@ -114,19 +114,22 @@ export default function LearningPlayerClient({ course, enrollment, initialProgre
   }
 
   return (
-    <div className="min-h-screen bg-navy text-white flex flex-col h-screen overflow-hidden">
+    <div className="min-h-screen bg-[#FAF8F3] text-[#1E293B] flex flex-col h-screen overflow-hidden">
       {/* ── Top Bar ─────────────────────────────────────────────── */}
-      <header className="h-16 bg-navy-900 border-b border-white/10 px-4 flex items-center justify-between flex-shrink-0 z-30">
+      <header className="h-16 bg-white border-b border-[#E7E2D6] px-4 flex items-center justify-between flex-shrink-0 z-30 shadow-sm">
         <div className="flex items-center gap-4">
           <Link
             href="/dashboard"
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+            className="p-2.5 rounded-xl bg-[#FAF8F3] hover:bg-[#F3EFE6] text-[#475569] hover:text-[#0A1F44] border border-[#E7E2D6] transition-colors"
+            aria-label="Retour au tableau de bord"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-4 h-4" />
           </Link>
           <div className="min-w-0">
-            <div className="text-xs text-gold font-semibold uppercase tracking-wider">Excelium E-Learning</div>
-            <h1 className="font-display font-bold text-white text-sm md:text-base truncate max-w-md">
+            <div className="text-[11px] text-[#C9A24B] font-semibold uppercase tracking-wider font-mono">
+              Excelium E-Learning
+            </div>
+            <h1 className="font-serif font-bold text-[#0A1F44] text-sm md:text-base truncate max-w-md">
               {course.title}
             </h1>
           </div>
@@ -134,22 +137,23 @@ export default function LearningPlayerClient({ course, enrollment, initialProgre
 
         {/* Progress & Sidebar Toggle */}
         <div className="flex items-center gap-4">
-          <div className="hidden sm:flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/10">
-            <div className="text-xs text-white/70">Progression</div>
-            <div className="w-24 h-2 bg-white/10 rounded-full overflow-hidden">
+          <div className="hidden sm:flex items-center gap-3 bg-[#FAF8F3] px-4 py-2 rounded-xl border border-[#E7E2D6]">
+            <div className="text-xs text-[#475569] font-medium">Progression</div>
+            <div className="w-24 h-2 bg-[#E7E2D6] rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-gold rounded-full transition-all duration-500"
+                className="h-full bg-gradient-to-r from-[#C9A24B] to-[#E8D099] rounded-full transition-all duration-500"
                 style={{ width: `${progressRate}%` }}
               />
             </div>
-            <div className="text-xs font-mono font-bold text-gold">{progressRate}%</div>
+            <div className="text-xs font-mono font-bold text-[#0A1F44]">{progressRate}%</div>
           </div>
 
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+            className="p-2.5 rounded-xl bg-[#FAF8F3] hover:bg-[#F3EFE6] text-[#475569] hover:text-[#0A1F44] border border-[#E7E2D6] transition-colors"
+            aria-label="Ouvrir le sommaire"
           >
-            {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {sidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
       </header>
@@ -157,7 +161,7 @@ export default function LearningPlayerClient({ course, enrollment, initialProgre
       {/* ── Main Layout (Player + Sidebar) ──────────────────────── */}
       <div className="flex-1 flex min-h-0 overflow-hidden relative">
         {/* Main Content Area (Video & Lesson Details) */}
-        <main className="flex-1 flex flex-col overflow-y-auto bg-navy-950 p-4 md:p-8">
+        <main className="flex-1 flex flex-col overflow-y-auto bg-[#FAF8F3] p-4 md:p-8">
           {activeLesson ? (
             <div className="max-w-5xl mx-auto w-full space-y-6">
               {/* Secure Video Player Box */}
@@ -170,28 +174,29 @@ export default function LearningPlayerClient({ course, enrollment, initialProgre
                     videoDurationSeconds={(activeLesson.duration_minutes || 60) * 60}
                   />
                 ) : (
-                  <div className="w-full aspect-video rounded-3xl flex flex-col items-center justify-center p-6 text-center bg-gradient-navy border border-white/10">
-                    <Video className="w-16 h-16 text-gold/40 mb-4" />
-                    <p className="text-white font-bold text-lg">Leçon au format Texte / Support Fichier</p>
+                  <div className="w-full aspect-video rounded-2xl flex flex-col items-center justify-center p-6 text-center bg-white border border-[#E7E2D6] shadow-sm">
+                    <Video className="w-16 h-16 text-[#C9A24B] mb-4" />
+                    <p className="text-[#0A1F44] font-serif font-bold text-lg">Support Pédagogique & Fiche Pratique</p>
+                    <p className="text-[#475569] text-sm mt-1">Consultez le texte explicatif et les fichiers joints ci-dessous.</p>
                   </div>
                 )}
               </div>
 
               {/* Lesson Controls Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-4 glass-card p-4 rounded-2xl">
+              <div className="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-[#E7E2D6] shadow-sm">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => toggleComplete(activeLesson.id)}
                     className={cn(
-                      'flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all',
+                      'flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-sm',
                       completedLessonIds.has(activeLesson.id)
-                        ? 'bg-emerald text-white'
-                        : 'bg-gold text-navy hover:bg-gold/90'
+                        ? 'bg-emerald-600 text-white hover:bg-emerald-700'
+                        : 'bg-[#0A1F44] text-white hover:bg-[#081836]'
                     )}
                   >
                     {completedLessonIds.has(activeLesson.id) ? (
                       <>
-                        <CheckCircle className="w-4 h-4" /> Leçon terminée
+                        <CheckCircle className="w-4 h-4 text-[#C9A24B]" /> Leçon terminée
                       </>
                     ) : (
                       <>
@@ -205,7 +210,7 @@ export default function LearningPlayerClient({ course, enrollment, initialProgre
                   {prevLesson && (
                     <button
                       onClick={() => setActiveLessonId(prevLesson.id)}
-                      className="btn-outline-gold text-xs px-4 py-2 rounded-xl flex items-center gap-1"
+                      className="px-4 py-2.5 rounded-xl border border-[#E7E2D6] bg-white hover:bg-[#FAF8F3] text-[#0A1F44] font-semibold text-xs flex items-center gap-1.5 transition-colors"
                     >
                       <ChevronLeft className="w-4 h-4" /> Précédent
                     </button>
@@ -213,19 +218,19 @@ export default function LearningPlayerClient({ course, enrollment, initialProgre
                   {nextLesson && (
                     <button
                       onClick={() => setActiveLessonId(nextLesson.id)}
-                      className="btn-gold text-xs px-4 py-2 rounded-xl flex items-center gap-1"
+                      className="px-4 py-2.5 rounded-xl bg-[#0A1F44] hover:bg-[#081836] text-white font-semibold text-xs flex items-center gap-1.5 transition-colors shadow-sm"
                     >
-                      Suivant <ChevronRight className="w-4 h-4" />
+                      Suivant <ChevronRight className="w-4 h-4 text-[#C9A24B]" />
                     </button>
                   )}
                 </div>
               </div>
 
               {/* Lesson Text Content */}
-              <div className="glass-card p-6 md:p-8 rounded-3xl space-y-4">
-                <h2 className="font-display font-bold text-2xl text-white">{activeLesson.title}</h2>
-                <div className="text-white/80 text-base leading-relaxed whitespace-pre-wrap font-sans">
-                  {activeLesson.content || 'Consultez la vidéo ci-dessus et les documents téléchargeables ci-dessous.'}
+              <div className="bg-white p-6 md:p-8 rounded-2xl border border-[#E7E2D6] shadow-sm space-y-4">
+                <h2 className="font-serif font-bold text-2xl text-[#0A1F44]">{activeLesson.title}</h2>
+                <div className="text-[#1E293B] text-[17px] leading-[1.7] whitespace-pre-wrap font-sans">
+                  {activeLesson.content || 'Consultez la vidéo ci-dessus et les supports téléchargeables rattachés à ce module.'}
                 </div>
               </div>
 
@@ -243,7 +248,7 @@ export default function LearningPlayerClient({ course, enrollment, initialProgre
               />
             </div>
           ) : (
-            <div className="flex items-center justify-center h-full text-white/50">
+            <div className="flex items-center justify-center h-full text-[#475569] text-base">
               Aucune leçon disponible pour ce cours.
             </div>
           )}
@@ -256,17 +261,17 @@ export default function LearningPlayerClient({ course, enrollment, initialProgre
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ duration: 0.3 }}
-              className="w-80 bg-navy-900 border-l border-white/10 flex flex-col flex-shrink-0 z-20"
+              transition={{ duration: 0.25 }}
+              className="w-80 bg-white border-l border-[#E7E2D6] flex flex-col flex-shrink-0 z-20 shadow-sm"
             >
-              <div className="p-4 border-b border-white/10 font-display font-semibold text-white text-sm">
-                Sommaire de la formation
+              <div className="p-4 border-b border-[#E7E2D6] font-serif font-bold text-[#0A1F44] text-sm">
+                Sommaire du programme
               </div>
 
               <div className="flex-1 overflow-y-auto p-3 space-y-4">
                 {course.modules.map((module, mIdx) => (
                   <div key={module.id} className="space-y-1">
-                    <div className="text-xs font-bold text-gold uppercase tracking-wider px-3 py-1">
+                    <div className="text-xs font-bold text-[#C9A24B] uppercase tracking-wider px-3 py-1 font-mono">
                       Module {mIdx + 1}: {module.title}
                     </div>
 
@@ -281,19 +286,19 @@ export default function LearningPlayerClient({ course, enrollment, initialProgre
                           className={cn(
                             'w-full text-left p-3 rounded-xl flex items-center justify-between gap-3 text-xs transition-all',
                             isActive
-                              ? 'bg-gold text-navy font-bold shadow-gold'
-                              : 'hover:bg-white/5 text-white/80'
+                              ? 'bg-[#0A1F44] text-white font-semibold shadow-sm'
+                              : 'hover:bg-[#FAF8F3] text-[#475569] hover:text-[#0A1F44]'
                           )}
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
                             {isDone ? (
-                              <CheckCircle className={cn('w-4 h-4 flex-shrink-0', isActive ? 'text-navy' : 'text-emerald')} />
+                              <CheckCircle className={cn('w-4 h-4 flex-shrink-0', isActive ? 'text-[#C9A24B]' : 'text-emerald-600')} />
                             ) : (
-                              <Circle className={cn('w-4 h-4 flex-shrink-0', isActive ? 'text-navy' : 'text-white/30')} />
+                              <Circle className={cn('w-4 h-4 flex-shrink-0', isActive ? 'text-white/40' : 'text-[#94A3B8]')} />
                             )}
                             <span className="truncate">{lesson.title}</span>
                           </div>
-                          <span className={cn('font-mono text-[10px]', isActive ? 'text-navy/70' : 'text-white/40')}>
+                          <span className={cn('font-mono text-[10px]', isActive ? 'text-[#C9A24B]' : 'text-[#64748B]')}>
                             {lesson.duration_minutes}m
                           </span>
                         </button>

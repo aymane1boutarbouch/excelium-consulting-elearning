@@ -27,7 +27,7 @@ export default async function FormationsPage() {
   ])
 
   return (
-    <Suspense fallback={<div className="min-h-screen bg-navy animate-pulse" />}>
+    <Suspense fallback={<div className="min-h-screen bg-[#FAF8F3] animate-pulse" />}>
       <FormationsClient
         initialCourses={courses || []}
         categories={categories || []}

@@ -1,71 +1,83 @@
 import React from 'react'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import { Mail, Phone, MapPin, MessageCircle, Send, Clock, Sparkles } from 'lucide-react'
+import { Mail, Phone, MapPin, MessageCircle } from 'lucide-react'
+import { ContactForm } from '@/components/contact/ContactForm'
 
 export const metadata = {
   title: 'Contact — Excelium Consulting Compta',
-  description: 'Contactez le cabinet Excelium Consulting Compta pour toute demande de renseignement ou d\'accompagnement.',
+  description: 'Contactez le cabinet Excelium Consulting Compta pour toute demande de renseignement ou d\'accompagnement en formation comptable et fiscale.',
 }
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-ivory dark:bg-navy flex flex-col">
+    <div className="min-h-screen bg-[#FAF8F3] flex flex-col">
       <Navbar />
 
-      <div className="bg-mesh pt-32 pb-16 px-4 relative overflow-hidden text-center">
-        <div className="orb-gold w-96 h-96 top-0 right-1/4 opacity-20 absolute" />
+      {/* Header section */}
+      <div className="bg-[#F3EFE6] border-b border-[#E7E2D6] pt-32 pb-16 px-4 relative overflow-hidden text-center">
         <div className="section-container relative z-10 max-w-3xl mx-auto">
-          <span className="text-gold text-xs font-bold uppercase tracking-widest">Besoin d&apos;aide ?</span>
-          <h1 className="font-display text-fluid-4xl font-bold text-white mt-2 mb-4">
-            Contactez Notre Équipe
+          <span className="text-[#C9A24B] text-xs font-bold uppercase tracking-widest">
+            Conseil & Assistance Pédagogique
+          </span>
+          <h1 className="font-serif text-3xl md:text-5xl font-bold text-[#0A1F44] mt-2 mb-4">
+            Contactez Notre Cabinet
           </h1>
-          <p className="text-white/70 text-lg leading-relaxed">
-            Nous sommes à votre disposition pour vous orienter vers la formation adaptée à vos objectifs.
+          <p className="text-[#475569] text-lg leading-relaxed">
+            Notre équipe d&apos;experts est à votre disposition pour vous orienter vers le programme adapté à votre profil professionnel.
           </p>
         </div>
       </div>
 
-      <div className="section-padding flex-1">
-        <div className="section-container max-w-4xl">
-          <div className="grid md:grid-cols-2 gap-12">
+      {/* Main content */}
+      <div className="py-20 flex-1">
+        <div className="section-container max-w-5xl">
+          <div className="grid md:grid-cols-2 gap-12 items-start">
             {/* Direct Contact Info */}
             <div className="space-y-6">
-              <h2 className="font-display text-fluid-2xl font-bold text-navy dark:text-white">
-                Coordonnées du Cabinet
-              </h2>
-              <p className="text-muted-foreground text-sm">
-                Retrouvez-nous à Casablanca ou contactez-nous directement sur WhatsApp pour une réponse rapide.
-              </p>
+              <div>
+                <h2 className="font-serif text-2xl font-bold text-[#0A1F44] mb-3">
+                  Coordonnées du Cabinet
+                </h2>
+                <p className="text-[#475569] text-base leading-relaxed">
+                  Basé à Casablanca, Excelium Consulting Compta répond à toutes vos questions relatives aux programmes de formation, aux modalités de financement et aux inscriptions.
+                </p>
+              </div>
 
               <div className="space-y-4">
-                <div className="glass-card-light dark:glass-card p-4 rounded-2xl flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold">
+                <div className="bg-white p-5 rounded-2xl border border-[#E7E2D6] shadow-sm flex items-center gap-4">
+                  <div className="w-11 h-11 rounded-xl bg-[#C9A24B]/15 border border-[#C9A24B]/30 flex items-center justify-center text-[#C9A24B]">
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-muted-foreground">Email</div>
-                    <div className="text-sm font-semibold text-navy dark:text-white">contact@excelium.ma</div>
+                    <div className="text-xs uppercase tracking-wider text-[#475569] font-medium">Email professionnel</div>
+                    <a href="mailto:contact@excelium.ma" className="text-base font-semibold text-[#0A1F44] hover:text-[#C9A24B] transition-colors">
+                      contact@excelium.ma
+                    </a>
                   </div>
                 </div>
 
-                <div className="glass-card-light dark:glass-card p-4 rounded-2xl flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold">
+                <div className="bg-white p-5 rounded-2xl border border-[#E7E2D6] shadow-sm flex items-center gap-4">
+                  <div className="w-11 h-11 rounded-xl bg-[#C9A24B]/15 border border-[#C9A24B]/30 flex items-center justify-center text-[#C9A24B]">
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-muted-foreground">Téléphone</div>
-                    <div className="text-sm font-semibold text-navy dark:text-white">+212 600 000 000</div>
+                    <div className="text-xs uppercase tracking-wider text-[#475569] font-medium">Ligne directe</div>
+                    <a href="tel:+212522000000" className="text-base font-semibold text-[#0A1F44] hover:text-[#C9A24B] transition-colors">
+                      +212 (0) 5 22 00 00 00
+                    </a>
                   </div>
                 </div>
 
-                <div className="glass-card-light dark:glass-card p-4 rounded-2xl flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center text-gold">
+                <div className="bg-white p-5 rounded-2xl border border-[#E7E2D6] shadow-sm flex items-center gap-4">
+                  <div className="w-11 h-11 rounded-xl bg-[#C9A24B]/15 border border-[#C9A24B]/30 flex items-center justify-center text-[#C9A24B]">
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-muted-foreground">Adresse</div>
-                    <div className="text-sm font-semibold text-navy dark:text-white">Casablanca, Maroc</div>
+                    <div className="text-xs uppercase tracking-wider text-[#475569] font-medium">Siège & Centre de formation</div>
+                    <div className="text-base font-semibold text-[#0A1F44]">
+                      Boulevard d&apos;Anfa, Casablanca, Maroc
+                    </div>
                   </div>
                 </div>
               </div>
@@ -75,56 +87,22 @@ export default function ContactPage() {
                 href="https://wa.me/212600000000"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-5 rounded-2xl bg-green-500/10 border border-green-500/30 flex items-center gap-4 hover:bg-green-500/20 transition-all block group"
+                className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center gap-4 hover:bg-emerald-100/60 transition-all block group"
               >
-                <div className="w-12 h-12 rounded-xl bg-green-500 flex items-center justify-center text-white shadow-lg">
+                <div className="w-12 h-12 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-sm">
                   <MessageCircle className="w-6 h-6" />
                 </div>
                 <div>
-                  <div className="font-bold text-navy dark:text-white text-base">Discuter sur WhatsApp</div>
-                  <div className="text-xs text-muted-foreground">Réponse directe sous 2 heures ouvrables</div>
+                  <div className="font-bold text-[#0A1F44] text-base group-hover:text-emerald-800 transition-colors">
+                    Assistance WhatsApp en direct
+                  </div>
+                  <div className="text-xs text-[#475569]">Réponse immédiate sous 2 heures ouvrables</div>
                 </div>
               </a>
             </div>
 
-            {/* Contact Form */}
-            <div className="glass-card-light dark:glass-card p-8 rounded-3xl border border-border shadow-xl space-y-4">
-              <h3 className="font-display text-xl font-bold text-navy dark:text-white mb-2">
-                Envoyez-nous un message
-              </h3>
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                <div>
-                  <label className="block text-xs font-medium text-muted-foreground mb-1">Nom complet</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Votre nom"
-                    className="w-full px-4 py-2.5 rounded-xl bg-muted/50 border border-border text-sm focus:outline-none focus:border-gold"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-muted-foreground mb-1">Email</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="votre@email.com"
-                    className="w-full px-4 py-2.5 rounded-xl bg-muted/50 border border-border text-sm focus:outline-none focus:border-gold"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-muted-foreground mb-1">Message</label>
-                  <textarea
-                    rows={4}
-                    required
-                    placeholder="Comment pouvons-nous vous aider ?"
-                    className="w-full px-4 py-2.5 rounded-xl bg-muted/50 border border-border text-sm focus:outline-none focus:border-gold resize-none"
-                  />
-                </div>
-                <button type="submit" className="btn-gold rounded-xl py-3 w-full justify-center inline-flex font-bold text-sm">
-                  Envoyer le message <Send className="w-4 h-4 ml-2" />
-                </button>
-              </form>
-            </div>
+            {/* Contact Form component */}
+            <ContactForm />
           </div>
         </div>
       </div>

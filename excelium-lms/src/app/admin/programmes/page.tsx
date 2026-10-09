@@ -86,7 +86,7 @@ export default function AdminProgramsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display font-bold text-navy dark:text-white text-2xl">
+          <h1 className="font-display font-bold text-navy text-2xl">
             Gestion des Programmes d&apos;Études (Niveau Supérieur)
           </h1>
           <p className="text-muted-foreground text-xs mt-1">
@@ -101,7 +101,7 @@ export default function AdminProgramsPage() {
         </Link>
       </div>
 
-      <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border">
+      <div className="glass-card-light p-4 rounded-2xl border border-border">
         <div className="relative w-full sm:w-80">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
@@ -120,7 +120,7 @@ export default function AdminProgramsPage() {
             key={prog.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-card-light dark:glass-card p-6 rounded-3xl border border-border flex flex-col md:flex-row md:items-center justify-between gap-4 group hover:border-gold/40 transition-all"
+            className="glass-card-light p-6 rounded-3xl border border-border flex flex-col md:flex-row md:items-center justify-between gap-4 group hover:border-gold/40 transition-all"
           >
             <div className="flex items-start gap-4 flex-1">
               <div className="flex flex-col items-center gap-1 pt-1">
@@ -156,7 +156,7 @@ export default function AdminProgramsPage() {
                   </span>
                 </div>
 
-                <h3 className="font-display font-bold text-navy dark:text-white text-lg leading-snug group-hover:text-gold transition-colors">
+                <h3 className="font-display font-bold text-navy text-lg leading-snug group-hover:text-gold transition-colors">
                   {prog.title}
                 </h3>
 
@@ -165,7 +165,7 @@ export default function AdminProgramsPage() {
                 </p>
 
                 <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground pt-1">
-                  <span className="flex items-center gap-1 font-bold text-navy dark:text-white">
+                  <span className="flex items-center gap-1 font-bold text-navy">
                     <BookOpen className="w-3.5 h-3.5 text-gold" /> {prog.coursesCount} cours associés
                   </span>
                   <span className="flex items-center gap-1">

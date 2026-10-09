@@ -65,7 +65,7 @@ export default function LessonResourcesList({ resources, isEnrolled = true, isFr
 
   return (
     <div className="space-y-3 pt-4 border-t border-border">
-      <h4 className="font-display font-bold text-navy dark:text-white text-xs uppercase tracking-wider flex items-center gap-2">
+      <h4 className="font-display font-bold text-navy text-xs uppercase tracking-wider flex items-center gap-2">
         <Download className="w-4 h-4 text-gold" /> Documents &amp; Supports de Cours ({resources.length})
       </h4>
 
@@ -78,7 +78,7 @@ export default function LessonResourcesList({ resources, isEnrolled = true, isFr
             <div className="flex items-center gap-3 min-w-0">
               {getIconForCategory(res.fileTypeCategory)}
               <div className="min-w-0">
-                <div className="font-bold text-navy dark:text-white text-xs truncate group-hover:text-gold transition-colors">
+                <div className="font-bold text-navy text-xs truncate group-hover:text-gold transition-colors">
                   {res.title || res.fileName}
                 </div>
                 <div className="text-[10px] text-muted-foreground font-mono">

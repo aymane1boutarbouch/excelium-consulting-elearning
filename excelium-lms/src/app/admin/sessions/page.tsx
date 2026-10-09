@@ -43,7 +43,7 @@ export default function AdminSessionsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display font-bold text-navy dark:text-white text-2xl">
+          <h1 className="font-display font-bold text-navy text-2xl">
             Sessions Live &amp; Webinaires Directs
           </h1>
           <p className="text-muted-foreground text-xs mt-1">
@@ -64,7 +64,7 @@ export default function AdminSessionsPage() {
             key={sess.id}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-card-light dark:glass-card p-6 rounded-3xl border border-border flex flex-col justify-between space-y-4"
+            className="glass-card-light p-6 rounded-3xl border border-border flex flex-col justify-between space-y-4"
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -76,19 +76,19 @@ export default function AdminSessionsPage() {
                 </span>
               </div>
 
-              <h3 className="font-display font-bold text-navy dark:text-white text-lg leading-snug">
+              <h3 className="font-display font-bold text-navy text-lg leading-snug">
                 {sess.title}
               </h3>
 
               <div className="p-4 rounded-2xl bg-muted/40 border border-border space-y-2 text-xs">
                 <div className="flex items-center justify-between text-muted-foreground">
-                  <span className="flex items-center gap-1.5 font-semibold text-navy dark:text-white">
+                  <span className="flex items-center gap-1.5 font-semibold text-navy">
                     <Calendar className="w-3.5 h-3.5 text-gold" />
                     {format(new Date(sess.scheduledAt), 'EEEE d MMMM yyyy à HH:mm', { locale: fr })}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-muted-foreground">
-                  <span>Animateur : <strong className="text-navy dark:text-white">{sess.instructorName}</strong></span>
+                  <span>Animateur : <strong className="text-navy">{sess.instructorName}</strong></span>
                   <span className="font-mono text-gold font-bold">{sess.attendeesCount} inscrits</span>
                 </div>
               </div>

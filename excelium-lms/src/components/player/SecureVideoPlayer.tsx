@@ -93,15 +93,15 @@ export default function SecureVideoPlayer({
 
       {/* 2+ Hour Video Watch Resume Banner */}
       {showResumeBanner && (
-        <div className="absolute bottom-4 left-4 right-4 bg-navy/95 border border-gold/40 backdrop-blur-md p-4 rounded-2xl flex items-center justify-between gap-4 z-30 shadow-2xl animate-fade-in">
+        <div className="absolute bottom-4 left-4 right-4 bg-white/95 border border-[#E7E2D6] backdrop-blur-md p-4 rounded-2xl flex items-center justify-between gap-4 z-30 shadow-xl">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gold/20 flex items-center justify-center text-gold font-bold">
+            <div className="w-10 h-10 rounded-xl bg-[#C9A24B]/15 text-[#C9A24B] flex items-center justify-center font-bold">
               <Clock className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs font-bold text-white">Reprendre la lecture là où vous vous étiez arrêté ?</div>
-              <div className="text-[11px] text-white/60 font-mono">
-                Position enregistrée : <span className="text-gold font-bold">{formatSecondsToHMS(savedPosition)}</span>
+              <div className="text-xs font-bold text-[#0A1F44]">Reprendre la lecture là où vous vous étiez arrêté ?</div>
+              <div className="text-[11px] text-[#475569] font-mono">
+                Position enregistrée : <span className="text-[#A0782E] font-bold">{formatSecondsToHMS(savedPosition)}</span>
               </div>
             </div>
           </div>
@@ -115,7 +115,7 @@ export default function SecureVideoPlayer({
             </button>
             <button
               onClick={() => setShowResumeBanner(false)}
-              className="text-xs text-white/40 hover:text-white px-2 py-1"
+              className="text-xs text-[#475569] hover:text-[#0A1F44] px-2 py-1 font-medium"
             >
               Ignorer
             </button>

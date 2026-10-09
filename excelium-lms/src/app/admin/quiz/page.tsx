@@ -60,7 +60,7 @@ export default function AdminQuizPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display font-bold text-navy dark:text-white text-2xl">
+          <h1 className="font-display font-bold text-navy text-2xl">
             Gestion des Quiz &amp; Examens de Validation
           </h1>
           <p className="text-muted-foreground text-xs mt-1">
@@ -75,7 +75,7 @@ export default function AdminQuizPage() {
         </Link>
       </div>
 
-      <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border">
+      <div className="glass-card-light p-4 rounded-2xl border border-border">
         <div className="relative w-full sm:w-80">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
@@ -94,7 +94,7 @@ export default function AdminQuizPage() {
             key={quiz.id}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-card-light dark:glass-card p-5 rounded-2xl border border-border flex flex-col justify-between hover:border-gold/40 transition-all"
+            className="glass-card-light p-5 rounded-2xl border border-border flex flex-col justify-between hover:border-gold/40 transition-all"
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -106,12 +106,12 @@ export default function AdminQuizPage() {
                 </span>
               </div>
 
-              <h3 className="font-display font-bold text-navy dark:text-white text-base leading-snug">
+              <h3 className="font-display font-bold text-navy text-base leading-snug">
                 {quiz.title}
               </h3>
 
               <p className="text-xs text-muted-foreground truncate">
-                Formation : <span className="font-semibold text-navy dark:text-white">{quiz.courseTitle}</span>
+                Formation : <span className="font-semibold text-navy">{quiz.courseTitle}</span>
               </p>
 
               <div className="p-3 rounded-xl bg-muted/40 border border-border grid grid-cols-2 gap-2 text-center text-xs">
@@ -121,7 +121,7 @@ export default function AdminQuizPage() {
                 </div>
                 <div>
                   <div className="text-muted-foreground text-[10px]">Passages / Moyenne</div>
-                  <div className="font-bold text-navy dark:text-white font-mono">{quiz.attemptsCount} ({quiz.avgScore}%)</div>
+                  <div className="font-bold text-navy font-mono">{quiz.attemptsCount} ({quiz.avgScore}%)</div>
                 </div>
               </div>
             </div>

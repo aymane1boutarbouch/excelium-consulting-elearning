@@ -92,7 +92,7 @@ export default function AdminEnrollmentsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display font-bold text-navy dark:text-white text-2xl">
+          <h1 className="font-display font-bold text-navy text-2xl">
             Registre des Inscriptions ({enrollments.length})
           </h1>
           <p className="text-muted-foreground text-xs mt-1">
@@ -108,7 +108,7 @@ export default function AdminEnrollmentsPage() {
       </div>
 
       {/* Filter bar */}
-      <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="glass-card-light p-4 rounded-2xl border border-border flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="relative w-full sm:w-80">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
@@ -123,7 +123,7 @@ export default function AdminEnrollmentsPage() {
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none text-navy dark:text-white w-full sm:w-auto"
+          className="px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none text-navy w-full sm:w-auto"
         >
           <option value="all">Tous les statuts</option>
           <option value="approved">Approuvé (Accès actif)</option>
@@ -133,7 +133,7 @@ export default function AdminEnrollmentsPage() {
       </div>
 
       {/* Table */}
-      <div className="glass-card-light dark:glass-card rounded-2xl border border-border overflow-hidden">
+      <div className="glass-card-light rounded-2xl border border-border overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -153,10 +153,10 @@ export default function AdminEnrollmentsPage() {
                     {enr.referenceCode}
                   </td>
                   <td className="px-4 py-3.5">
-                    <div className="text-sm font-bold text-navy dark:text-white">{enr.studentName}</div>
+                    <div className="text-sm font-bold text-navy">{enr.studentName}</div>
                     <div className="text-xs text-muted-foreground">{enr.studentEmail}</div>
                   </td>
-                  <td className="px-4 py-3.5 text-xs text-navy dark:text-white font-medium max-w-[220px] truncate">
+                  <td className="px-4 py-3.5 text-xs text-navy font-medium max-w-[220px] truncate">
                     {enr.courseTitle}
                   </td>
                   <td className="px-4 py-3.5">

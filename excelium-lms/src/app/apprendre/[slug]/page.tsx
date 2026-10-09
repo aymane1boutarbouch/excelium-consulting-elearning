@@ -71,7 +71,7 @@ export default async function LearningPage({ params }: Props) {
     .eq('enrollment_id', enrollment.id)
 
   return (
-    <Suspense fallback={<div className="min-h-screen bg-navy animate-pulse" />}>
+    <Suspense fallback={<div className="min-h-screen bg-[#FAF8F3] animate-pulse" />}>
       <LearningPlayerClient
         course={course}
         enrollment={enrollment}

@@ -63,7 +63,7 @@ export default function AdminAnnouncementsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display font-bold text-navy dark:text-white text-2xl">
+          <h1 className="font-display font-bold text-navy text-2xl">
             Gestion des Annonces &amp; Communications
           </h1>
           <p className="text-muted-foreground text-xs mt-1">
@@ -83,12 +83,12 @@ export default function AdminAnnouncementsPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="glass-card-light dark:glass-card p-6 rounded-3xl border border-gold/40 space-y-4"
+          className="glass-card-light p-6 rounded-3xl border border-gold/40 space-y-4"
         >
-          <h2 className="font-display font-bold text-navy dark:text-white text-lg">Nouvelle Annonce Globale</h2>
+          <h2 className="font-display font-bold text-navy text-lg">Nouvelle Annonce Globale</h2>
           <form onSubmit={handleCreate} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Titre de l&apos;Annonce</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Titre de l&apos;Annonce</label>
               <input
                 type="text"
                 value={title}
@@ -100,7 +100,7 @@ export default function AdminAnnouncementsPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Message détaillé</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Message détaillé</label>
               <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
@@ -113,7 +113,7 @@ export default function AdminAnnouncementsPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Cible</label>
+                <label className="block text-xs font-semibold text-navy mb-1">Cible</label>
                 <select
                   value={targetScope}
                   onChange={(e) => setTargetScope(e.target.value)}
@@ -125,7 +125,7 @@ export default function AdminAnnouncementsPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Priorité</label>
+                <label className="block text-xs font-semibold text-navy mb-1">Priorité</label>
                 <select
                   value={priority}
                   onChange={(e) => setPriority(e.target.value)}
@@ -163,7 +163,7 @@ export default function AdminAnnouncementsPage() {
             key={ann.id}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-card-light dark:glass-card p-6 rounded-3xl border border-border flex flex-col md:flex-row md:items-center justify-between gap-4"
+            className="glass-card-light p-6 rounded-3xl border border-border flex flex-col md:flex-row md:items-center justify-between gap-4"
           >
             <div className="space-y-2 flex-1">
               <div className="flex items-center gap-3">
@@ -175,7 +175,7 @@ export default function AdminAnnouncementsPage() {
                 </span>
               </div>
 
-              <h3 className="font-display font-bold text-navy dark:text-white text-base">
+              <h3 className="font-display font-bold text-navy text-base">
                 {ann.title}
               </h3>
 

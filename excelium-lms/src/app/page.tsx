@@ -1,27 +1,39 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef, Suspense } from 'react'
 import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import {
   BookOpen, Clock, Award, ArrowRight, Play, CheckCircle,
   FileText, ShieldCheck, ChevronDown, MessageCircle, Building2,
-  BadgeCheck, FileSpreadsheet, Scale, ChevronRight
+  BadgeCheck, FileSpreadsheet, Scale, ChevronRight, Star,
+  TrendingUp, Users, Zap, MapPin, Phone, ExternalLink
 } from 'lucide-react'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { cn } from '@/lib/utils'
+import dynamic from 'next/dynamic'
 
-// Realistic stats
+const Hero3DWidgetDynamic = dynamic(
+  () => import('@/components/layout/Hero3D').then(m => m.Hero3DWidget),
+  { ssr: false, loading: () => <div className="w-full h-full bg-gradient-to-br from-[#F3EFE6] to-[#E8DFC8] rounded-2xl animate-pulse" /> }
+)
+
+const CinematicIntroDynamic = dynamic(
+  () => import('@/components/layout/Hero3D').then(m => m.CinematicIntro),
+  { ssr: false }
+)
+
+/* ── Data ──────────────────────────────────────────────────────────────── */
+
 const stats = [
-  { label: 'Financiers & Comptables Formés', value: '342' },
-  { label: 'Modules Conformés Loi de Finances 2026', value: '14' },
-  { label: 'Taux de Validation aux Examens', value: '98.4%' },
-  { label: 'Dossiers Pratiques d\'Entreprises', value: '100%' },
+  { label: 'Financiers & Comptables Formés', value: 342, suffix: '+' },
+  { label: 'Modules Conformes Loi de Finances 2026', value: 14, suffix: '' },
+  { label: 'Taux de Validation aux Examens', value: 98.4, suffix: '%' },
+  { label: 'Ans d\'expérience en conseil fiscal', value: 18, suffix: '' },
 ]
 
-// Practical Moroccan modules
-const flagshipModules = [
+const programs = [
   {
     title: 'Pratique de la Liasse Fiscale Marocaine & Passages Fiscaux 2026',
     category: 'Fiscalité Marocaine',
@@ -31,59 +43,92 @@ const flagshipModules = [
     level: 'Avancé',
     price: '1.490 MAD',
     href: '/formations/liasse-fiscale-marocaine',
+    color: 'bg-blue-50',
+    size: 'lg',
   },
   {
-    title: 'Comptabilité Générale des Sociétés selon le Plan Comptable Marocain (PCM)',
+    title: 'Comptabilité Générale des Sociétés selon le PCM',
     category: 'Comptabilité',
     duration: '24 Heures',
     code: 'MOD-COMPTA-02',
-    description: 'Enregistrement des opérations courantes et d\'inventaire. Amortissements, provisions, régularisations de charges et clôture annuelle des comptes.',
+    description: 'Enregistrement des opérations courantes et d\'inventaire. Amortissements, provisions, régularisations et clôture annuelle.',
     level: 'Intermédiaire',
     price: '1.250 MAD',
     href: '/formations/comptabilite-societes-pcm',
+    color: 'bg-amber-50',
+    size: 'sm',
   },
   {
-    title: 'Gestion de la Paie, CNSS & Déclarations Annuelles IR (SIMPL-Paie)',
+    title: 'Gestion de la Paie, CNSS & Déclarations IR (SIMPL-Paie)',
     category: 'Gestion Sociale',
     duration: '14 Heures',
     code: 'MOD-PAIE-03',
-    description: 'Calcul des bulletins de paie, traitement des cotisations CNSS, AMO, CIMR et télédéclaration IR annuel (état 9421) sur les plateformes officielles.',
+    description: 'Calcul des bulletins de paie, cotisations CNSS, AMO, CIMR et télédéclaration IR annuel sur les plateformes officielles.',
     level: 'Pratique',
     price: '990 MAD',
     href: '/formations/gestion-paie-cnss-simpl',
+    color: 'bg-emerald-50',
+    size: 'sm',
   },
   {
-    title: 'Audit Fiscal & Préparation au Contrôle de l\'Administration (CLT/CNRF)',
+    title: 'Audit Fiscal & Préparation au Contrôle de l\'Administration',
     category: 'Droit & Contentieux',
     duration: '16 Heures',
     code: 'MOD-AUDIT-04',
-    description: 'Techniques d\'examen critique de la comptabilité, détection des risques fiscaux majeurs, procédure contradictoire et rédaction des mémoires de réponse.',
+    description: 'Techniques d\'examen critique, détection des risques fiscaux, procédure contradictoire et rédaction des mémoires de réponse.',
     level: 'Expert',
     price: '1.850 MAD',
     href: '/formations/audit-fiscal-controle',
+    color: 'bg-purple-50',
+    size: 'lg',
   },
 ]
 
-// Authentic Moroccan testimonials
+const steps = [
+  { n: '01', title: 'Choisissez votre programme', desc: 'Parcourez notre catalogue de formations pratiques adaptées à votre niveau et vos objectifs professionnels.' },
+  { n: '02', title: 'Inscrivez-vous en ligne', desc: 'Créez votre espace apprenant et finalisez votre inscription. Règlement par virement bancaire (CIH / Attijariwafa).' },
+  { n: '03', title: 'Accédez aux contenus', desc: 'Cours vidéo HD, supports téléchargeables, quiz pratiques et exercices sur des cas d\'entreprises réels marocains.' },
+  { n: '04', title: 'Obtenez votre certificat', desc: 'Validez votre formation et recevez votre certificat numérique authentifié avec QR Code vérifiable en ligne.' },
+]
+
 const testimonials = [
   {
     name: 'Mme Kenza Bennani',
-    role: 'Responsable Financière, Groupe Industriel — Ain Sebaâ, Casablanca',
-    content: 'La formation sur les passages fiscaux IS et la liasse 2026 est d\'une précision chirurgicale. Les cas pratiques tirés directement de bilans réels nous ont permis de sécuriser notre clôture annuelle sans risque d\'imposition arbitraire.',
+    role: 'Responsable Financière',
+    company: 'Groupe Industriel, Ain Sebaâ — Casablanca',
+    content: 'La formation sur les passages fiscaux IS et la liasse 2026 est d\'une précision chirurgicale. Les cas pratiques tirés directement de bilans réels nous ont permis de sécuriser notre clôture annuelle sans risque.',
+    rating: 5,
   },
   {
     name: 'M. Youssef El Mansouri',
-    role: 'Chef Comptable en Cabinet Fiduciaire — Rabat Agdal',
-    content: 'En tant que praticien, je cherchais un perfectionnement à jour avec la dernière Loi de Finances. M. El Amrani explique les arcanes du Code Général des Impôts avec la rigueur propre aux experts-comptables diplômés.',
+    role: 'Chef Comptable en Cabinet Fiduciaire',
+    company: 'Rabat Agdal',
+    content: 'En tant que praticien, je cherchais un perfectionnement à jour avec la dernière Loi de Finances. M. El Amrani explique les arcanes du CGI avec la rigueur propre aux experts-comptables diplômés.',
+    rating: 5,
   },
   {
     name: 'Mme Salma Berrada',
-    role: 'Auditeure Senior — Technopark Casablanca',
-    content: 'La maîtrise du module SIMPL-Paie et du calcul IR/CNSS a permis à notre cabinet d\'optimiser tous nos processus de traitement mensuel. Le support de cours téléchargeable est une vraie mine d\'or.',
+    role: 'Auditeure Senior',
+    company: 'Technopark Casablanca',
+    content: 'La maîtrise du module SIMPL-Paie et du calcul IR/CNSS a permis à notre cabinet d\'optimiser tous nos processus. Le support de cours téléchargeable est une vraie mine d\'or.',
+    rating: 5,
+  },
+  {
+    name: 'M. Hassan Alaoui',
+    role: 'Directeur Administratif et Financier',
+    company: 'PME Industrielle, Casablanca',
+    content: 'Formation ultra-pratique avec des exercices sur des liasses fiscales réelles. J\'ai pu appliquer directement ce que j\'ai appris dans mon poste. Rapport qualité-prix excellent.',
+    rating: 5,
+  },
+  {
+    name: 'Mme Nadia Tazi',
+    role: 'Expert-Comptable Stagiaire',
+    company: 'Cabinet d\'Audit, Agdal Rabat',
+    content: 'Les modules CNSS et paie m\'ont offert une vision globale que je n\'avais pas dans ma formation initiale. Le formateur est disponible et les réponses sont toujours précises.',
+    rating: 5,
   },
 ]
 
-// Realistic FAQs
 const faqs = [
   {
     q: 'Comment s\'effectue l\'inscription et le règlement des frais de formation ?',
@@ -103,286 +148,737 @@ const faqs = [
   },
 ]
 
-export default function LandingPage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(null)
+/* ── Animated counter hook ────────────────────────────────────────────── */
+function AnimatedNumber({ target, suffix = '' }: { target: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+  const [current, setCurrent] = useState(0)
+
+  useEffect(() => {
+    if (!inView) return
+    const duration = 2000
+    const step = target / (duration / 16)
+    let current = 0
+    const interval = setInterval(() => {
+      current = Math.min(current + step, target)
+      setCurrent(parseFloat(current.toFixed(target % 1 !== 0 ? 1 : 0)))
+      if (current >= target) clearInterval(interval)
+    }, 16)
+    return () => clearInterval(interval)
+  }, [inView, target])
 
   return (
-    <div className="min-h-screen bg-ivory dark:bg-navy font-sans text-navy dark:text-white selection:bg-gold/30">
+    <span ref={ref}>
+      {current}{suffix}
+    </span>
+  )
+}
+
+/* ── Stagger reveal ───────────────────────────────────────────────────── */
+const fadeUpVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay: i * 0.1, ease: [0.4, 0, 0.2, 1] },
+  }),
+}
+
+/* ── Card tilt effect ─────────────────────────────────────────────────── */
+function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  const handleMove = (e: React.MouseEvent) => {
+    if (!ref.current) return
+    const rect = ref.current.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width - 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    ref.current.style.transform = `perspective(1000px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg) translateZ(4px)`
+  }
+
+  const handleLeave = () => {
+    if (ref.current) ref.current.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)'
+  }
+
+  return (
+    <div
+      ref={ref}
+      className={cn('transition-transform duration-200 ease-out', className)}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+    >
+      {children}
+    </div>
+  )
+}
+
+/* ── Marquee ──────────────────────────────────────────────────────────── */
+function TestimonialsMarquee() {
+  return (
+    <div className="overflow-hidden py-4">
+      <div className="flex gap-6" style={{ animation: 'marqueeScroll 40s linear infinite', width: 'max-content' }}>
+        {[...testimonials, ...testimonials].map((t, i) => (
+          <div
+            key={i}
+            className="w-80 flex-shrink-0 card-white p-6 space-y-4"
+          >
+            <div className="flex items-center gap-1">
+              {Array.from({ length: t.rating }, (_, k) => (
+                <Star key={k} className="w-3.5 h-3.5 fill-[#C9A24B] text-[#C9A24B]" />
+              ))}
+            </div>
+            <p className="text-sm text-[#475569] leading-relaxed italic">
+              &ldquo;{t.content}&rdquo;
+            </p>
+            <div className="border-t border-[#E7E2D6] pt-4">
+              <div className="font-semibold text-[#0A1F44] text-sm">{t.name}</div>
+              <div className="text-xs text-[#475569] mt-0.5">{t.role}</div>
+              <div className="text-xs text-[#C9A24B]/80 font-mono mt-0.5">{t.company}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ── FAQ Item ─────────────────────────────────────────────────────────── */
+function FaqItem({ q, a, isOpen, onToggle }: { q: string; a: string; isOpen: boolean; onToggle: () => void }) {
+  return (
+    <div className="card-white overflow-hidden">
+      <button
+        onClick={onToggle}
+        className="w-full text-left p-6 flex items-start justify-between gap-4 font-semibold text-base text-[#0A1F44] hover:text-[#C9A24B] transition-colors"
+        aria-expanded={isOpen}
+      >
+        <span className="leading-snug">{q}</span>
+        <ChevronDown
+          className={cn('w-5 h-5 text-[#C9A24B] flex-shrink-0 mt-0.5 transition-transform duration-300', isOpen && 'rotate-180')}
+        />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.28, ease: 'easeInOut' }}
+            className="overflow-hidden"
+          >
+            <div className="px-6 pb-6 pt-2 text-[#475569] text-sm leading-relaxed border-t border-[#E7E2D6]">
+              {a}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+/* ── Main Component ───────────────────────────────────────────────────── */
+
+export default function LandingPage() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [showIntro, setShowIntro] = useState(false)
+  const [introComplete, setIntroComplete] = useState(false)
+
+  useEffect(() => {
+    // Show intro only on first visit per session
+    if (typeof window !== 'undefined') {
+      const alreadySeen = sessionStorage.getItem('excelium-intro-seen')
+      if (!alreadySeen) {
+        setShowIntro(true)
+      } else {
+        setIntroComplete(true)
+      }
+    }
+  }, [])
+
+  const handleIntroComplete = () => {
+    sessionStorage.setItem('excelium-intro-seen', 'true')
+    setShowIntro(false)
+    setIntroComplete(true)
+  }
+
+  const handleIntroSkip = () => {
+    sessionStorage.setItem('excelium-intro-seen', 'true')
+    setShowIntro(false)
+    setIntroComplete(true)
+  }
+
+  return (
+    <div className="min-h-screen bg-[#FAF8F3]">
+      {/* Cinematic Intro */}
+      {showIntro && (
+        <CinematicIntroDynamic
+          onComplete={handleIntroComplete}
+          onSkip={handleIntroSkip}
+        />
+      )}
+
       <Navbar />
 
-      {/* ── HERO SECTION (Editorial Asymmetric Layout) ────────────────────── */}
-      <section className="pt-32 pb-20 border-b border-border bg-navy text-white relative overflow-hidden">
-        <div className="section-container relative z-10">
-          <div className="grid lg:grid-cols-12 gap-12 items-center">
-            {/* Left 7 cols: Editorial Header & Copy */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gold/15 border border-gold/40 text-gold text-xs font-mono font-semibold">
-                <Building2 className="w-3.5 h-3.5" /> Cabinet d&apos;Expertise & Formation — Casablanca
-              </div>
+      {/* ── HERO ───────────────────────────────────────────────────────────── */}
+      <section className="relative min-h-screen flex items-center pt-24 pb-16 overflow-hidden bg-[#FAF8F3]">
+        {/* Background gold abstract decoration */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-[700px] h-[700px] rounded-full bg-[#C9A24B]/5 blur-3xl" />
+          <div className="absolute bottom-0 -left-20 w-[400px] h-[400px] rounded-full bg-[#C9A24B]/5 blur-3xl" />
+          {/* Abstract SVG lines */}
+          <svg className="absolute top-20 right-0 w-1/2 h-full opacity-30" viewBox="0 0 600 800" fill="none" aria-hidden>
+            <circle cx="500" cy="200" r="300" stroke="#C9A24B" strokeWidth="0.5" strokeDasharray="4 8" />
+            <circle cx="500" cy="200" r="200" stroke="#C9A24B" strokeWidth="0.5" strokeDasharray="2 6" />
+            <circle cx="500" cy="200" r="100" stroke="#C9A24B" strokeWidth="1" strokeOpacity="0.4" />
+          </svg>
+        </div>
 
-              <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold leading-tight tracking-tight text-white">
-                Pratique de la <span className="text-gold underline decoration-gold/40 underline-offset-8">Comptabilité</span>, du Droit Fiscal & de la Paie au Maroc.
-              </h1>
+        <div className="section-container relative z-10 w-full">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left: Copy */}
+            <div className="space-y-8 max-w-xl">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <span className="section-label">
+                  <Building2 className="w-3 h-3" />
+                  Cabinet d&apos;Expertise & Formation — Casablanca
+                </span>
+              </motion.div>
 
-              <p className="text-white/70 text-base md:text-lg leading-relaxed max-w-2xl">
-                Programmes certifiants conçus par des professionnels du chiffre. Maîtrisez le Code Général des Impôts (CGI), la confection de la Liasse Fiscale et les déclarations électroniques SIMPL.
-              </p>
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.1 }}
+                className="font-serif text-5xl md:text-6xl font-bold leading-[1.1] text-[#0A1F44]"
+              >
+                Pratique de la{' '}
+                <span className="relative">
+                  <span className="gold-underline revealed">Comptabilité</span>
+                </span>
+                {', '}du Droit{' '}
+                <span className="text-gradient-gold">Fiscal</span>
+                {' '}&amp; de la Paie au Maroc.
+              </motion.h1>
 
-              <div className="pt-4 flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
-                <Link href="/formations" className="btn-gold text-sm px-6 py-3.5 font-bold">
-                  Consulter le Catalogue des Formations <ArrowRight className="w-4 h-4 ml-1" />
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="text-[#475569] text-lg leading-relaxed"
+              >
+                Programmes certifiants conçus par des professionnels du chiffre. Maîtrisez
+                le Code Général des Impôts (CGI), la confection de la Liasse Fiscale et les
+                déclarations électroniques SIMPL.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="flex flex-col sm:flex-row gap-4"
+              >
+                <Link href="/formations" className="btn-gold text-base px-8 animate-pulse-gold">
+                  Consulter le Catalogue
+                  <ArrowRight className="w-4 h-4 ml-1" />
                 </Link>
-                <Link href="/a-propos" className="btn-outline-gold text-sm px-6 py-3.5">
+                <Link href="/a-propos" className="btn-outline-navy text-base px-8">
                   Présentation du Cabinet
                 </Link>
-              </div>
+              </motion.div>
 
-              <div className="pt-6 flex items-center gap-6 text-xs text-white/50 border-t border-white/10 font-mono">
-                <span>✓ Conforme Loi de Finances 2026</span>
-                <span>✓ Attestations Authentifiées QR</span>
-                <span>✓ Factures Éligibles FPC</span>
-              </div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-2 text-sm text-[#475569] border-t border-[#E7E2D6]"
+              >
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  Conforme Loi de Finances 2026
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  Attestations Authentifiées QR
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  Factures Éligibles FPC
+                </span>
+              </motion.div>
             </div>
 
-            {/* Right 5 cols: Structured Asymmetric Panel */}
-            <div className="lg:col-span-5">
-              <div className="bg-navy-light border border-white/15 rounded-2xl p-6 space-y-6 shadow-2xl">
-                <div className="flex items-center justify-between pb-4 border-b border-white/10">
-                  <div>
-                    <div className="text-xs text-gold font-mono uppercase">Prochaine Session Pratique</div>
-                    <div className="font-serif font-bold text-white text-lg">Liasse Fiscale & IS 2026</div>
+            {/* Right: 3D Widget + session card */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="relative"
+            >
+              {/* 3D Scene */}
+              <div className="relative h-[420px] lg:h-[500px] rounded-2xl overflow-hidden bg-gradient-to-br from-[#F3EFE6] to-[#E8DFC8]">
+                <Hero3DWidgetDynamic />
+
+                {/* Floating label on 3D */}
+                <div className="absolute bottom-4 left-4 glass-card px-4 py-3 flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-[#C9A24B]/15 flex items-center justify-center">
+                    <TrendingUp className="w-4 h-4 text-[#C9A24B]" />
                   </div>
-                  <span className="px-2.5 py-1 rounded bg-emerald/20 border border-emerald/40 text-emerald-300 font-mono text-[11px]">
+                  <div>
+                    <div className="text-xs font-semibold text-[#0A1F44]">Taux de réussite</div>
+                    <div className="text-xl font-bold text-[#C9A24B] font-mono">98.4%</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Session card (floats below) */}
+              <div className="mt-4 card-white p-5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-xs text-[#C9A24B] font-mono uppercase tracking-widest">Prochaine Session</div>
+                    <div className="font-serif font-bold text-[#0A1F44] text-base">Liasse Fiscale & IS 2026</div>
+                  </div>
+                  <span className="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold text-xs">
                     Inscriptions Ouvertes
                   </span>
                 </div>
-
-                <div className="space-y-3 text-xs text-white/80">
-                  <div className="flex items-center justify-between py-1.5 border-b border-white/5">
-                    <span className="text-white/50">Formateur référent</span>
-                    <span className="font-semibold text-white">M. Abdellah El Amrani (OEC)</span>
-                  </div>
-                  <div className="flex items-center justify-between py-1.5 border-b border-white/5">
-                    <span className="text-white/50">Volume horaire</span>
-                    <span className="font-mono text-white">18 Heures de cas réels</span>
-                  </div>
-                  <div className="flex items-center justify-between py-1.5 border-b border-white/5">
-                    <span className="text-white/50">Supports transmis</span>
-                    <span className="text-white">Matrice Excel + Guides PDF</span>
-                  </div>
-                  <div className="flex items-center justify-between py-1.5">
-                    <span className="text-white/50">Lieu / Format</span>
-                    <span className="text-gold font-semibold">En Ligne & Sessions Directes</span>
-                  </div>
+                <div className="grid grid-cols-2 gap-3 text-xs">
+                  {[
+                    { label: 'Formateur', value: 'M. El Amrani (OEC)' },
+                    { label: 'Volume', value: '18h de cas réels' },
+                    { label: 'Supports', value: 'Matrice Excel + PDF' },
+                    { label: 'Format', value: 'En Ligne & Sessions Live' },
+                  ].map(({ label, value }) => (
+                    <div key={label} className="bg-[#FAF8F3] rounded-lg p-2.5">
+                      <div className="text-[#475569] mb-0.5">{label}</div>
+                      <div className="font-semibold text-[#0A1F44]">{value}</div>
+                    </div>
+                  ))}
                 </div>
-
                 <Link
                   href="/formations/liasse-fiscale-marocaine"
-                  className="btn-gold w-full text-xs py-3 justify-center text-navy font-bold uppercase tracking-wider"
+                  className="btn-gold w-full justify-center text-sm"
                 >
                   Voir la fiche du programme
                 </Link>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ── METRICS STRIP ─────────────────────────────────────────────────── */}
-      <section className="bg-ivory dark:bg-navy-900 border-b border-border py-10">
-        <div className="section-container">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((item) => (
-              <div key={item.label} className="border-l-2 border-gold pl-4">
-                <div className="font-serif font-bold text-3xl md:text-4xl text-navy dark:text-white font-mono">
-                  {item.value}
+      {/* ── TRUST BAR / STATS ──────────────────────────────────────────────── */}
+      <section className="bg-[#F3EFE6] border-y border-[#E7E2D6] py-14 relative overflow-hidden">
+        <div className="section-container relative z-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+            {stats.map((item, i) => (
+              <motion.div
+                key={item.label}
+                custom={i}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: '-60px' }}
+                variants={fadeUpVariants}
+                className="text-center md:text-left border-l-2 border-[#C9A24B] pl-4 md:pl-6"
+              >
+                <div className="font-serif font-bold text-4xl md:text-5xl text-[#0A1F44] font-mono">
+                  <AnimatedNumber target={item.value} suffix={item.suffix} />
                 </div>
-                <div className="text-xs text-muted-foreground mt-1 font-medium">{item.label}</div>
-              </div>
+                <div className="text-sm text-[#475569] font-medium mt-1.5 leading-snug">{item.label}</div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── FLAGSHIP MODULES (Asymmetric Grid Layout) ────────────────────── */}
-      <section className="section-padding bg-ivory dark:bg-navy">
+      {/* ── PROGRAMS BENTO GRID ────────────────────────────────────────────── */}
+      <section className="section-padding bg-[#FAF8F3]">
         <div className="section-container space-y-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-border">
-            <div>
-              <span className="text-gold text-xs font-mono uppercase tracking-widest">Offre Académique Pratique</span>
-              <h2 className="font-serif text-3xl font-bold text-navy dark:text-white mt-1">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="section-label mb-3 inline-flex">Offre Académique Pratique</span>
+              <h2 className="font-serif text-4xl md:text-5xl font-bold text-[#0A1F44] mt-3 max-w-xl">
                 Programmes de Perfectionnement Fisc & Compta
               </h2>
-            </div>
-            <Link href="/formations" className="text-xs font-semibold text-gold hover:underline inline-flex items-center gap-1">
-              Explorer l&apos;ensemble du catalogue <ChevronRight className="w-4 h-4" />
+            </motion.div>
+            <Link href="/formations" className="text-sm font-semibold text-[#C9A24B] hover:text-[#A0782E] inline-flex items-center gap-1.5 group flex-shrink-0">
+              Explorer le catalogue complet
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {flagshipModules.map((module) => (
-              <div key={module.code} className="editorial-card flex flex-col justify-between space-y-6">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="px-2.5 py-1 rounded bg-navy/5 dark:bg-white/5 text-gold font-mono font-semibold">
-                      {module.category}
-                    </span>
-                    <span className="text-muted-foreground font-mono">{module.code} • {module.duration}</span>
+          {/* Bento grid: 2 large + 2 small, alternating */}
+          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+            {programs.map((prog, i) => (
+              <TiltCard
+                key={prog.code}
+                className={cn(
+                  prog.size === 'lg' && i === 0 ? 'xl:col-span-2' : '',
+                  prog.size === 'lg' && i === 3 ? 'xl:col-span-2' : ''
+                )}
+              >
+                <motion.div
+                  custom={i}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: '-60px' }}
+                  variants={fadeUpVariants}
+                  className="card-white h-full flex flex-col p-6 md:p-7 space-y-5"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="section-label text-[0.65rem]">{prog.category}</span>
+                    <span className="text-xs text-[#475569] font-mono">{prog.code} · {prog.duration}</span>
                   </div>
 
-                  <h3 className="font-serif font-bold text-xl text-navy dark:text-white leading-snug">
-                    {module.title}
+                  <h3 className="font-serif font-bold text-xl md:text-2xl text-[#0A1F44] leading-snug">
+                    {prog.title}
                   </h3>
 
-                  <p className="text-muted-foreground text-xs leading-relaxed">
-                    {module.description}
+                  <p className="text-[#475569] text-sm leading-relaxed flex-1">
+                    {prog.description}
                   </p>
-                </div>
 
-                <div className="pt-4 border-t border-border flex items-center justify-between">
-                  <div>
-                    <div className="text-[10px] text-muted-foreground uppercase font-semibold">Tarif TTC</div>
-                    <div className="font-serif font-bold text-lg text-navy dark:text-gold font-mono">
-                      {module.price}
+                  <div className="flex items-center justify-between pt-4 border-t border-[#E7E2D6]">
+                    <div>
+                      <div className="text-[10px] text-[#475569] uppercase font-semibold tracking-wider">Tarif TTC</div>
+                      <div className="font-serif font-bold text-2xl text-[#0A1F44] font-mono">{prog.price}</div>
                     </div>
+                    <Link href={prog.href} className="btn-navy text-sm !h-11 px-5">
+                      Voir la fiche
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
                   </div>
-
-                  <Link href={module.href} className="btn-navy text-xs px-4 py-2">
-                    Fiche du programme <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </div>
+                </motion.div>
+              </TiltCard>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── TRAINER CREDENTIALS (Human Agency Style) ──────────────────────── */}
-      <section className="section-padding bg-navy text-white border-t border-b border-white/10">
-        <div className="section-container">
-          <div className="grid md:grid-cols-12 gap-12 items-center">
-            <div className="md:col-span-5">
-              <div className="p-8 rounded-2xl bg-navy-light border border-white/15 space-y-4 shadow-xl">
-                <div className="w-16 h-16 rounded-xl bg-gold/15 border border-gold/40 flex items-center justify-center text-gold font-serif font-bold text-2xl">
-                  AE
-                </div>
-                <div>
-                  <h3 className="font-serif font-bold text-xl text-white">M. Abdellah El Amrani</h3>
-                  <p className="text-xs text-gold font-mono mt-0.5">
-                    Expert-Comptable DPLE — Membre OEC Maroc
-                  </p>
-                </div>
-                <p className="text-white/70 text-xs leading-relaxed">
-                  Fondateur et directeur d&apos;études d&apos;Excelium Consulting Compta. Plus de 18 ans d&apos;expérience en direction financière, assistance lors de vérifications fiscales et conseil fiscal auprès de groupes marocains et internationaux.
-                </p>
-              </div>
-            </div>
+      {/* ── HOW IT WORKS ───────────────────────────────────────────────────── */}
+      <section className="section-padding bg-[#F3EFE6] relative overflow-hidden">
+        {/* Decorative abstract */}
+        <div className="absolute top-0 right-0 w-96 h-96 rounded-full bg-[#C9A24B]/6 blur-3xl pointer-events-none" />
 
-            <div className="md:col-span-7 space-y-6">
-              <span className="text-gold text-xs font-mono uppercase tracking-widest">Corps Professoral & Direction</span>
-              <h2 className="font-serif text-3xl font-bold text-white">
+        <div className="section-container space-y-14">
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="section-label">Comment ça marche</span>
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-[#0A1F44] mt-4">
+              4 Étapes Vers la Certification
+            </h2>
+            <p className="text-[#475569] text-lg mt-4">
+              Un parcours clair, de l&apos;inscription à l&apos;obtention de votre certificat authentifié.
+            </p>
+          </div>
+
+          <div className="relative">
+            {/* Connecting line (hidden on mobile) */}
+            <div className="hidden md:block absolute top-10 left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-transparent via-[#C9A24B]/50 to-transparent" />
+
+            <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-5">
+              {steps.map((step, i) => (
+                <motion.div
+                  key={step.n}
+                  custom={i}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: '-50px' }}
+                  variants={fadeUpVariants}
+                  className="relative text-center"
+                >
+                  {/* Step number bubble */}
+                  <div className="relative mx-auto w-20 h-20 rounded-2xl bg-white border border-[#E7E2D6] flex items-center justify-center shadow-sm mb-5">
+                    <span className="font-serif font-bold text-3xl text-[#C9A24B] font-mono">{step.n}</span>
+                    {i < steps.length - 1 && (
+                      <div className="md:hidden absolute -right-3 top-1/2 -translate-y-1/2">
+                        <ChevronRight className="w-4 h-4 text-[#C9A24B]/40" />
+                      </div>
+                    )}
+                  </div>
+                  <h3 className="font-serif font-bold text-lg text-[#0A1F44] mb-3 leading-snug">{step.title}</h3>
+                  <p className="text-sm text-[#475569] leading-relaxed">{step.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── TRAINER SECTION ────────────────────────────────────────────────── */}
+      <section className="section-padding bg-white">
+        <div className="section-container">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            {/* Left: visual card */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+            >
+              <div className="card-ivory p-8 space-y-6 relative overflow-hidden">
+                {/* Background pattern */}
+                <div className="absolute top-0 right-0 w-48 h-48 opacity-20">
+                  <svg viewBox="0 0 200 200" fill="none" aria-hidden>
+                    <circle cx="100" cy="100" r="90" stroke="#C9A24B" strokeWidth="1" strokeDasharray="3 6" />
+                    <circle cx="100" cy="100" r="60" stroke="#C9A24B" strokeWidth="1" strokeDasharray="2 4" />
+                  </svg>
+                </div>
+
+                <div className="relative z-10 flex items-start gap-4">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#C9A24B] to-[#A0782E] flex items-center justify-center text-white font-serif font-bold text-2xl flex-shrink-0 shadow-gold">
+                    AE
+                  </div>
+                  <div>
+                    <h3 className="font-serif font-bold text-2xl text-[#0A1F44]">M. Abdellah El Amrani</h3>
+                    <p className="text-sm text-[#C9A24B] font-mono mt-0.5">
+                      Expert-Comptable DPLE — Membre OEC Maroc
+                    </p>
+                  </div>
+                </div>
+
+                <p className="text-[#475569] text-sm leading-relaxed relative z-10">
+                  Fondateur et directeur d&apos;études d&apos;Excelium Consulting Compta. Plus de 18 ans
+                  d&apos;expérience en direction financière, assistance lors de vérifications fiscales
+                  et conseil fiscal auprès de groupes marocains et internationaux.
+                </p>
+
+                <div className="grid grid-cols-2 gap-3 relative z-10">
+                  {[
+                    { label: 'Années d\'exp.', value: '18+' },
+                    { label: 'Dossiers suivis', value: '200+' },
+                    { label: 'Apprenants formés', value: '342+' },
+                    { label: 'Modules conformes LF', value: '14' },
+                  ].map(({ label, value }) => (
+                    <div key={label} className="bg-white rounded-xl p-3 text-center border border-[#E7E2D6]">
+                      <div className="font-bold text-xl text-[#C9A24B] font-mono">{value}</div>
+                      <div className="text-[11px] text-[#475569] mt-0.5">{label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Right: copy */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="space-y-6"
+            >
+              <span className="section-label">Corps Professoral & Direction</span>
+              <h2 className="font-serif text-4xl md:text-5xl font-bold text-[#0A1F44] leading-tight">
                 Une Pédagogie Ancrée dans la Réalité des Pratiques Marocaines.
               </h2>
-              <p className="text-white/70 text-sm leading-relaxed">
-                Nos cours ne s&apos;appuient pas sur des concepts théoriques abstraits. Chaque cas traité est issu directement d&apos;un dossier réel transmis aux administrations marocaines (Direction Générale des Impôts, CNSS, Office des Changes).
+              <p className="text-[#475569] text-lg leading-relaxed">
+                Nos cours ne s&apos;appuient pas sur des concepts théoriques abstraits. Chaque cas
+                traité est issu directement d&apos;un dossier réel transmis aux administrations
+                marocaines (Direction Générale des Impôts, CNSS, Office des Changes).
               </p>
 
-              <div className="space-y-3 pt-2">
+              <div className="space-y-3.5 pt-2">
                 {[
                   'Dépôt certifié des liasses fiscales selon le PCM',
                   'Maîtrise des télé-procédures administratives SIMPL',
                   'Préparation aux contrôles fiscaux sur place et sur pièces',
                   'Support individuel par la messagerie dédiée aux étudiants',
                 ].map((item) => (
-                  <div key={item} className="flex items-center gap-3 text-xs text-white/90">
-                    <BadgeCheck className="w-4 h-4 text-gold flex-shrink-0" />
-                    <span>{item}</span>
+                  <div key={item} className="flex items-start gap-3 text-[#1E293B]">
+                    <div className="w-6 h-6 rounded-full bg-[#C9A24B]/10 border border-[#C9A24B]/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <BadgeCheck className="w-3.5 h-3.5 text-[#C9A24B]" />
+                    </div>
+                    <span className="text-sm leading-relaxed">{item}</span>
                   </div>
                 ))}
               </div>
+
+              <Link href="/a-propos" className="btn-gold inline-flex text-sm">
+                Présentation complète du cabinet
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── TESTIMONIALS MARQUEE ───────────────────────────────────────────── */}
+      <section className="section-padding bg-[#FAF8F3] overflow-hidden">
+        <div className="section-container">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="section-label">Retour d&apos;Expérience Praticiens</span>
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-[#0A1F44] mt-4">
+              Témoignages de nos Apprenants
+            </h2>
+          </div>
+        </div>
+        <TestimonialsMarquee />
+      </section>
+
+      {/* ── CERTIFICATE 3D FLIP SECTION ────────────────────────────────────── */}
+      <section className="section-padding bg-[#F3EFE6]">
+        <div className="section-container">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            {/* Certificate preview */}
+            <motion.div
+              initial={{ opacity: 0, rotateY: -20 }}
+              whileInView={{ opacity: 1, rotateY: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="perspective"
+            >
+              <div className="preserve-3d hover:rotate-y-6 transition-transform duration-500">
+                <div className="bg-white rounded-2xl border-2 border-[#C9A24B]/40 p-8 shadow-gold relative overflow-hidden">
+                  {/* Gold corner decorations */}
+                  <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-[#C9A24B]/60 rounded-tl-sm" />
+                  <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-[#C9A24B]/60 rounded-tr-sm" />
+                  <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-[#C9A24B]/60 rounded-bl-sm" />
+                  <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-[#C9A24B]/60 rounded-br-sm" />
+
+                  <div className="text-center space-y-4 py-4">
+                    <div className="text-xs font-mono tracking-widest text-[#475569] uppercase">Excelium Consulting Compta</div>
+                    <div className="text-xs text-[#C9A24B] font-mono tracking-wider">CABINET DE CONSEIL & FORMATION CONTINUE</div>
+
+                    <div className="font-serif text-2xl font-bold text-[#0A1F44] leading-tight">
+                      Attestation de Formation Professionnelle
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="text-[#475569] text-sm">Délivrée à</div>
+                      <div className="font-serif font-bold text-xl text-[#0A1F44]">Mme Kenza Bennani</div>
+                    </div>
+
+                    <div className="bg-[#FAF8F3] rounded-xl p-4 border border-[#E7E2D6]">
+                      <div className="text-xs text-[#475569] mb-1">Formation suivie & validée</div>
+                      <div className="font-semibold text-sm text-[#0A1F44]">
+                        Pratique de la Liasse Fiscale Marocaine & Passages Fiscaux 2026
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-4 border-t border-[#E7E2D6]">
+                      <div className="text-left">
+                        <div className="text-xs text-[#475569]">Référence</div>
+                        <div className="font-mono font-bold text-sm text-[#C9A24B]">EXC-2026-001</div>
+                      </div>
+                      <div className="w-16 h-16 bg-[#0A1F44] rounded-lg flex items-center justify-center">
+                        <ShieldCheck className="w-8 h-8 text-[#C9A24B]" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Copy */}
+            <div className="space-y-6">
+              <span className="section-label">Certification Authentifiée</span>
+              <h2 className="font-serif text-4xl md:text-5xl font-bold text-[#0A1F44]">
+                Des Certificats Vérifiables & Reconnus par les Employeurs
+              </h2>
+              <p className="text-[#475569] text-lg leading-relaxed">
+                Chaque attestation est numérotée, signée par l&apos;Expert-Comptable titulaire
+                et revêtue du sceau officiel. Le QR Code intégré permet une vérification
+                instantanée en ligne par n&apos;importe quel employeur ou auditeur.
+              </p>
+              <div className="space-y-3">
+                {[
+                  'Numérotation sécurisée unique par certificat',
+                  'QR Code de vérification authentifiée en ligne',
+                  'Signature de l\'Expert-Comptable DPLE Membre OEC',
+                  'Valeur reconnue auprès des DRH et cabinets d\'audit',
+                ].map(item => (
+                  <div key={item} className="flex items-center gap-3 text-sm text-[#1E293B]">
+                    <ShieldCheck className="w-4 h-4 text-[#C9A24B] flex-shrink-0" />
+                    {item}
+                  </div>
+                ))}
+              </div>
+              <Link href="/certificats/verifier/EXC-DEMO" className="btn-outline-navy inline-flex text-sm">
+                Vérifier un certificat exemple
+                <ExternalLink className="w-4 h-4" />
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── TESTIMONIALS (Realistic Professionals) ──────────────────────── */}
-      <section className="section-padding bg-ivory dark:bg-navy">
-        <div className="section-container space-y-12">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="text-gold text-xs font-mono uppercase tracking-widest">Retour d&apos;Expérience Praticiens</span>
-            <h2 className="font-serif text-3xl font-bold text-navy dark:text-white">
-              Témoignages de nos Apprenants & Clients
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((t, idx) => (
-              <div key={idx} className="editorial-card flex flex-col justify-between space-y-4">
-                <p className="text-xs text-muted-foreground leading-relaxed italic">
-                  &ldquo;{t.content}&rdquo;
-                </p>
-                <div className="pt-4 border-t border-border">
-                  <div className="font-semibold text-navy dark:text-white text-xs">{t.name}</div>
-                  <div className="text-[11px] text-muted-foreground mt-0.5">{t.role}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FAQ (Moroccan Context) ────────────────────────────────────────── */}
-      <section className="section-padding bg-white dark:bg-navy-900 border-t border-border">
-        <div className="section-container max-w-3xl space-y-8">
-          <div className="text-center space-y-2">
-            <span className="text-gold text-xs font-mono uppercase tracking-widest">Informations Pratiques</span>
-            <h2 className="font-serif text-3xl font-bold text-navy dark:text-white">
+      {/* ── FAQ ────────────────────────────────────────────────────────────── */}
+      <section className="section-padding bg-white">
+        <div className="section-container max-w-3xl">
+          <div className="text-center mb-12">
+            <span className="section-label">Informations Pratiques</span>
+            <h2 className="font-serif text-4xl md:text-5xl font-bold text-[#0A1F44] mt-4">
               Foire Aux Questions
             </h2>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {faqs.map((faq, idx) => (
-              <div key={idx} className="border border-border rounded-xl overflow-hidden bg-card">
-                <button
-                  onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                  className="w-full text-left p-5 flex items-center justify-between gap-4 font-semibold text-sm text-navy dark:text-white hover:text-gold transition-colors"
-                >
-                  <span>{faq.q}</span>
-                  <ChevronDown className={cn('w-4 h-4 text-muted-foreground transition-transform', openFaq === idx && 'rotate-180 text-gold')} />
-                </button>
-                {openFaq === idx && (
-                  <div className="px-5 pb-5 pt-1 text-xs text-muted-foreground leading-relaxed border-t border-border/50">
-                    {faq.a}
-                  </div>
-                )}
-              </div>
+              <FaqItem
+                key={idx}
+                q={faq.q}
+                a={faq.a}
+                isOpen={openFaq === idx}
+                onToggle={() => setOpenFaq(openFaq === idx ? null : idx)}
+              />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── FINAL CTA ────────────────────────────────────────────────────── */}
-      <section className="py-20 bg-navy text-white text-center border-t border-white/10">
-        <div className="section-container max-w-3xl space-y-6">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold text-white">
-            Renforcez vos Compétences Fisc & Compta dès Aujourd&apos;hui.
+      {/* ── FINAL CTA ──────────────────────────────────────────────────────── */}
+      <section className="py-24 bg-[#FAF8F3] relative overflow-hidden">
+        {/* Decorative dots grid */}
+        <div
+          className="absolute inset-0 opacity-20 pointer-events-none"
+          style={{
+            backgroundImage: 'radial-gradient(circle, #C9A24B 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+          }}
+        />
+
+        <div className="section-container max-w-4xl text-center relative z-10 space-y-8">
+          <span className="section-label">Passez à l&apos;action</span>
+          <h2 className="font-serif text-5xl md:text-6xl font-bold text-[#0A1F44] leading-tight">
+            Renforcez vos Compétences
+            <span className="block text-gradient-gold">Fisc & Compta dès Aujourd&apos;hui.</span>
           </h2>
-          <p className="text-white/70 text-sm leading-relaxed max-w-xl mx-auto">
-            Consultez le programme détaillé de nos sessions pratiques ou échangez directement avec notre secrétariat à Casablanca.
+          <p className="text-[#475569] text-xl leading-relaxed max-w-2xl mx-auto">
+            Consultez le programme détaillé de nos sessions pratiques ou échangez directement
+            avec notre secrétariat à Casablanca.
           </p>
-          <div className="pt-4 flex flex-col sm:flex-row justify-center gap-4">
-            <Link href="/formations" className="btn-gold text-xs px-8 py-3.5 font-bold uppercase tracking-wider">
+
+          <div className="flex flex-col sm:flex-row justify-center gap-4 pt-2">
+            <Link href="/formations" className="btn-gold text-base px-10">
               Découvrir les Formations Ouvertes
+              <ArrowRight className="w-5 h-5" />
             </Link>
             <a
               href="https://wa.me/212661345892"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-outline-gold text-xs px-8 py-3.5 inline-flex items-center justify-center gap-2"
+              className="btn-outline-navy text-base px-10"
             >
-              <MessageCircle className="w-4 h-4" /> Secrétariat WhatsApp
+              <MessageCircle className="w-5 h-5" />
+              Secrétariat WhatsApp
             </a>
+          </div>
+
+          {/* Contact info strip */}
+          <div className="flex flex-wrap items-center justify-center gap-8 pt-6 border-t border-[#E7E2D6] text-sm text-[#475569]">
+            <div className="flex items-center gap-2">
+              <Phone className="w-4 h-4 text-[#C9A24B]" />
+              +212 (0) 522 48 90 12
+            </div>
+            <div className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-[#C9A24B]" />
+              142 Bd Abdelmoumen, Casablanca
+            </div>
           </div>
         </div>
       </section>

@@ -186,7 +186,7 @@ export default function AdminCoursesPage() {
       {/* Top Header & Action Controls */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display font-bold text-navy dark:text-white text-2xl flex items-center gap-2">
+          <h1 className="font-display font-bold text-navy text-2xl flex items-center gap-2">
             Gestion &amp; Création des Formations
             <span className="text-xs font-mono bg-gold/15 text-gold px-2.5 py-0.5 rounded-full border border-gold/30">
               {courses.length} Formations
@@ -205,7 +205,7 @@ export default function AdminCoursesPage() {
               className={cn(
                 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5',
                 viewMode === '3columns'
-                  ? 'bg-navy dark:bg-navy-900 text-gold shadow-sm'
+                  ? 'bg-navy text-gold shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
               )}
             >
@@ -216,7 +216,7 @@ export default function AdminCoursesPage() {
               className={cn(
                 'px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5',
                 viewMode === 'grid'
-                  ? 'bg-navy dark:bg-navy-900 text-gold shadow-sm'
+                  ? 'bg-navy text-gold shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
               )}
             >
@@ -235,7 +235,7 @@ export default function AdminCoursesPage() {
 
           <Link
             href="/admin/formations/nouveau"
-            className="px-4 py-2.5 rounded-xl bg-navy dark:bg-navy-900 border border-white/20 text-white hover:border-gold text-xs font-bold flex items-center gap-2 transition-all"
+            className="px-4 py-2.5 rounded-xl bg-navy border border-white/20 text-white hover:border-gold text-xs font-bold flex items-center gap-2 transition-all"
           >
             <Plus className="w-4 h-4 text-gold" /> Nouvelle Formation
           </Link>
@@ -244,30 +244,30 @@ export default function AdminCoursesPage() {
 
       {/* Summary KPI Counters */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border">
+        <div className="glass-card-light p-4 rounded-2xl border border-border">
           <div className="text-xs text-muted-foreground font-semibold">Total Formations</div>
-          <div className="font-display font-bold text-2xl text-navy dark:text-white mt-1 font-mono">
+          <div className="font-display font-bold text-2xl text-navy mt-1 font-mono">
             {courses.length}
           </div>
         </div>
 
-        <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border">
+        <div className="glass-card-light p-4 rounded-2xl border border-border">
           <div className="text-xs text-muted-foreground font-semibold">En Ligne (Publiées)</div>
           <div className="font-display font-bold text-2xl text-emerald mt-1 font-mono">
             {courses.filter((c) => c.isPublished).length}
           </div>
         </div>
 
-        <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border">
+        <div className="glass-card-light p-4 rounded-2xl border border-border">
           <div className="text-xs text-muted-foreground font-semibold">Inscrits Totaux</div>
           <div className="font-display font-bold text-2xl text-gold mt-1 font-mono">
             {courses.reduce((acc, c) => acc + c.totalEnrolled, 0)}
           </div>
         </div>
 
-        <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border">
+        <div className="glass-card-light p-4 rounded-2xl border border-border">
           <div className="text-xs text-muted-foreground font-semibold">Chiffre d&apos;Affaires Généré</div>
-          <div className="font-display font-bold text-xl text-navy dark:text-white mt-1 font-mono">
+          <div className="font-display font-bold text-xl text-navy mt-1 font-mono">
             {formatCurrency(totalValue, 'MAD')}
           </div>
         </div>
@@ -279,7 +279,7 @@ export default function AdminCoursesPage() {
       ) : (
         <>
           {/* Search & Filter Bar */}
-          <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="glass-card-light p-4 rounded-2xl border border-border flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="relative w-full sm:w-80">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
@@ -297,7 +297,7 @@ export default function AdminCoursesPage() {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none text-navy dark:text-white"
+                  className="px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none text-navy"
                 >
                   <option value="all">Toutes les catégories</option>
                   <option value="Fiscalité Marocaine">Fiscalité Marocaine</option>
@@ -309,7 +309,7 @@ export default function AdminCoursesPage() {
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none text-navy dark:text-white"
+                className="px-3 py-2 rounded-xl bg-muted/50 border border-border text-xs focus:outline-none text-navy"
               >
                 <option value="all">Tous les statuts</option>
                 <option value="published">Publiés uniquement</option>
@@ -325,7 +325,7 @@ export default function AdminCoursesPage() {
                 key={course.id}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass-card-light dark:glass-card rounded-2xl border border-border p-5 flex flex-col justify-between hover:border-gold/40 transition-all group relative overflow-hidden"
+                className="glass-card-light rounded-2xl border border-border p-5 flex flex-col justify-between hover:border-gold/40 transition-all group relative overflow-hidden"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-3">
@@ -345,7 +345,7 @@ export default function AdminCoursesPage() {
                     </span>
                   </div>
 
-                  <h3 className="font-display font-bold text-navy dark:text-white text-base leading-snug mb-2 group-hover:text-gold transition-colors line-clamp-2">
+                  <h3 className="font-display font-bold text-navy text-base leading-snug mb-2 group-hover:text-gold transition-colors line-clamp-2">
                     {course.title}
                   </h3>
 
@@ -365,7 +365,7 @@ export default function AdminCoursesPage() {
                   <div className="pt-4 border-t border-border flex items-center justify-between mb-4">
                     <div>
                       <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Tarif officiel</div>
-                      <div className="font-mono font-bold text-navy dark:text-white text-base">
+                      <div className="font-mono font-bold text-navy text-base">
                         {formatCurrency(course.price, course.currency)}
                       </div>
                     </div>

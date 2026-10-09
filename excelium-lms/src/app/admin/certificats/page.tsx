@@ -82,7 +82,7 @@ export default function AdminCertificatesPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display font-bold text-navy dark:text-white text-2xl">
+          <h1 className="font-display font-bold text-navy text-2xl">
             Registre des Certificats Professionnels ({certs.length})
           </h1>
           <p className="text-muted-foreground text-xs mt-1">
@@ -97,7 +97,7 @@ export default function AdminCertificatesPage() {
         </button>
       </div>
 
-      <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border">
+      <div className="glass-card-light p-4 rounded-2xl border border-border">
         <div className="relative w-full sm:w-80">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
@@ -110,7 +110,7 @@ export default function AdminCertificatesPage() {
         </div>
       </div>
 
-      <div className="glass-card-light dark:glass-card rounded-2xl border border-border overflow-hidden">
+      <div className="glass-card-light rounded-2xl border border-border overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -130,14 +130,14 @@ export default function AdminCertificatesPage() {
                     <ShieldCheck className="w-4 h-4 text-emerald" /> {cert.code}
                   </td>
                   <td className="px-4 py-3.5">
-                    <div className="text-sm font-bold text-navy dark:text-white">{cert.studentName}</div>
+                    <div className="text-sm font-bold text-navy">{cert.studentName}</div>
                     <div className="text-xs text-muted-foreground">{cert.studentEmail}</div>
                   </td>
-                  <td className="px-4 py-3.5 text-xs text-navy dark:text-white font-medium max-w-[220px] truncate">
+                  <td className="px-4 py-3.5 text-xs text-navy font-medium max-w-[220px] truncate">
                     {cert.courseTitle}
                   </td>
                   <td className="px-4 py-3.5 text-xs font-mono">
-                    <div className="text-navy dark:text-white font-bold">{cert.score}% de réussite</div>
+                    <div className="text-navy font-bold">{cert.score}% de réussite</div>
                     <div className="text-muted-foreground text-[10px]">
                       {format(new Date(cert.issuedAt), 'd MMM yyyy', { locale: fr })}
                     </div>

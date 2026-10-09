@@ -185,36 +185,36 @@ export default function EnrollmentFlow({ course, userId, existingEnrollment }: P
             className="space-y-6"
           >
             <div>
-              <h3 className="font-display text-xl font-bold text-navy dark:text-white mb-1">
+              <h3 className="font-display text-xl font-bold text-navy mb-1">
                 Récapitulatif de commande
               </h3>
               <p className="text-muted-foreground text-sm">Vérifiez les détails avant de procéder au paiement</p>
             </div>
 
-            <div className="glass-card-light dark:glass-card p-5 rounded-2xl space-y-3">
+            <div className="glass-card-light p-5 rounded-2xl space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Formation</span>
-                <span className="font-semibold text-navy dark:text-white text-right max-w-[60%]">{course.title}</span>
+                <span className="font-semibold text-navy text-right max-w-[60%]">{course.title}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Durée</span>
-                <span className="font-mono text-navy dark:text-white">{course.duration_hours}h</span>
+                <span className="font-mono text-navy">{course.duration_hours}h</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Niveau</span>
-                <span className="text-navy dark:text-white">
+                <span className="text-navy">
                   {course.level === 'debutant' ? 'Débutant' : course.level === 'intermediaire' ? 'Intermédiaire' : 'Avancé'}
                 </span>
               </div>
               <div className="border-t border-border pt-3 flex justify-between">
-                <span className="font-semibold text-navy dark:text-white">Total à payer</span>
+                <span className="font-semibold text-navy">Total à payer</span>
                 <span className="font-display text-xl font-bold text-gold">
                   {formatCurrency(course.price, course.currency)}
                 </span>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400">
+            <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-600">
               <Info className="w-5 h-5 flex-shrink-0 mt-0.5" />
               <div className="text-sm">
                 <p className="font-semibold mb-1">Paiement par virement bancaire</p>
@@ -247,7 +247,7 @@ export default function EnrollmentFlow({ course, userId, existingEnrollment }: P
             className="space-y-6"
           >
             <div>
-              <h3 className="font-display text-xl font-bold text-navy dark:text-white mb-1">
+              <h3 className="font-display text-xl font-bold text-navy mb-1">
                 Coordonnées bancaires
               </h3>
               <p className="text-muted-foreground text-sm">
@@ -256,7 +256,7 @@ export default function EnrollmentFlow({ course, userId, existingEnrollment }: P
             </div>
 
             {/* Bank details card */}
-            <div className="glass-card-light dark:glass-card p-6 rounded-2xl space-y-4 border border-gold/20">
+            <div className="glass-card-light p-6 rounded-2xl space-y-4 border border-gold/20">
               {[
                 { label: 'Banque', value: bankDetails.bank, key: 'bank' },
                 { label: 'Titulaire', value: bankDetails.accountName, key: 'name' },
@@ -270,8 +270,8 @@ export default function EnrollmentFlow({ course, userId, existingEnrollment }: P
                     <div className="text-xs text-muted-foreground mb-0.5">{item.label}</div>
                     <div className={`text-sm font-semibold break-all ${
                       item.highlight ? 'text-gold text-base font-bold' :
-                      item.mono ? 'font-mono text-navy dark:text-white' :
-                      'text-navy dark:text-white'
+                      item.mono ? 'font-mono text-navy' :
+                      'text-navy'
                     }`}>
                       {item.value}
                     </div>
@@ -293,7 +293,7 @@ export default function EnrollmentFlow({ course, userId, existingEnrollment }: P
 
             <div className="flex items-start gap-3 p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
               <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-yellow-700 dark:text-yellow-400">
+              <div className="text-sm text-yellow-700">
                 <p className="font-semibold mb-1">Important !</p>
                 <p className="text-xs opacity-80">
                   Mentionnez obligatoirement la référence{' '}
@@ -322,7 +322,7 @@ export default function EnrollmentFlow({ course, userId, existingEnrollment }: P
             className="space-y-6"
           >
             <div>
-              <h3 className="font-display text-xl font-bold text-navy dark:text-white mb-1">
+              <h3 className="font-display text-xl font-bold text-navy mb-1">
                 Preuve de paiement
               </h3>
               <p className="text-muted-foreground text-sm">
@@ -350,7 +350,7 @@ export default function EnrollmentFlow({ course, userId, existingEnrollment }: P
                     <FileImage className="w-12 h-12 text-emerald" />
                   )}
                   <div>
-                    <p className="font-semibold text-navy dark:text-white text-sm">{proofFile.name}</p>
+                    <p className="font-semibold text-navy text-sm">{proofFile.name}</p>
                     <p className="text-muted-foreground text-xs">
                       {(proofFile.size / 1024 / 1024).toFixed(2)} Mo
                     </p>
@@ -367,7 +367,7 @@ export default function EnrollmentFlow({ course, userId, existingEnrollment }: P
                 <div className="flex flex-col items-center gap-3">
                   <Upload className="w-12 h-12 text-muted-foreground" />
                   <div>
-                    <p className="font-semibold text-navy dark:text-white text-sm">
+                    <p className="font-semibold text-navy text-sm">
                       {isDragActive ? 'Déposez ici !' : 'Glissez-déposez ou cliquez pour parcourir'}
                     </p>
                     <p className="text-muted-foreground text-xs mt-1">
@@ -417,17 +417,17 @@ export default function EnrollmentFlow({ course, userId, existingEnrollment }: P
             </motion.div>
 
             <div>
-              <h3 className="font-display text-2xl font-bold text-navy dark:text-white mb-2">
+              <h3 className="font-display text-2xl font-bold text-navy mb-2">
                 Demande envoyée !
               </h3>
               <p className="text-muted-foreground text-sm leading-relaxed max-w-sm mx-auto">
                 Votre demande d&apos;inscription a été reçue. Nous vérifierons votre paiement et activerons
-                votre accès sous <span className="font-semibold text-navy dark:text-white">24 heures ouvrables</span>.
+                votre accès sous <span className="font-semibold text-navy">24 heures ouvrables</span>.
               </p>
             </div>
 
             {referenceCode && (
-              <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-gold/20 inline-block">
+              <div className="glass-card-light p-4 rounded-2xl border border-gold/20 inline-block">
                 <div className="text-xs text-muted-foreground mb-1">Votre référence de paiement</div>
                 <div className="font-mono font-bold text-gold text-xl">{referenceCode}</div>
               </div>

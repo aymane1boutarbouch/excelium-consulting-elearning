@@ -106,7 +106,7 @@ export default function NewCoursePage() {
   }
 
   return (
-    <div className="min-h-screen bg-ivory dark:bg-navy p-4 md:p-8">
+    <div className="min-h-screen bg-ivory p-4 md:p-8">
       {/* Importer Modal */}
       <FormationImporterModal
         isOpen={isImporterOpen}
@@ -121,7 +121,7 @@ export default function NewCoursePage() {
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <div>
-              <h1 className="font-display font-bold text-navy dark:text-white text-2xl">
+              <h1 className="font-display font-bold text-navy text-2xl">
                 Ajouter une Nouvelle Formation
               </h1>
               <p className="text-muted-foreground text-sm">Créez manuellement ou importez un document Word / Excel</p>
@@ -137,10 +137,10 @@ export default function NewCoursePage() {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="glass-card-light dark:glass-card p-6 md:p-8 rounded-3xl space-y-6 border border-border">
+        <form onSubmit={handleSubmit} className="glass-card-light p-6 md:p-8 rounded-3xl space-y-6 border border-border">
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Titre de la formation</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Titre de la formation</label>
               <input
                 type="text"
                 name="title"
@@ -153,7 +153,7 @@ export default function NewCoursePage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Slug URL</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Slug URL</label>
               <input
                 type="text"
                 name="slug"
@@ -165,7 +165,7 @@ export default function NewCoursePage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Description détaillée</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Description détaillée</label>
               <textarea
                 name="description"
                 value={formData.description}
@@ -179,7 +179,7 @@ export default function NewCoursePage() {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Prix (MAD)</label>
+                <label className="block text-xs font-semibold text-navy mb-1">Prix (MAD)</label>
                 <input
                   type="number"
                   name="price"
@@ -190,7 +190,7 @@ export default function NewCoursePage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Durée (heures)</label>
+                <label className="block text-xs font-semibold text-navy mb-1">Durée (heures)</label>
                 <input
                   type="number"
                   name="durationHours"
@@ -201,7 +201,7 @@ export default function NewCoursePage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Nombre de leçons</label>
+                <label className="block text-xs font-semibold text-navy mb-1">Nombre de leçons</label>
                 <input
                   type="number"
                   name="totalLessons"
@@ -215,7 +215,7 @@ export default function NewCoursePage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Niveau</label>
+                <label className="block text-xs font-semibold text-navy mb-1">Niveau</label>
                 <select
                   name="level"
                   value={formData.level}
@@ -228,7 +228,7 @@ export default function NewCoursePage() {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-navy dark:text-white mb-1">URL de l&apos;image (Miniature)</label>
+                <label className="block text-xs font-semibold text-navy mb-1">URL de l&apos;image (Miniature)</label>
                 <input
                   type="url"
                   name="thumbnailUrl"
@@ -241,7 +241,7 @@ export default function NewCoursePage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">URL de la vidéo d&apos;aperçu (YouTube / Vimeo)</label>
+              <label className="block text-xs font-semibold text-navy mb-1">URL de la vidéo d&apos;aperçu (YouTube / Vimeo)</label>
               <input
                 type="url"
                 name="previewVideoUrl"
@@ -253,7 +253,7 @@ export default function NewCoursePage() {
             </div>
 
             <div className="flex items-center gap-6 pt-2">
-              <label className="flex items-center gap-2 text-sm font-medium text-navy dark:text-white cursor-pointer">
+              <label className="flex items-center gap-2 text-sm font-medium text-navy cursor-pointer">
                 <input
                   type="checkbox"
                   name="isPublished"
@@ -264,7 +264,7 @@ export default function NewCoursePage() {
                 Publier immédiatement
               </label>
 
-              <label className="flex items-center gap-2 text-sm font-medium text-navy dark:text-white cursor-pointer">
+              <label className="flex items-center gap-2 text-sm font-medium text-navy cursor-pointer">
                 <input
                   type="checkbox"
                   name="isFeatured"

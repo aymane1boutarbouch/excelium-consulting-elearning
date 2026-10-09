@@ -32,91 +32,102 @@ export default async function VerifyCertificatePage({ params }: Props) {
   const isValid = cert && !cert.is_revoked
 
   return (
-    <div className="min-h-screen bg-navy flex items-center justify-center p-4 relative overflow-hidden">
-      <div className="absolute inset-0 bg-mesh" />
+    <div className="min-h-screen bg-[#FAF8F3] flex items-center justify-center p-4 relative overflow-hidden py-12">
+      {/* Subtle background glow */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-[#C9A24B]/5 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-[#C9A24B]/5 blur-3xl pointer-events-none" />
 
       <div className="relative z-10 max-w-lg w-full">
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-gold flex items-center justify-center shadow-gold">
-              <GraduationCap className="w-7 h-7 text-navy" />
+            <div className="w-12 h-12 rounded-2xl bg-[#0A1F44] flex items-center justify-center shadow-sm">
+              <GraduationCap className="w-6 h-6 text-[#C9A24B]" />
             </div>
             <div className="text-left">
-              <div className="font-display font-bold text-white text-base leading-none">EXCELIUM</div>
-              <div className="text-gold text-xs tracking-widest">CONSULTING COMPTA</div>
+              <div className="font-serif font-bold text-[#0A1F44] text-base leading-none">EXCELIUM</div>
+              <div className="text-[#C9A24B] text-[10px] tracking-widest font-mono uppercase mt-0.5">
+                CONSULTING COMPTA
+              </div>
             </div>
           </Link>
         </div>
 
-        <div className="glass-card p-8 rounded-3xl text-center space-y-6 border border-white/20 shadow-2xl">
+        <div className="bg-white border border-[#E7E2D6] p-8 md:p-10 rounded-3xl text-center space-y-6 shadow-sm">
           {isValid ? (
             <>
-              <div className="w-20 h-20 rounded-full bg-emerald/10 border-4 border-emerald/30 flex items-center justify-center mx-auto">
-                <ShieldCheck className="w-10 h-10 text-emerald" />
+              <div className="w-20 h-20 rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center mx-auto text-emerald-700">
+                <ShieldCheck className="w-10 h-10" />
               </div>
 
               <div>
-                <span className="px-3 py-1 rounded-full bg-emerald/10 text-emerald text-xs font-bold uppercase tracking-wider">
+                <span className="px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider">
                   Certificat Authentique & Valide
                 </span>
-                <h1 className="font-display text-2xl font-bold text-white mt-3">
+                <h1 className="font-serif text-2xl font-bold text-[#0A1F44] mt-3">
                   Certificat Officiel de Formation
                 </h1>
-                <p className="text-white/50 text-sm mt-1">Délivré par le cabinet Excelium Consulting Compta</p>
+                <p className="text-[#475569] text-sm mt-1">
+                  Délivré par le cabinet Excelium Consulting Compta (Casablanca)
+                </p>
               </div>
 
-              <div className="glass-card p-5 rounded-2xl text-left space-y-3 border border-gold/20">
-                <div className="flex justify-between text-xs text-white/50">
-                  <span>Numéro d&apos;attestation</span>
-                  <span className="font-mono text-gold font-bold">{cert.certificate_number}</span>
+              <div className="bg-[#FAF8F3] p-5 rounded-2xl text-left space-y-3.5 border border-[#E7E2D6]">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-[#475569]">Numéro d&apos;attestation</span>
+                  <span className="font-mono text-[#0A1F44] font-bold bg-white px-2.5 py-1 rounded border border-[#E7E2D6]">
+                    {cert.certificate_number}
+                  </span>
                 </div>
-                <div className="flex justify-between text-xs text-white/50">
-                  <span>Titulaire</span>
-                  <span className="font-semibold text-white">{cert.profiles?.full_name}</span>
+                <div className="flex justify-between text-xs">
+                  <span className="text-[#475569]">Titulaire certifié</span>
+                  <span className="font-semibold text-[#0A1F44]">{cert.profiles?.full_name}</span>
                 </div>
-                <div className="flex justify-between text-xs text-white/50">
-                  <span>Formation</span>
-                  <span className="font-semibold text-white text-right max-w-[60%]">{cert.courses?.title}</span>
+                <div className="flex justify-between text-xs">
+                  <span className="text-[#475569]">Programme suivi</span>
+                  <span className="font-semibold text-[#0A1F44] text-right max-w-[65%]">{cert.courses?.title}</span>
                 </div>
-                <div className="flex justify-between text-xs text-white/50">
-                  <span>Volume horaire</span>
-                  <span className="font-mono text-white">{cert.courses?.duration_hours} heures</span>
+                <div className="flex justify-between text-xs">
+                  <span className="text-[#475569]">Volume horaire</span>
+                  <span className="font-mono font-medium text-[#0A1F44]">{cert.courses?.duration_hours} heures</span>
                 </div>
-                <div className="flex justify-between text-xs text-white/50 border-t border-white/10 pt-2">
-                  <span>Date d&apos;émission</span>
-                  <span className="text-white font-medium">
+                <div className="flex justify-between text-xs border-t border-[#E7E2D6] pt-3">
+                  <span className="text-[#475569]">Date d&apos;émission</span>
+                  <span className="text-[#0A1F44] font-medium">
                     {format(new Date(cert.issued_at), 'd MMMM yyyy', { locale: fr })}
                   </span>
                 </div>
               </div>
 
-              <p className="text-white/40 text-xs leading-relaxed">
-                Ce document officiel atteste que le titulaire a suivi et validé avec succès l&apos;ensemble des exigences académiques de la formation.
+              <p className="text-[#64748B] text-xs leading-relaxed">
+                Ce document officiel atteste que le titulaire a suivi et validé avec succès l&apos;ensemble des exigences académiques et pratiques du programme de formation.
               </p>
             </>
           ) : (
             <>
-              <div className="w-20 h-20 rounded-full bg-red-500/10 border-4 border-red-500/30 flex items-center justify-center mx-auto">
-                <Award className="w-10 h-10 text-red-400" />
+              <div className="w-20 h-20 rounded-full bg-red-100 border border-red-300 flex items-center justify-center mx-auto text-red-600">
+                <Award className="w-10 h-10" />
               </div>
 
               <div>
-                <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-bold uppercase tracking-wider">
+                <span className="px-3.5 py-1 rounded-full bg-red-100 text-red-800 text-xs font-bold uppercase tracking-wider">
                   Certificat Introuvable ou Révoqué
                 </span>
-                <h1 className="font-display text-2xl font-bold text-white mt-3">
+                <h1 className="font-serif text-2xl font-bold text-[#0A1F44] mt-3">
                   Vérification Impossible
                 </h1>
-                <p className="text-white/50 text-sm mt-2">
-                  Le numéro <span className="font-mono text-gold font-bold">{params.code}</span> n&apos;est pas reconnu dans notre registre officiel.
+                <p className="text-[#475569] text-sm mt-2">
+                  La référence <span className="font-mono text-[#0A1F44] font-bold bg-[#FAF8F3] px-2 py-0.5 rounded border border-[#E7E2D6]">{params.code}</span> n&apos;est pas reconnue dans notre registre officiel.
                 </p>
               </div>
             </>
           )}
 
-          <Link href="/" className="btn-outline-gold rounded-xl py-3 w-full justify-center inline-flex text-sm">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Retour au site principal
+          <Link
+            href="/"
+            className="w-full min-h-[48px] py-3.5 px-6 rounded-xl bg-[#0A1F44] hover:bg-[#081836] text-white font-semibold text-sm transition-all justify-center inline-flex items-center gap-2 shadow-sm"
+          >
+            <ArrowLeft className="w-4 h-4 text-[#C9A24B]" /> Retour à la plateforme
           </Link>
         </div>
       </div>

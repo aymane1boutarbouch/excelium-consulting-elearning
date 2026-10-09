@@ -77,15 +77,15 @@ export default function AdminDashboardClient({ stats, recentPayments, recentEnro
       label: 'Formations publiées',
       value: stats.totalCourses,
       icon: BookOpen,
-      color: 'text-navy dark:text-blue-300',
-      bg: 'bg-navy/5 dark:bg-blue-300/10',
+      color: 'text-navy',
+      bg: 'bg-navy/5',
       change: '+3',
     },
     {
       label: 'Paiements en attente',
       value: stats.pendingPayments,
       icon: CreditCard,
-      color: stats.pendingPayments > 0 ? 'text-yellow-600 dark:text-yellow-400' : 'text-emerald',
+      color: stats.pendingPayments > 0 ? 'text-yellow-600' : 'text-emerald',
       bg: stats.pendingPayments > 0 ? 'bg-yellow-500/10' : 'bg-emerald/10',
       alert: stats.pendingPayments > 0,
     },
@@ -112,32 +112,32 @@ export default function AdminDashboardClient({ stats, recentPayments, recentEnro
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-card-light dark:glass-card p-6 rounded-3xl border border-border bg-gradient-to-r from-navy via-navy-900 to-navy text-white relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
+        className="p-6 md:p-8 rounded-3xl border border-[#E7E2D6] bg-[#F3EFE6] text-[#0A1F44] relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm"
       >
         <div className="space-y-2 z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/20 text-gold text-xs font-bold font-mono">
-            <Sparkles className="w-3.5 h-3.5" /> CENTRE DE CRÉATION &amp; CONTRÔLE ADMIN
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C9A24B]/15 text-[#0A1F44] text-xs font-bold font-mono border border-[#C9A24B]/30">
+            <Sparkles className="w-3.5 h-3.5 text-[#C9A24B]" /> CENTRE DE CRÉATION &amp; CONTRÔLE ADMIN
           </div>
-          <h1 className="font-display font-bold text-2xl md:text-3xl text-white leading-tight">
+          <h1 className="font-serif font-bold text-2xl md:text-3xl text-[#0A1F44] leading-tight">
             Pilotez votre plateforme et importez vos formations en 1-clic
           </h1>
-          <p className="text-white/70 text-xs md:text-sm">
-            Importez des cours complets depuis des fichiers Word (.docx) ou Excel (.xlsx), gérez vos inscriptions et validez les virement bancaires instantanément.
+          <p className="text-[#475569] text-xs md:text-sm leading-relaxed">
+            Importez des cours complets depuis des fichiers Word (.docx) ou Excel (.xlsx), gérez vos inscriptions et validez les virements bancaires instantanément.
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 z-10 w-full md:w-auto">
           <button
             onClick={() => setIsImporterOpen(true)}
-            className="w-full sm:w-auto btn-gold px-5 py-3 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 shadow-gold text-navy"
+            className="w-full sm:w-auto min-h-[44px] px-5 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm bg-[#0A1F44] hover:bg-[#081836] text-white transition-all"
           >
-            <Upload className="w-4 h-4" /> Importer Word / Excel
+            <Upload className="w-4 h-4 text-[#C9A24B]" /> Importer Word / Excel
           </button>
           <Link
             href="/admin/formations/nouveau"
-            className="w-full sm:w-auto px-5 py-3 rounded-2xl border border-white/20 hover:border-gold text-white text-xs font-bold flex items-center justify-center gap-2 transition-all bg-white/5 hover:bg-white/10"
+            className="w-full sm:w-auto min-h-[44px] px-5 py-2.5 rounded-xl border border-[#E7E2D6] hover:border-[#C9A24B] text-[#0A1F44] text-xs font-bold flex items-center justify-center gap-2 transition-all bg-white hover:bg-[#FAF8F3] shadow-sm"
           >
-            <Plus className="w-4 h-4 text-gold" /> Créer Manuellement
+            <Plus className="w-4 h-4 text-[#C9A24B]" /> Créer Manuellement
           </Link>
         </div>
       </motion.div>
@@ -155,7 +155,7 @@ export default function AdminDashboardClient({ stats, recentPayments, recentEnro
               key={kpi.label}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0, transition: { delay: i * 0.08 } }}
-              className="glass-card-light dark:glass-card p-5 rounded-2xl border border-border"
+              className="glass-card-light p-5 rounded-2xl border border-border"
             >
               <div className="flex items-start justify-between mb-3">
                 <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center', kpi.bg)}>
@@ -170,7 +170,7 @@ export default function AdminDashboardClient({ stats, recentPayments, recentEnro
                   </span>
                 )}
               </div>
-              <div className="font-display text-2xl font-bold text-navy dark:text-white font-mono">
+              <div className="font-display text-2xl font-bold text-navy font-mono">
                 {kpi.value}
               </div>
               <div className="text-muted-foreground text-xs mt-0.5">{kpi.label}</div>
@@ -186,7 +186,7 @@ export default function AdminDashboardClient({ stats, recentPayments, recentEnro
           animate={{ opacity: 1, y: 0, transition: { delay: 0.2 } }}
         >
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display font-bold text-navy dark:text-white text-lg">
+            <h2 className="font-display font-bold text-navy text-lg">
               Paiements en attente de validation
             </h2>
             <Link href="/admin/paiements" className="text-gold text-xs font-bold hover:underline flex items-center gap-1">
@@ -195,17 +195,17 @@ export default function AdminDashboardClient({ stats, recentPayments, recentEnro
           </div>
 
           {recentPayments.length === 0 ? (
-            <div className="glass-card-light dark:glass-card p-8 rounded-2xl text-center border border-border">
+            <div className="glass-card-light p-8 rounded-2xl text-center border border-border">
               <CheckCircle className="w-10 h-10 text-emerald mx-auto mb-3" />
               <p className="text-muted-foreground text-sm">Tous les paiements sont validés !</p>
             </div>
           ) : (
             <div className="space-y-3">
               {recentPayments.map((payment) => (
-                <div key={payment.id} className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border">
+                <div key={payment.id} className="glass-card-light p-4 rounded-2xl border border-border">
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="min-w-0">
-                      <div className="font-semibold text-navy dark:text-white text-sm">
+                      <div className="font-semibold text-navy text-sm">
                         {payment.profiles?.full_name || 'Étudiant'}
                       </div>
                       <div className="text-muted-foreground text-xs truncate">
@@ -216,7 +216,7 @@ export default function AdminDashboardClient({ stats, recentPayments, recentEnro
                       </div>
                     </div>
                     <div className="text-right flex-shrink-0">
-                      <div className="font-bold text-navy dark:text-white text-sm font-mono">
+                      <div className="font-bold text-navy text-sm font-mono">
                         {formatCurrency(payment.amount, payment.currency)}
                       </div>
                       <div className="text-muted-foreground text-[11px]">
@@ -253,7 +253,7 @@ export default function AdminDashboardClient({ stats, recentPayments, recentEnro
           animate={{ opacity: 1, y: 0, transition: { delay: 0.3 } }}
         >
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-display font-bold text-navy dark:text-white text-lg">
+            <h2 className="font-display font-bold text-navy text-lg">
               Formations phares
             </h2>
             <Link href="/admin/formations" className="text-gold text-xs font-bold hover:underline flex items-center gap-1">
@@ -262,12 +262,12 @@ export default function AdminDashboardClient({ stats, recentPayments, recentEnro
           </div>
           <div className="space-y-3">
             {topCourses.map((course, i) => (
-              <div key={course.id} className="glass-card-light dark:glass-card p-4 rounded-2xl flex items-center gap-4 border border-border">
+              <div key={course.id} className="glass-card-light p-4 rounded-2xl flex items-center gap-4 border border-border">
                 <div className="w-8 h-8 rounded-xl bg-gold/15 text-gold font-bold text-xs flex items-center justify-center font-mono">
                   0{i + 1}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-navy dark:text-white text-sm truncate">
+                  <div className="font-semibold text-navy text-sm truncate">
                     {course.title}
                   </div>
                   <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5">
@@ -285,7 +285,7 @@ export default function AdminDashboardClient({ stats, recentPayments, recentEnro
                 </div>
                 <Link
                   href={`/admin/formations/${course.id}`}
-                  className="px-3 py-1.5 rounded-xl bg-navy/5 dark:bg-white/5 hover:bg-gold hover:text-navy text-xs font-bold transition-all text-navy dark:text-white"
+                  className="px-3 py-1.5 rounded-xl bg-navy/5 hover:bg-gold hover:text-navy text-xs font-bold transition-all text-navy"
                 >
                   Modifier
                 </Link>

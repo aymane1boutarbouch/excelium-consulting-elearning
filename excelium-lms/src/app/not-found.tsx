@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-ivory dark:bg-navy flex flex-col">
+    <div className="min-h-screen bg-[#FAF8F3] flex flex-col">
       <Navbar />
 
       <div className="flex-1 flex items-center justify-center section-padding">
@@ -19,7 +19,7 @@ export default function NotFound() {
           </div>
 
           <div className="space-y-2">
-            <h1 className="font-serif text-3xl font-bold text-navy dark:text-white">
+            <h1 className="font-serif text-3xl font-bold text-navy">
               Page Introuvable
             </h1>
             <p className="text-muted-foreground text-xs leading-relaxed">

@@ -73,7 +73,7 @@ export default function ResourceDropzone({ lessonId, initialResources = [], onRe
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <label className="block text-xs font-bold text-navy dark:text-white uppercase tracking-wider">
+        <label className="block text-xs font-bold text-navy uppercase tracking-wider">
           Fichiers joints &amp; Documents Téléchargeables ({resources.length})
         </label>
         <span className="text-[11px] text-muted-foreground font-mono">100 Mo max / fichier</span>
@@ -90,7 +90,7 @@ export default function ResourceDropzone({ lessonId, initialResources = [], onRe
           disabled={uploading}
         />
         <Upload className="w-6 h-6 text-gold mx-auto mb-1.5" />
-        <div className="text-xs font-bold text-navy dark:text-white">
+        <div className="text-xs font-bold text-navy">
           {uploading ? 'Téléversement des documents en cours...' : 'Glissez-déposez des fichiers (PDF, Excel, Word, ZIP)'}
         </div>
         <div className="text-[10px] text-muted-foreground mt-0.5">
@@ -109,7 +109,7 @@ export default function ResourceDropzone({ lessonId, initialResources = [], onRe
               <div className="flex items-center gap-3 min-w-0">
                 {getIconForCategory(res.fileTypeCategory)}
                 <div className="min-w-0">
-                  <div className="font-bold text-navy dark:text-white truncate">{res.fileName}</div>
+                  <div className="font-bold text-navy truncate">{res.fileName}</div>
                   <div className="text-[10px] text-muted-foreground font-mono">
                     {formatFileSize(res.sizeBytes)} • <span className="uppercase text-gold font-bold">{res.fileTypeCategory}</span>
                   </div>

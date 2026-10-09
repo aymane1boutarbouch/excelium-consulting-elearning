@@ -64,7 +64,7 @@ export default function AdminPaymentsClient({ initialPayments }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-ivory dark:bg-navy flex flex-col p-4 md:p-8">
+    <div className="min-h-screen bg-[#FAF8F3] flex flex-col p-4 md:p-8">
       {/* Top Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
@@ -72,7 +72,7 @@ export default function AdminPaymentsClient({ initialPayments }: Props) {
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="font-display font-bold text-navy dark:text-white text-2xl">
+            <h1 className="font-display font-bold text-navy text-2xl">
               Gestion des Paiements par Virement
             </h1>
             <p className="text-muted-foreground text-sm">Vérification des preuves de paiement et activation des accès</p>
@@ -81,7 +81,7 @@ export default function AdminPaymentsClient({ initialPayments }: Props) {
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="glass-card-light dark:glass-card p-4 rounded-2xl mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
+      <div className="glass-card-light p-4 rounded-2xl mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
         {/* Filter pills */}
         <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto">
           {[
@@ -119,7 +119,7 @@ export default function AdminPaymentsClient({ initialPayments }: Props) {
       </div>
 
       {/* Table */}
-      <div className="glass-card-light dark:glass-card rounded-2xl overflow-hidden shadow-xl border border-border flex-1">
+      <div className="glass-card-light rounded-2xl overflow-hidden shadow-xl border border-border flex-1">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
@@ -137,16 +137,16 @@ export default function AdminPaymentsClient({ initialPayments }: Props) {
                 filteredPayments.map(payment => (
                   <tr key={payment.id} className="border-b border-border/50 hover:bg-muted/20 transition-colors">
                     <td className="p-4">
-                      <div className="font-semibold text-navy dark:text-white">{payment.profiles?.full_name}</div>
+                      <div className="font-semibold text-navy">{payment.profiles?.full_name}</div>
                       <div className="text-xs text-muted-foreground">{payment.profiles?.email}</div>
                     </td>
-                    <td className="p-4 text-navy dark:text-white font-medium max-w-xs truncate">
+                    <td className="p-4 text-navy font-medium max-w-xs truncate">
                       {payment.courses?.title}
                     </td>
                     <td className="p-4 font-mono font-bold text-gold text-xs">
                       {payment.reference_code}
                     </td>
-                    <td className="p-4 font-mono font-bold text-navy dark:text-white">
+                    <td className="p-4 font-mono font-bold text-navy">
                       {formatCurrency(payment.amount, payment.currency)}
                     </td>
                     <td className="p-4">

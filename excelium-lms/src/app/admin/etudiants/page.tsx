@@ -98,7 +98,7 @@ export default function AdminStudentsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-display font-bold text-navy dark:text-white text-2xl">
+          <h1 className="font-display font-bold text-navy text-2xl">
             Répertoire des Étudiants ({students.length})
           </h1>
           <p className="text-muted-foreground text-xs mt-1">
@@ -108,7 +108,7 @@ export default function AdminStudentsPage() {
       </div>
 
       {/* Search Bar */}
-      <div className="glass-card-light dark:glass-card p-4 rounded-2xl border border-border">
+      <div className="glass-card-light p-4 rounded-2xl border border-border">
         <div className="relative w-full sm:w-96">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
@@ -122,7 +122,7 @@ export default function AdminStudentsPage() {
       </div>
 
       {/* Students Table */}
-      <div className="glass-card-light dark:glass-card rounded-2xl border border-border overflow-hidden">
+      <div className="glass-card-light rounded-2xl border border-border overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -144,7 +144,7 @@ export default function AdminStudentsPage() {
                         {student.fullName.charAt(0)}
                       </div>
                       <div>
-                        <div className="text-sm font-bold text-navy dark:text-white">{student.fullName}</div>
+                        <div className="text-sm font-bold text-navy">{student.fullName}</div>
                         <div className="text-xs text-muted-foreground flex items-center gap-1">
                           <Mail className="w-3 h-3" /> {student.email}
                         </div>
@@ -152,13 +152,13 @@ export default function AdminStudentsPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3.5">
-                    <div className="text-xs font-medium text-navy dark:text-white">{student.city}</div>
+                    <div className="text-xs font-medium text-navy">{student.city}</div>
                     <div className="text-xs text-muted-foreground flex items-center gap-1 font-mono">
                       <Phone className="w-3 h-3 text-gold" /> {student.phone}
                     </div>
                   </td>
                   <td className="px-4 py-3.5">
-                    <div className="text-xs font-bold text-navy dark:text-white flex items-center gap-1">
+                    <div className="text-xs font-bold text-navy flex items-center gap-1">
                       <BookOpen className="w-3.5 h-3.5 text-gold" />
                       {student.enrolledCourses} cours ({student.completedCourses} terminés)
                     </div>
@@ -166,7 +166,7 @@ export default function AdminStudentsPage() {
                       {student.xpPoints} XP accumulés
                     </div>
                   </td>
-                  <td className="px-4 py-3.5 text-sm font-mono font-bold text-navy dark:text-white">
+                  <td className="px-4 py-3.5 text-sm font-mono font-bold text-navy">
                     {formatCurrency(student.totalPaid, 'MAD')}
                   </td>
                   <td className="px-4 py-3.5">

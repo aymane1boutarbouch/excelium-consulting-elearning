@@ -40,7 +40,7 @@ export default function AdminSettingsPage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div>
-        <h1 className="font-display font-bold text-navy dark:text-white text-2xl">
+        <h1 className="font-display font-bold text-navy text-2xl">
           Paramètres Généraux du Cabinet &amp; Plateforme
         </h1>
         <p className="text-muted-foreground text-xs mt-1">
@@ -50,14 +50,14 @@ export default function AdminSettingsPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Section 1: Firm Identifiers */}
-        <div className="glass-card-light dark:glass-card p-6 rounded-3xl border border-border space-y-4">
-          <h2 className="font-display font-bold text-navy dark:text-white text-lg flex items-center gap-2">
+        <div className="glass-card-light p-6 rounded-3xl border border-border space-y-4">
+          <h2 className="font-display font-bold text-navy text-lg flex items-center gap-2">
             <Building className="w-5 h-5 text-gold" /> Identifiants Fiscaux &amp; Juridiques du Cabinet
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Raison Sociale</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Raison Sociale</label>
               <input
                 type="text"
                 name="firmName"
@@ -68,7 +68,7 @@ export default function AdminSettingsPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">ICE (Identifiant Commun de l&apos;Entreprise)</label>
+              <label className="block text-xs font-semibold text-navy mb-1">ICE (Identifiant Commun de l&apos;Entreprise)</label>
               <input
                 type="text"
                 name="ice"
@@ -79,7 +79,7 @@ export default function AdminSettingsPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Identifiant Fiscal (IF)</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Identifiant Fiscal (IF)</label>
               <input
                 type="text"
                 name="ifCode"
@@ -90,7 +90,7 @@ export default function AdminSettingsPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Registre du Commerce (RC)</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Registre du Commerce (RC)</label>
               <input
                 type="text"
                 name="rcNumber"
@@ -104,14 +104,14 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* Section 2: Bank Transfer Details */}
-        <div className="glass-card-light dark:glass-card p-6 rounded-3xl border border-border space-y-4">
-          <h2 className="font-display font-bold text-navy dark:text-white text-lg flex items-center gap-2">
+        <div className="glass-card-light p-6 rounded-3xl border border-border space-y-4">
+          <h2 className="font-display font-bold text-navy text-lg flex items-center gap-2">
             <CreditCard className="w-5 h-5 text-gold" /> Coordonnées Bancaires (Paiement par Virement)
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Banque &amp; Agence</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Banque &amp; Agence</label>
               <input
                 type="text"
                 name="bankName"
@@ -122,7 +122,7 @@ export default function AdminSettingsPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Intitulé du Compte (Bénéficiaire)</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Intitulé du Compte (Bénéficiaire)</label>
               <input
                 type="text"
                 name="bankAccountName"
@@ -133,7 +133,7 @@ export default function AdminSettingsPage() {
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Relevé d&apos;Identité Bancaire (RIB — 24 chiffres)</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Relevé d&apos;Identité Bancaire (RIB — 24 chiffres)</label>
               <input
                 type="text"
                 name="bankRib"
@@ -144,7 +144,7 @@ export default function AdminSettingsPage() {
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Code IBAN International</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Code IBAN International</label>
               <input
                 type="text"
                 name="bankIban"
@@ -158,14 +158,14 @@ export default function AdminSettingsPage() {
         </div>
 
         {/* Section 3: Contact & Support */}
-        <div className="glass-card-light dark:glass-card p-6 rounded-3xl border border-border space-y-4">
-          <h2 className="font-display font-bold text-navy dark:text-white text-lg flex items-center gap-2">
+        <div className="glass-card-light p-6 rounded-3xl border border-border space-y-4">
+          <h2 className="font-display font-bold text-navy text-lg flex items-center gap-2">
             <Phone className="w-5 h-5 text-gold" /> Support &amp; Assistance WhatsApp
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Numéro WhatsApp Support</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Numéro WhatsApp Support</label>
               <input
                 type="text"
                 name="whatsappNumber"
@@ -176,7 +176,7 @@ export default function AdminSettingsPage() {
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-navy dark:text-white mb-1">Email de Contact Client</label>
+              <label className="block text-xs font-semibold text-navy mb-1">Email de Contact Client</label>
               <input
                 type="email"
                 name="supportEmail"

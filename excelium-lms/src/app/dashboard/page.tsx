@@ -105,7 +105,7 @@ export default async function DashboardPage() {
   }
 
   return (
-    <Suspense fallback={<div className="min-h-screen bg-navy animate-pulse" />}>
+    <Suspense fallback={<div className="min-h-screen bg-[#FAF8F3] animate-pulse" />}>
       <StudentDashboardClient
         profile={profile}
         enrollments={enrollments}

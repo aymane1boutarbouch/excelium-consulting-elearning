@@ -1,25 +1,29 @@
 import type { Metadata, Viewport } from 'next'
-import { Playfair_Display, Inter, JetBrains_Mono } from 'next/font/google'
+import { Playfair_Display, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
-import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { Toaster } from 'sonner'
+import { SmoothScrollProvider } from '@/components/providers/SmoothScrollProvider'
+import { CustomCursor } from '@/components/layout/CustomCursor'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
   variable: '--font-display',
   display: 'swap',
+  weight: ['500', '600', '700'],
 })
 
-const inter = Inter({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-body',
   display: 'swap',
+  weight: ['300', '400', '500', '600', '700', '800'],
 })
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
   display: 'swap',
+  weight: ['400', '500', '600'],
 })
 
 export const metadata: Metadata = {
@@ -83,10 +87,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#FAF8F3' },
-    { media: '(prefers-color-scheme: dark)', color: '#0A1F44' },
-  ],
+  themeColor: '#FAF8F3',
   width: 'device-width',
   initialScale: 1,
 }
@@ -100,28 +101,26 @@ export default function RootLayout({
     <html
       lang="fr"
       dir="ltr"
-      suppressHydrationWarning
-      className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${playfair.variable} ${plusJakarta.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="min-h-screen bg-background font-body antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange={false}
-        >
+      <body className="min-h-screen bg-[#FAF8F3] antialiased overflow-x-hidden">
+        <SmoothScrollProvider>
+          <CustomCursor />
           {children}
           <Toaster
             position="top-right"
             toastOptions={{
               style: {
-                background: 'hsl(var(--card))',
-                color: 'hsl(var(--card-foreground))',
-                border: '1px solid hsl(var(--border))',
+                background: 'white',
+                color: '#1E293B',
+                border: '1px solid #E7E2D6',
+                borderRadius: '0.75rem',
+                fontFamily: 'Plus Jakarta Sans, sans-serif',
+                fontSize: '14px',
               },
             }}
           />
-        </ThemeProvider>
+        </SmoothScrollProvider>
       </body>
     </html>
   )

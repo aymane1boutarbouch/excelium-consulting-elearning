@@ -177,34 +177,34 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0A1F44]/40 backdrop-blur-md overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-navy-900 border border-white/15 w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden flex flex-col my-8 max-h-[90vh]"
+        className="bg-white border border-[#E7E2D6] w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden flex flex-col my-8 max-h-[90vh]"
       >
         {/* Modal Header */}
-        <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/5">
+        <div className="p-6 border-b border-[#E7E2D6] flex items-center justify-between bg-[#FAF8F3]">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-gold/15 text-gold flex items-center justify-center border border-gold/30">
+            <div className="w-11 h-11 rounded-2xl bg-[#C9A24B]/15 text-[#C9A24B] flex items-center justify-center border border-[#C9A24B]/30">
               <Sparkles className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="font-display font-bold text-white text-lg flex items-center gap-2">
+              <h2 className="font-serif font-bold text-[#0A1F44] text-lg flex items-center gap-2">
                 Importation Rapide de Formations
-                <span className="text-[10px] bg-gold/20 text-gold px-2 py-0.5 rounded-full font-mono uppercase font-bold">
+                <span className="text-[10px] bg-[#C9A24B]/20 text-[#A0782E] px-2 py-0.5 rounded-full font-mono uppercase font-bold">
                   Word &amp; Excel
                 </span>
               </h2>
-              <p className="text-white/60 text-xs mt-0.5">
+              <p className="text-[#475569] text-xs mt-0.5">
                 Glissez votre document (.docx) ou tableau (.xlsx) pour importer des formations complètes en 1 clic
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-2 rounded-xl text-[#475569] hover:text-[#0A1F44] hover:bg-[#F3EFE6] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -226,8 +226,8 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
                 onClick={() => fileInputRef.current?.click()}
                 className={`p-10 rounded-3xl border-2 border-dashed text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-4 ${
                   isDragging
-                    ? 'border-gold bg-gold/10 scale-[1.01]'
-                    : 'border-white/20 bg-white/5 hover:border-gold/50 hover:bg-white/10'
+                    ? 'border-[#C9A24B] bg-[#C9A24B]/10 scale-[1.01]'
+                    : 'border-[#E7E2D6] bg-[#FAF8F3] hover:border-[#C9A24B]/60 hover:bg-[#F3EFE6]'
                 }`}
               >
                 <input
@@ -242,40 +242,40 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
                   }}
                 />
 
-                <div className="w-16 h-16 rounded-2xl bg-gradient-gold text-navy flex items-center justify-center shadow-gold">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#C9A24B] to-[#A0782E] text-white flex items-center justify-center shadow-md">
                   {isProcessing ? (
-                    <div className="w-8 h-8 border-3 border-navy border-t-transparent rounded-full animate-spin" />
+                    <div className="w-8 h-8 border-3 border-white border-t-transparent rounded-full animate-spin" />
                   ) : (
                     <UploadCloud className="w-8 h-8" />
                   )}
                 </div>
 
                 <div>
-                  <h3 className="font-display font-bold text-white text-base">
+                  <h3 className="font-serif font-bold text-[#0A1F44] text-base">
                     Glissez votre fichier Word (.docx) ou Excel (.xlsx) ici
                   </h3>
-                  <p className="text-white/50 text-xs mt-1">
+                  <p className="text-[#475569] text-xs mt-1">
                     ou cliquez pour parcourir votre ordinateur (.docx, .doc, .xlsx, .xls, .csv)
                   </p>
                 </div>
 
                 <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
-                  <span className="px-3 py-1 rounded-full bg-emerald/15 text-emerald border border-emerald/30 text-[11px] font-bold flex items-center gap-1.5">
+                  <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold flex items-center gap-1.5 font-mono">
                     <FileSpreadsheet className="w-3.5 h-3.5" /> Tableaux Excel (.xlsx, .csv)
                   </span>
-                  <span className="px-3 py-1 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/30 text-[11px] font-bold flex items-center gap-1.5">
+                  <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-[11px] font-bold flex items-center gap-1.5 font-mono">
                     <FileText className="w-3.5 h-3.5" /> Documents Word (.docx, .doc)
                   </span>
                 </div>
               </div>
 
               {/* Download templates bar */}
-              <div className="p-5 rounded-2xl bg-white/5 border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="p-5 rounded-2xl bg-[#FAF8F3] border border-[#E7E2D6] flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
-                  <h4 className="font-bold text-white text-xs flex items-center gap-1.5">
-                    <Download className="w-4 h-4 text-gold" /> Besoin d&apos;un modèle pré-formaté ?
+                  <h4 className="font-bold text-[#0A1F44] text-xs flex items-center gap-1.5">
+                    <Download className="w-4 h-4 text-[#C9A24B]" /> Besoin d&apos;un modèle pré-formaté ?
                   </h4>
-                  <p className="text-white/60 text-[11px] mt-0.5">
+                  <p className="text-[#475569] text-[11px] mt-0.5">
                     Téléchargez notre trame Excel prête à remplir ou copiez notre structure Word standard.
                   </p>
                 </div>
@@ -283,33 +283,33 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
                 <div className="flex items-center gap-2.5 w-full sm:w-auto">
                   <button
                     onClick={downloadSampleExcelTemplate}
-                    className="flex-1 sm:flex-none btn-gold text-xs px-3.5 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1.5"
+                    className="flex-1 sm:flex-none btn-gold text-xs px-3.5 py-2.5 rounded-xl font-bold flex items-center justify-center gap-1.5 shadow-sm"
                   >
                     <FileSpreadsheet className="w-4 h-4" /> Modèle Excel (.xlsx)
                   </button>
 
                   <button
                     onClick={() => setShowWordGuide(!showWordGuide)}
-                    className="flex-1 sm:flex-none py-2.5 px-3.5 rounded-xl border border-white/20 hover:border-gold/50 text-white/80 hover:text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
+                    className="flex-1 sm:flex-none py-2.5 px-3.5 rounded-xl border border-[#E7E2D6] hover:border-[#C9A24B] bg-white text-[#0A1F44] text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
                   >
-                    <FileText className="w-4 h-4 text-blue-400" /> Structure Word
+                    <FileText className="w-4 h-4 text-blue-600" /> Structure Word
                   </button>
                 </div>
               </div>
 
               {/* Word guide preview if opened */}
               {showWordGuide && (
-                <div className="p-4 rounded-2xl bg-black/40 border border-white/10 space-y-3">
+                <div className="p-4 rounded-2xl bg-[#FAF8F3] border border-[#E7E2D6] space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-gold text-xs font-bold font-mono">Exemple de document Word à importer :</span>
+                    <span className="text-[#A0782E] text-xs font-bold font-mono">Exemple de document Word à importer :</span>
                     <button
                       onClick={copyWordGuide}
-                      className="text-xs text-white/70 hover:text-gold flex items-center gap-1 font-mono"
+                      className="text-xs text-[#475569] hover:text-[#0A1F44] flex items-center gap-1 font-mono"
                     >
                       <Copy className="w-3.5 h-3.5" /> Copier l&apos;exemple
                     </button>
                   </div>
-                  <pre className="text-[11px] text-white/80 font-mono bg-navy-950 p-4 rounded-xl overflow-x-auto whitespace-pre-wrap border border-white/5">
+                  <pre className="text-[11px] text-[#1E293B] font-mono bg-white p-4 rounded-xl overflow-x-auto whitespace-pre-wrap border border-[#E7E2D6]">
                     {getWordTemplateGuideText()}
                   </pre>
                 </div>
@@ -320,16 +320,16 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
             <div className="space-y-6">
               {/* Multi-course tabs if excel contained multiple courses */}
               {parsedFormations.length > 1 && (
-                <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-white/10">
-                  <span className="text-white/50 text-xs font-mono uppercase mr-2">Formations détectées:</span>
+                <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-[#E7E2D6]">
+                  <span className="text-[#475569] text-xs font-mono uppercase mr-2">Formations détectées:</span>
                   {parsedFormations.map((f, idx) => (
                     <button
                       key={idx}
                       onClick={() => setSelectedIndex(idx)}
                       className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap ${
                         idx === selectedIndex
-                          ? 'bg-gold text-navy shadow-gold font-bold'
-                          : 'bg-white/5 text-white/70 hover:bg-white/10'
+                          ? 'bg-[#C9A24B] text-[#0A1F44] shadow-sm font-bold'
+                          : 'bg-[#FAF8F3] text-[#475569] hover:bg-[#F3EFE6] border border-[#E7E2D6]'
                       }`}
                     >
                       <span>0{idx + 1}. {f.title.substring(0, 24)}...</span>
@@ -340,17 +340,17 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
               )}
 
               {/* Current Formation Metadata Form */}
-              <div className="p-5 rounded-2xl bg-white/5 border border-white/10 space-y-4">
-                <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                  <h3 className="font-display font-bold text-white text-base flex items-center gap-2">
-                    <FileCheck className="w-5 h-5 text-emerald" /> Édition avant importation
+              <div className="p-5 rounded-2xl bg-[#FAF8F3] border border-[#E7E2D6] space-y-4">
+                <div className="flex items-center justify-between border-b border-[#E7E2D6] pb-3">
+                  <h3 className="font-serif font-bold text-[#0A1F44] text-base flex items-center gap-2">
+                    <FileCheck className="w-5 h-5 text-emerald-600" /> Édition avant importation
                   </h3>
                   <button
                     onClick={() => {
                       setParsedFormations([])
                       setSelectedIndex(0)
                     }}
-                    className="text-xs text-white/50 hover:text-white flex items-center gap-1"
+                    className="text-xs text-[#475569] hover:text-[#0A1F44] flex items-center gap-1 font-medium"
                   >
                     Changer de fichier
                   </button>
@@ -358,21 +358,21 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-white/80 mb-1">Titre de la formation</label>
+                    <label className="block text-xs font-semibold text-[#0A1F44] mb-1">Titre de la formation</label>
                     <input
                       type="text"
                       value={currentFormation.title}
                       onChange={(e) => updateCurrentFormation((prev) => ({ ...prev, title: e.target.value }))}
-                      className="w-full px-3.5 py-2 rounded-xl bg-navy-950 border border-white/15 text-white text-xs focus:outline-none focus:border-gold"
+                      className="w-full px-3.5 py-2 rounded-xl bg-white border border-[#E7E2D6] text-[#0A1F44] text-xs focus:outline-none focus:border-[#C9A24B]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-white/80 mb-1">Catégorie</label>
+                    <label className="block text-xs font-semibold text-[#0A1F44] mb-1">Catégorie</label>
                     <select
                       value={currentFormation.category}
                       onChange={(e) => updateCurrentFormation((prev) => ({ ...prev, category: e.target.value }))}
-                      className="w-full px-3.5 py-2 rounded-xl bg-navy-950 border border-white/15 text-white text-xs focus:outline-none focus:border-gold"
+                      className="w-full px-3.5 py-2 rounded-xl bg-white border border-[#E7E2D6] text-[#0A1F44] text-xs focus:outline-none focus:border-[#C9A24B]"
                     >
                       <option value="Fiscalité Marocaine">Fiscalité Marocaine</option>
                       <option value="Comptabilité">Comptabilité &amp; Finance</option>
@@ -384,29 +384,29 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
 
                   <div className="grid grid-cols-3 gap-2">
                     <div>
-                      <label className="block text-xs font-semibold text-white/80 mb-1">Prix (MAD)</label>
+                      <label className="block text-xs font-semibold text-[#0A1F44] mb-1">Prix (MAD)</label>
                       <input
                         type="number"
                         value={currentFormation.price}
                         onChange={(e) => updateCurrentFormation((prev) => ({ ...prev, price: Number(e.target.value) }))}
-                        className="w-full px-3 py-2 rounded-xl bg-navy-950 border border-white/15 text-white text-xs font-mono focus:outline-none focus:border-gold"
+                        className="w-full px-3 py-2 rounded-xl bg-white border border-[#E7E2D6] text-[#0A1F44] text-xs font-mono focus:outline-none focus:border-[#C9A24B]"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-white/80 mb-1">Durée (H)</label>
+                      <label className="block text-xs font-semibold text-[#0A1F44] mb-1">Durée (H)</label>
                       <input
                         type="number"
                         value={currentFormation.durationHours}
                         onChange={(e) => updateCurrentFormation((prev) => ({ ...prev, durationHours: Number(e.target.value) }))}
-                        className="w-full px-3 py-2 rounded-xl bg-navy-950 border border-white/15 text-white text-xs font-mono focus:outline-none focus:border-gold"
+                        className="w-full px-3 py-2 rounded-xl bg-white border border-[#E7E2D6] text-[#0A1F44] text-xs font-mono focus:outline-none focus:border-[#C9A24B]"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-white/80 mb-1">Niveau</label>
+                      <label className="block text-xs font-semibold text-[#0A1F44] mb-1">Niveau</label>
                       <select
                         value={currentFormation.level}
                         onChange={(e) => updateCurrentFormation((prev) => ({ ...prev, level: e.target.value as any }))}
-                        className="w-full px-3 py-2 rounded-xl bg-navy-950 border border-white/15 text-white text-xs focus:outline-none focus:border-gold"
+                        className="w-full px-3 py-2 rounded-xl bg-white border border-[#E7E2D6] text-[#0A1F44] text-xs focus:outline-none focus:border-[#C9A24B]"
                       >
                         <option value="Débutant">Débutant</option>
                         <option value="Intermédiaire">Intermédiaire</option>
@@ -416,13 +416,13 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-white/80 mb-1">Lien vidéo de présentation</label>
+                    <label className="block text-xs font-semibold text-[#0A1F44] mb-1">Lien vidéo de présentation</label>
                     <input
                       type="text"
                       value={currentFormation.previewVideoUrl || ''}
                       onChange={(e) => updateCurrentFormation((prev) => ({ ...prev, previewVideoUrl: e.target.value }))}
                       placeholder="https://vimeo.com/... ou https://youtube.com/..."
-                      className="w-full px-3.5 py-2 rounded-xl bg-navy-950 border border-white/15 text-white text-xs font-mono focus:outline-none focus:border-gold"
+                      className="w-full px-3.5 py-2 rounded-xl bg-white border border-[#E7E2D6] text-[#0A1F44] text-xs font-mono focus:outline-none focus:border-[#C9A24B]"
                     />
                   </div>
                 </div>
@@ -431,8 +431,8 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
               {/* Curriculum Modules & Lessons Tree Builder */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-display font-bold text-white text-sm flex items-center gap-2">
-                    <Layers className="w-4 h-4 text-gold" />
+                  <h4 className="font-serif font-bold text-[#0A1F44] text-sm flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-[#C9A24B]" />
                     Programme &amp; Leçons extraites ({currentFormation.modules.reduce((acc, m) => acc + m.lessons.length, 0)} leçons)
                   </h4>
                   <button
@@ -445,10 +445,10 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
 
                 <div className="space-y-4 max-h-[320px] overflow-y-auto pr-1">
                   {currentFormation.modules.map((mod, modIdx) => (
-                    <div key={mod.id} className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+                    <div key={mod.id} className="p-4 rounded-2xl bg-white border border-[#E7E2D6] shadow-sm space-y-3">
                       <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-2 flex-1">
-                          <span className="w-6 h-6 rounded-lg bg-gold/20 text-gold font-mono font-bold text-xs flex items-center justify-center">
+                          <span className="w-6 h-6 rounded-lg bg-[#C9A24B]/20 text-[#A0782E] font-mono font-bold text-xs flex items-center justify-center">
                             {modIdx + 1}
                           </span>
                           <input
@@ -461,20 +461,20 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
                                 modules: prev.modules.map((m) => (m.id === mod.id ? { ...m, title: val } : m)),
                               }))
                             }}
-                            className="flex-1 bg-transparent border-b border-white/20 focus:border-gold font-bold text-white text-sm py-0.5 focus:outline-none"
+                            className="flex-1 bg-transparent border-b border-[#E7E2D6] focus:border-[#C9A24B] font-bold text-[#0A1F44] text-sm py-0.5 focus:outline-none"
                           />
                         </div>
 
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => handleAddLesson(mod.id)}
-                            className="text-xs text-gold hover:underline flex items-center gap-1 font-semibold"
+                            className="text-xs text-[#A0782E] hover:underline flex items-center gap-1 font-semibold"
                           >
                             <Plus className="w-3 h-3" /> Leçon
                           </button>
                           <button
                             onClick={() => handleDeleteModule(mod.id)}
-                            className="p-1 text-white/40 hover:text-red-400"
+                            className="p-1 text-[#94A3B8] hover:text-red-500"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -482,11 +482,11 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
                       </div>
 
                       {/* Lessons list */}
-                      <div className="space-y-2 pl-4 border-l-2 border-white/10">
+                      <div className="space-y-2 pl-4 border-l-2 border-[#E7E2D6]">
                         {mod.lessons.map((les, lesIdx) => (
-                          <div key={les.id} className="p-3 rounded-xl bg-navy-950/80 border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                          <div key={les.id} className="p-3 rounded-xl bg-[#FAF8F3] border border-[#E7E2D6] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
                             <div className="flex items-center gap-2 flex-1 w-full sm:w-auto">
-                              <Video className="w-3.5 h-3.5 text-gold flex-shrink-0" />
+                              <Video className="w-3.5 h-3.5 text-[#C9A24B] flex-shrink-0" />
                               <input
                                 type="text"
                                 value={les.title}
@@ -504,7 +504,7 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
                                     ),
                                   }))
                                 }}
-                                className="flex-1 bg-transparent border-b border-transparent hover:border-white/20 focus:border-gold text-white font-medium text-xs focus:outline-none"
+                                className="flex-1 bg-transparent border-b border-transparent hover:border-[#E7E2D6] focus:border-[#C9A24B] text-[#0A1F44] font-medium text-xs focus:outline-none"
                               />
                             </div>
 
@@ -526,12 +526,12 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
                                     ),
                                   }))
                                 }}
-                                className="w-20 px-2 py-1 rounded-lg bg-white/5 border border-white/10 text-white/80 text-[11px] font-mono text-center focus:outline-none"
+                                className="w-20 px-2 py-1 rounded-lg bg-white border border-[#E7E2D6] text-[#0A1F44] text-[11px] font-mono text-center focus:outline-none"
                               />
 
                               <button
                                 onClick={() => handleDeleteLesson(mod.id, les.id)}
-                                className="p-1 text-white/40 hover:text-red-400"
+                                className="p-1 text-[#94A3B8] hover:text-red-500"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
                               </button>
@@ -548,10 +548,10 @@ export default function FormationImporterModal({ isOpen, onClose, onImportSucces
         </div>
 
         {/* Modal Footer */}
-        <div className="p-5 border-t border-white/10 bg-white/5 flex items-center justify-between gap-4">
+        <div className="p-5 border-t border-[#E7E2D6] bg-[#FAF8F3] flex items-center justify-between gap-4">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl border border-white/20 text-white/70 hover:text-white hover:bg-white/10 text-xs font-bold transition-all"
+            className="px-5 py-2.5 rounded-xl border border-[#E7E2D6] text-[#475569] hover:text-[#0A1F44] hover:bg-white text-xs font-bold transition-all"
           >
             Fermer
           </button>
